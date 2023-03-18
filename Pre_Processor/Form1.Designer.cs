@@ -102,7 +102,6 @@
             this.textBox3.Size = new System.Drawing.Size(141, 28);
             this.textBox3.TabIndex = 6;
             this.textBox3.Text = "20200918";
-            this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
             // 
             // textBox4
             // 
@@ -145,7 +144,7 @@
             // textBox2
             // 
             this.textBox2.Location = new System.Drawing.Point(361, 386);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(2);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(159, 28);
             this.textBox2.TabIndex = 12;
@@ -154,7 +153,7 @@
             // button7
             // 
             this.button7.Location = new System.Drawing.Point(108, 379);
-            this.button7.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button7.Margin = new System.Windows.Forms.Padding(2);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(232, 65);
             this.button7.TabIndex = 13;
@@ -187,7 +186,7 @@
             // button10
             // 
             this.button10.Location = new System.Drawing.Point(119, 165);
-            this.button10.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button10.Margin = new System.Windows.Forms.Padding(2);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(271, 64);
             this.button10.TabIndex = 19;
@@ -222,7 +221,7 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.ColumnHeadersVisible = false;
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowHeadersWidth = 82;
@@ -234,7 +233,7 @@
             // button12
             // 
             this.button12.Location = new System.Drawing.Point(119, 92);
-            this.button12.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button12.Margin = new System.Windows.Forms.Padding(2);
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(271, 64);
             this.button12.TabIndex = 23;
@@ -249,9 +248,9 @@
             this.button13.Name = "button13";
             this.button13.Size = new System.Drawing.Size(257, 39);
             this.button13.TabIndex = 24;
-            this.button13.Text = "프분 거분 avr dev";
+            this.button13.Text = "프분 거분";
             this.button13.UseVisualStyleBackColor = true;
-            this.button13.Click += new System.EventHandler(this.프분_거분_avr_dev);
+            this.button13.Click += new System.EventHandler(this.프분_거분);
             // 
             // Form1
             // 

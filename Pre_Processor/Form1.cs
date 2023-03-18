@@ -1297,11 +1297,6 @@ namespace Pre_Processor
 
         }
 
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         public static string GetFinalRedirect(string url)
         {
             if (string.IsNullOrWhiteSpace(url))
@@ -1834,9 +1829,76 @@ namespace Pre_Processor
             프돈외기();
         }
 
-        private void 프분_거분_avr_dev(object sender, EventArgs e)
+        private void 프분_거분(object sender, EventArgs e)
         {
+            int start_date = Convert.ToInt32(textBox3.Text);
+            int end_date = Convert.ToInt32(textBox4.Text);
 
+            wr.create_empty_temp_file();
+
+            foreach (var stock in g.sl)
+            {
+                var 프분_list = new List<double>();
+                var 거분_list = new List<double>();
+                double value = 0.0;
+
+                int 전일종가 = rd.read_전일종가(stock);
+
+                if (stock.Contains("KODEX") || stock.Contains("KBSTAR"))
+                    continue;
+
+                // find g.nCol * g.nRow maximum date and time
+                // in order of descending
+                for (int i = start_date; i <= end_date; i++)
+                {
+                    g.date = i;
+                    if (stock.Contains("KODEX") || stock.Contains("혼합"))
+                        continue;
+
+                    int[,] x = new int[400, 12];
+                    int nrow = rd.read_Stock_Minute(i, stock, x); // i -> date
+                    if (nrow < 200)
+                        continue;
+
+                    for (int j = 1; j < nrow; j++)
+                    {
+                        if (x[j, 0] / 100 - x[j - 1, 0] / 100 != 1 || // minute difference = 1
+                            x[j, 1] < -3000 || x[j, 1] > 3000 ||     // price less than 3,000, and larger than -3,000
+                        x[j, 7] - x[j - 1, 7] < 0 ||                        // 거분 > 0
+                        x[j, 0] > 150000)                                // before 1500
+                        {
+                            continue;
+                        }
+
+                        value = (double)(x[j, 4] - x[j - 1, 4]) * 전일종가;
+                        value /= g.억원;
+                        if (value > 0.01)
+                            프분_list.Add(value);
+                        value = (double)(x[j, 7] - x[j - 1, 7]) * 전일종가;
+                        value /= g.억원;
+                        거분_list.Add(value);
+                    }
+                }
+
+                프분_list.Sort((a, b) => b.CompareTo(a)); // descending sort
+                거분_list.Sort((c, d) => d.CompareTo(c)); // descending sort
+
+                g.clicked_Stock = stock;
+                //ms.Naver_호가_txt(2, -1, -1, 0, 0);
+
+                string str = stock;
+                double avr = 프분_list.Sum() / 프분_list.Count;
+                str += "\t" + avr.ToString("#.##");
+                double dev = Math.Sqrt(프분_list.Sum(y => Math.Pow(y - avr, 2)) / (프분_list.Count - 1));
+                str += "\t" + dev.ToString("#.##");
+
+                avr = 거분_list.Sum() / 거분_list.Count;
+                str += "\t" + avr.ToString("#.##");
+                dev = Math.Sqrt(거분_list.Sum(y => Math.Pow(y - avr, 2)) / (거분_list.Count - 1));
+                str += "\t" + dev.ToString("#.##");
+
+                wr.w(str);
+            }
         }
     }
 }
