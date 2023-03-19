@@ -1527,6 +1527,10 @@ namespace Pre_Processor
 
         private void button10_Click(object sender, EventArgs e)
         {
+            통계();
+
+
+
             네이버_업종();
             네이버_테마(1);
             일주월();
@@ -1844,8 +1848,7 @@ namespace Pre_Processor
             if (File.Exists(path))
                 File.Delete(path);
 
-            if (!File.Exists(path))
-                File.Create(path).Dispose();
+            StreamWriter sw = File.CreateText(path);
 
             foreach (var o in g.ogl_data) // 혼합 2 종목 빠져시 to-jsb 보다 2 종목 작음
             {
@@ -1918,11 +1921,7 @@ namespace Pre_Processor
                 str += "\t" + avr.ToString("#.##");
                 str += "\t" + dev.ToString("#.##");
 
-                // wr.w(str);
 
-                StreamWriter sw = File.AppendText(path);
-
-                //sw.WriteLine("{0}\t{1}", t, time_now);
                 sw.WriteLine("{0}", str);
                 sw.Close();
             }
@@ -1936,13 +1935,12 @@ namespace Pre_Processor
             int start_date = Convert.ToInt32(textBox3.Text);
             int end_date = Convert.ToInt32(textBox4.Text);
 
-            string path = @"C:\WORK\\data\통계.txt";
+            string path = @"C:\WORK\data\통계.txt";
 
             if (File.Exists(path))
                 File.Delete(path);
 
-            if (!File.Exists(path))
-                File.Create(path).Dispose();
+            StreamWriter sw = File.CreateText(path);
 
             foreach (var o in g.ogl_data) // 혼합 2 종목 빠져시 to-jsb 보다 2 종목 작음
             {
@@ -2015,14 +2013,9 @@ namespace Pre_Processor
                 str += "\t" + avr.ToString("#.##");
                 str += "\t" + dev.ToString("#.##");
 
-                // wr.w(str);
-
-                StreamWriter sw = File.AppendText(path);
-
-                //sw.WriteLine("{0}\t{1}", t, time_now);
                 sw.WriteLine("{0}", str);
-                sw.Close();
             }
+            sw.Close();
         }
 
 
