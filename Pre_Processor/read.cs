@@ -292,7 +292,7 @@ namespace Pre_Processor
             }
 
             // 지수종목 
-            rd.read_KODEX(); // stored in g.지수종목
+            rd.read_지수(); // stored in g.지수종목
             foreach (string t in g.지수종목)
             {
                 if (!total_stock_list.Contains(t))
@@ -789,10 +789,7 @@ namespace Pre_Processor
         {
             List<string> gl_list = new List<string>();
 
-            string working_directory = System.IO.Directory.GetCurrentDirectory();
-            // replaces "Programming" with "C#" 
-            string filename = working_directory.Replace("bin\\Debug", "");
-            filename += "제외.txt";
+            string filename = @"C:\Work\data\제외.txt"; ;
 
             string[] grlines = File.ReadAllLines(filename);
 
@@ -813,18 +810,15 @@ namespace Pre_Processor
         }
 
 
-        public static void read_KODEX()
+        public static void read_지수()
         {
             // 종목별 배당된 주식숫자로부터 각 종목의 Weighting Factor 계산하여 저장
 
-            string working_directory = System.IO.Directory.GetCurrentDirectory();
-            // replaces "Programming" with "C#" 
-            string filename = working_directory.Replace("bin\\Debug", "");
-            filename += "지수.txt";
+            string filename = @"C:\Work\data\지수.txt";
 
             if (!File.Exists(filename))
             {
-                //MessageBox.Show("지수.txt Not Exist");
+                MessageBox.Show("지수.txt Not Exist");
                 return;
             }
 
@@ -903,10 +897,7 @@ namespace Pre_Processor
 
         public static void read_상관(List<string> gl, List<string> GL_title, List<List<string>> GL)
         {
-            string working_directory = System.IO.Directory.GetCurrentDirectory();
-            // replaces "Programming" with "C#" 
-            string filename = working_directory.Replace("bin\\Debug", "");
-            filename += "상관.txt";
+            string filename = @"C:\Work\data\상관.txt";
 
             if (!File.Exists(filename))
             {
@@ -1396,7 +1387,7 @@ namespace Pre_Processor
             }
 
             List<string> 제외 = new List<string>();
-           // 제외 = read_제외(); // read_그룹_네이버_업종
+           제외 = read_제외(); // read_그룹_네이버_업종
 
             string[] grlines = File.ReadAllLines(filepath, Encoding.Default);
 

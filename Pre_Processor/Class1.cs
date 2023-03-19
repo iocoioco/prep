@@ -379,7 +379,7 @@ namespace Pre_Processor
                 if (words[0].Contains("//"))
                 {
                     temp_Gl.Clear();
-                    if (words[1].Length > 1)
+                    if (words[1].Length > 1 && !words[1].Contains("/"))
                     {
                         temp_title = words[1];
                         continue;
