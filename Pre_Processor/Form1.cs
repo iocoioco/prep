@@ -614,13 +614,13 @@ namespace Pre_Processor
             switch (_variable[0])
             {
                 case "일":
-                    path = @"C:\WORK\일\";
+                    path = @"C:\WORK\data\일\";
                     break;
                 case "주":
-                    path = @"C:\WORK\주\";
+                    path = @"C:\WORK\data\주\";
                     break;
                 case "월":
-                    path = @"C:\WORK\월\";
+                    path = @"C:\WORK\data\월\";
                     break;
                 default:
                     break;
@@ -748,7 +748,7 @@ namespace Pre_Processor
 
         public void _Stock_Chart_시총_stockChart()
         {
-            string file = @"C:\WORK\시총.txt";
+            string file = @"C:\WORK\data\시총.txt";
 
             if (File.Exists(file))
                 File.Delete(file);
@@ -797,7 +797,7 @@ namespace Pre_Processor
             string text1 = _Stock_Chart_시총.GetDibMsg1();
             string text2 = _Stock_Chart_시총.GetDibMsg2();
 
-            Stream FS = new FileStream(@"C:\WORK\시총.txt", FileMode.Append, FileAccess.Write);
+            Stream FS = new FileStream(@"C:\WORK\data\시총.txt", FileMode.Append, FileAccess.Write);
             StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
 
             int count = (int)_Stock_Chart_시총.GetHeaderValue(1);
@@ -1096,12 +1096,12 @@ namespace Pre_Processor
             var doc = new HtmlAgilityPack.HtmlDocument();
             HtmlAgilityPack.HtmlWeb web = new HtmlAgilityPack.HtmlWeb();
 
-            string file = @"C:\WORK\" + "그룹_네이버_업종" + ".txt";
+            string file = @"C:\WORK\data\" + "그룹_네이버_업종" + ".txt";
             if (File.Exists(file))
             {
                 File.Delete(file);
             }
-            Stream FS = new FileStream(@"C:\WORK\" + "그룹_네이버_업종" + ".txt", FileMode.CreateNew, FileAccess.Write);
+            Stream FS = new FileStream(@"C:\WORK\data\" + "그룹_네이버_업종" + ".txt", FileMode.CreateNew, FileAccess.Write);
             StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
 
             int[] themeRemove = new int[] { 25 }; // 환율하락수혜
@@ -1211,15 +1211,15 @@ namespace Pre_Processor
             var doc = new HtmlAgilityPack.HtmlDocument();
             HtmlAgilityPack.HtmlWeb web = new HtmlAgilityPack.HtmlWeb();
 
-            string file = @"C:\WORK\" + "그룹_네이버_업종" + ".txt";
+            string file = @"C:\WORK\data\" + "그룹_네이버_업종" + ".txt";
             if (File.Exists(file))
             {
                 File.Delete(file);
             }
-            Stream FS = new FileStream(@"C:\WORK\" + "그룹_네이버_업종" + ".txt", FileMode.CreateNew, FileAccess.Write);
+            Stream FS = new FileStream(@"C:\WORK\data\" + "그룹_네이버_업종" + ".txt", FileMode.CreateNew, FileAccess.Write);
             StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
 
-            var lines = File.ReadAllLines(@"C:\WORK\" + "업종_url" + ".txt");
+            var lines = File.ReadAllLines(@"C:\WORK\data\" + "업종_url" + ".txt");
 
             int count = 0;
             int upjong_count = 0;
@@ -1364,12 +1364,12 @@ namespace Pre_Processor
             var doc = new HtmlAgilityPack.HtmlDocument();
             HtmlAgilityPack.HtmlWeb web = new HtmlAgilityPack.HtmlWeb();
 
-            string file = @"C:\WORK\" + "그룹_네이버_테마" + ".txt";
+            string file = @"C:\WORK\data\" + "그룹_네이버_테마" + ".txt";
             if (File.Exists(file))
             {
                 File.Delete(file);
             }
-            Stream FS = new FileStream(@"C:\WORK\" + "그룹_네이버_테마" + ".txt", FileMode.CreateNew, FileAccess.Write);
+            Stream FS = new FileStream(@"C:\WORK\data\" + "그룹_네이버_테마" + ".txt", FileMode.CreateNew, FileAccess.Write);
             StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
 
             int[] themeRemove = new int[1];
@@ -1474,15 +1474,15 @@ namespace Pre_Processor
             var doc = new HtmlAgilityPack.HtmlDocument();
             HtmlAgilityPack.HtmlWeb web = new HtmlAgilityPack.HtmlWeb();
 
-            string file = @"C:\WORK\" + "그룹_네이버_테마" + ".txt";
+            string file = @"C:\WORK\data\" + "그룹_네이버_테마" + ".txt";
             if (File.Exists(file))
             {
                 File.Delete(file);
             }
-            Stream FS = new FileStream(@"C:\WORK\" + "그룹_네이버_테마" + ".txt", FileMode.CreateNew, FileAccess.Write);
+            Stream FS = new FileStream(@"C:\WORK\data\" + "그룹_네이버_테마" + ".txt", FileMode.CreateNew, FileAccess.Write);
             StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
 
-            var lines = File.ReadAllLines(@"C:\WORK\" + "테마_url" + ".txt");
+            var lines = File.ReadAllLines(@"C:\WORK\data\" + "테마_url" + ".txt");
 
             int count = 0;
             int theme_count = 0;
@@ -1551,10 +1551,10 @@ namespace Pre_Processor
             if (HHmm <= 1530)
                 reference_date--; // 당일 데이터가 저장되어 있지 않아 전일 기준 Processing
 
-            string[] grlines = File.ReadAllLines(@"C:\WORK\시총.txt", Encoding.Default);
+            string[] grlines = File.ReadAllLines(@"C:\WORK\data\시총.txt", Encoding.Default);
 
             // 저장파일 "프돈외기" 있으면 삭제 후 재생성
-            string path = @"C:\WORK\프돈외기.txt";
+            string path = @"C:\WORK\data\프돈외기.txt";
             if (File.Exists(path))
                 File.Delete(path);
 
@@ -1831,6 +1831,9 @@ namespace Pre_Processor
 
         private void 프분_거분(object sender, EventArgs e)
         {
+            rd.read_변수();
+            rd.read_업종_상관(); // 업종 & 상관 : 다 읽은 후 종목은 전일 거래액 순서로 정리함
+
             int start_date = Convert.ToInt32(textBox3.Text);
             int end_date = Convert.ToInt32(textBox4.Text);
 
@@ -1838,6 +1841,7 @@ namespace Pre_Processor
 
             foreach (var stock in g.sl)
             {
+                
                 var 프분_list = new List<double>();
                 var 거분_list = new List<double>();
                 double value = 0.0;
@@ -1899,6 +1903,11 @@ namespace Pre_Processor
 
                 wr.w(str);
             }
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

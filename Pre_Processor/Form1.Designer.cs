@@ -101,7 +101,8 @@
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(141, 28);
             this.textBox3.TabIndex = 6;
-            this.textBox3.Text = "20200918";
+            this.textBox3.Text = "20220101";
+            this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
             // 
             // textBox4
             // 
@@ -110,7 +111,7 @@
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(141, 28);
             this.textBox4.TabIndex = 7;
-            this.textBox4.Text = "20200918";
+            this.textBox4.Text = "20230317";
             // 
             // textBox6
             // 

@@ -65,7 +65,7 @@ namespace Pre_Processor
                      .ToList();
 
             List<string> 제외종목 = new List<string>();
-            제외종목 = read_제외();  // read_stocks_in_directory
+            //제외종목 = read_제외();  // read_stocks_in_directory
 
 
             g.관심종목.Clear();
@@ -87,7 +87,7 @@ namespace Pre_Processor
 
         public static void read_시간별거래비율(List<List<string>> 누적)
         {
-            string[] grlines = File.ReadAllLines(@"C:\WORK\누적.txt", Encoding.Default);
+            string[] grlines = File.ReadAllLines(@"C:\WORK\data\누적.txt", Encoding.Default);
             foreach (string line in grlines)
             {
                 List<string> alist = new List<string>();
@@ -105,7 +105,7 @@ namespace Pre_Processor
 
         public static void read_누적(double[] 누적)
         {
-            string[] grlines = File.ReadAllLines(@"C:\WORK\누적.txt", Encoding.Default);
+            string[] grlines = File.ReadAllLines(@"C:\WORK\data\누적.txt", Encoding.Default);
             int count = 0;
             foreach (string line in grlines)
             {
@@ -772,7 +772,7 @@ namespace Pre_Processor
 
         public static double read_시총(string stock)
         {
-            string[] grlines = File.ReadAllLines(@"C:\WORK\시총.txt", Encoding.Default);
+            string[] grlines = File.ReadAllLines(@"C:\WORK\data\시총.txt", Encoding.Default);
             foreach (string line in grlines)
             {
                 string[] words = line.Split(' ');
@@ -824,7 +824,7 @@ namespace Pre_Processor
 
             if (!File.Exists(filename))
             {
-                MessageBox.Show("지수.txt Not Exist");
+                //MessageBox.Show("지수.txt Not Exist");
                 return;
             }
 
@@ -870,7 +870,7 @@ namespace Pre_Processor
 
         public static void read_그룹_네이버_테마(List<string> tsl, List<string> tsl_그룹_상관, List<string> GL_title, List<List<string>> GL)
         {
-            string filepath = @"C:\WORK\그룹_네이버_테마.txt"; // QQQ
+            string filepath = @"C:\WORK\data\그룹_네이버_테마.txt"; // QQQ
             if (!File.Exists(filepath))
                 return;
 
@@ -1318,13 +1318,13 @@ namespace Pre_Processor
             switch (dwm)
             {
                 case "일":
-                    file = @"C:\WORK\일\" + stock + ".txt"; ;   // 틱,분,일,주,월 단위 데이터
+                    file = @"C:\WORK\data\일\" + stock + ".txt"; ;   // 틱,분,일,주,월 단위 데이터
                     break;
                 case "주":
-                    file = @"C:\WORK\주\" + stock + ".txt"; ;   // 틱,분,일,주,월 단위 데이터
+                    file = @"C:\WORK\data\주\" + stock + ".txt"; ;   // 틱,분,일,주,월 단위 데이터
                     break;
                 case "월":
-                    file = @"C:\WORK\월\" + stock + ".txt"; ;   // 틱,분,일,주,월 단위 데이터
+                    file = @"C:\WORK\data\월\" + stock + ".txt"; ;   // 틱,분,일,주,월 단위 데이터
                     break;
                 default:
                     break;
@@ -1352,7 +1352,7 @@ namespace Pre_Processor
 
         public static int read_전일종가_전일거래액_천만원(string stock)
         {
-            string path = @"C:\WORK\일\" + stock + ".txt";
+            string path = @"C:\WORK\data\일\" + stock + ".txt";
             if (!File.Exists(path))
             {
                 return -1;
@@ -1370,7 +1370,7 @@ namespace Pre_Processor
         public static int read_전일종가(string stock)
         {
 
-            string path = @"C:\WORK\일\" + stock + ".txt";
+            string path = @"C:\WORK\data\일\" + stock + ".txt";
             if (!File.Exists(path))
             {
                 return -1;
@@ -1389,14 +1389,14 @@ namespace Pre_Processor
 
             List<string> gl_list = new List<string>();
 
-            string filepath = @"C:\WORK\그룹_네이버_업종.txt";
+            string filepath = @"C:\WORK\data\그룹_네이버_업종.txt";
             if (!File.Exists(filepath))
             {
                 return gl_list;
             }
 
             List<string> 제외 = new List<string>();
-            제외 = read_제외(); // read_그룹_네이버_업종
+           // 제외 = read_제외(); // read_그룹_네이버_업종
 
             string[] grlines = File.ReadAllLines(filepath, Encoding.Default);
 
@@ -1457,7 +1457,7 @@ namespace Pre_Processor
 
             List<string> gl_list = new List<string>();
 
-            string filepath = @"C:\WORK\그룹_네이버_업종.txt";
+            string filepath = @"C:\WORK\data\그룹_네이버_업종.txt";
             if (!File.Exists(filepath))
             {
                 return gl_list;

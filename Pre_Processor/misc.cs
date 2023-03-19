@@ -393,7 +393,7 @@ namespace Pre_Processor
         public static void setting_코스피_코스닥합성()
         {
             string file;
-            file = @"C:\WORK\KODEX_FACTOR" + ".txt";
+            file = @"C:\WORK\data\KODEX_FACTOR" + ".txt";
 
             if (!File.Exists(file))
                 File.Create(file).Dispose();

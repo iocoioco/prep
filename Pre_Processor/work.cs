@@ -356,7 +356,7 @@ namespace Pre_Processor
             int days = 20;
             foreach (var stock in tsl)
             {
-                string path = @"C:\Work\일\\" + stock + ".txt";
+                string path = @"C:\WORK\data\일\" + stock + ".txt";
                 if (!File.Exists(path))
                     continue;
 
@@ -760,7 +760,7 @@ namespace Pre_Processor
         public static string calcurate_종목일중변동평균편차(string stock, int days, ref double avr, ref double dev,
                                     ref int avr_dealt, ref int min_dealt, ref int max_dealt, ref ulong 일평균거래량, ref int long_high)
         {
-            string path = @"C:\Work\일\\" + stock + ".txt";
+            string path = @"C:\WORK\data\일\" + stock + ".txt";
             if (!File.Exists(path))
                 return " ";
 
@@ -914,7 +914,7 @@ namespace Pre_Processor
         public static ulong calculate_종목20일기준일평균거래량(string stock)
         {
             // Extract column 5 from stock filename
-            string filename = @"C:\WORK\일\" + stock + ".txt";
+            string filename = @"C:\WORK\data\일\" + stock + ".txt";
             int[] c_id = new int[1]; // number of columns needed
             string[,] x = new string[1000, 1]; // array declaration
             List<double> alist = new List<double>();
