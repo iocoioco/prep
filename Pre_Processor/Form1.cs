@@ -2003,7 +2003,7 @@ namespace Pre_Processor
                 else
                     str += "\t" + avr.ToString("#.####");
                 if (dev < 0.001)
-                    str += "\t" + "0.0";
+                    str += "\t" + "0.0"; 
                 else
                     str += "\t" + dev.ToString("#.####");
 
