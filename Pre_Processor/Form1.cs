@@ -2006,7 +2006,7 @@ namespace Pre_Processor
                     str += "\t" + "0.0"; 
                 else
                     str += "\t" + dev.ToString("#.####");
-
+                 
                 avr = 0.0;
                 dev = 0.0;
                 if (거분_list.Count >10)
