@@ -2009,7 +2009,7 @@ namespace Pre_Processor
                  
                 avr = 0.0;
                 dev = 0.0;
-                if (거분_list.Count >10)
+                if (거분_list.Count >10) 
                 {
                     avr = 거분_list.Sum() / 거분_list.Count;
                     dev = Math.Sqrt(거분_list.Sum(y => Math.Pow(y - avr, 2)) / (거분_list.Count - 1));
