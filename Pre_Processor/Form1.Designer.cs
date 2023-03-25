@@ -249,9 +249,9 @@
             this.button13.Name = "button13";
             this.button13.Size = new System.Drawing.Size(257, 39);
             this.button13.TabIndex = 24;
-            this.button13.Text = "프분 거분";
+            this.button13.Text = "통계";
             this.button13.UseVisualStyleBackColor = true;
-            this.button13.Click += new System.EventHandler(this.프분_거분);
+            this.button13.Click += new System.EventHandler(this.통계);
             // 
             // Form1
             // 

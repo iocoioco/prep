@@ -17,7 +17,7 @@ using System.Xml.Linq;
 
 namespace Pre_Processor
 {
-    public partial class Form1 : Form
+    public partial class Form1 : Form 
     {
         static CPUTILLib.CpCodeMgr _cm = new CPUTILLib.CpCodeMgr();
 
@@ -29,7 +29,7 @@ namespace Pre_Processor
         CPSYSDIBLib.StockChart _Stock_Chart_분 = new CPSYSDIBLib.StockChart();
         CPSYSDIBLib.StockChart _Stock_Chart_시총 = new CPSYSDIBLib.StockChart();
         CPSYSDIBLib.StockChart _Stock_Chart_틱 = new CPSYSDIBLib.StockChart();
-        //CPSYSDIBLib.StockChart _Stock_Chart6 = new CPSYSDIBLib.StockChart();
+        //CPSYSDIBLib.StockChart _Stock_Chart6 = new CPSYSDIBLib.StockChart(); 
         CPSYSDIBLib.CpSvr7254 _cpsvr7254 = new CPSYSDIBLib.CpSvr7254();
         CPSYSDIBLib.CpSvrNew7216 _cpsvrNew7216 = new CPSYSDIBLib.CpSvrNew7216();
 
@@ -1527,16 +1527,11 @@ namespace Pre_Processor
 
         private void button10_Click(object sender, EventArgs e)
         {
-            통계();
-
-
-
             네이버_업종();
             네이버_테마(1);
             일주월();
             시가총액();
             통계();
-
         }
 
 
@@ -1835,6 +1830,8 @@ namespace Pre_Processor
             프돈외기();
         }
 
+
+        // old version 프분_거분, new version 통계
         private void 프분_거분(object sender, EventArgs e)
         {
             rd.read_변수();
@@ -1927,6 +1924,7 @@ namespace Pre_Processor
             }
         }
 
+        // old version 프분_거분, new version 통계
         private void 통계()
         {
             rd.read_변수();
@@ -1995,23 +1993,35 @@ namespace Pre_Processor
                 string str = stock;
                 double avr = 0.0;
                 double dev = 0.0;
-                if (프분_list.Count > 300)
+                if (프분_list.Count > 10)
                 {
                     avr = 프분_list.Sum() / 프분_list.Count;
                     dev = Math.Sqrt(프분_list.Sum(y => Math.Pow(y - avr, 2)) / (프분_list.Count - 1));
                 }
-                str += "\t" + avr.ToString("#.##");
-                str += "\t" + dev.ToString("#.##");
+                if(avr < 0.001)
+                    str += "\t" + "0.0";
+                else
+                    str += "\t" + avr.ToString("#.####");
+                if (dev < 0.001)
+                    str += "\t" + "0.0";
+                else
+                    str += "\t" + dev.ToString("#.####");
 
                 avr = 0.0;
                 dev = 0.0;
-                if (거분_list.Count > 300)
+                if (거분_list.Count >10)
                 {
                     avr = 거분_list.Sum() / 거분_list.Count;
                     dev = Math.Sqrt(거분_list.Sum(y => Math.Pow(y - avr, 2)) / (거분_list.Count - 1));
                 }
-                str += "\t" + avr.ToString("#.##");
-                str += "\t" + dev.ToString("#.##");
+                if (avr < 0.001)
+                    str += "\t" + "0.0";
+                else
+                    str += "\t" + avr.ToString("#.####");
+                if (dev < 0.001)
+                    str += "\t" + "0.0";
+                else
+                    str += "\t" + dev.ToString("#.####");
 
                 sw.WriteLine("{0}", str);
             }
@@ -2022,6 +2032,11 @@ namespace Pre_Processor
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void 통계(object sender, EventArgs e)
+        {
+            통계();   
         }
     }
 }
