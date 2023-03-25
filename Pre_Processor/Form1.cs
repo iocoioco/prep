@@ -17,7 +17,7 @@ using System.Xml.Linq;
 
 namespace Pre_Processor
 {
-    public partial class Form1 : Form 
+    public partial class Form1 : Form  
     {
         static CPUTILLib.CpCodeMgr _cm = new CPUTILLib.CpCodeMgr();
 
