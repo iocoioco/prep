@@ -1108,6 +1108,23 @@ namespace Pre_Processor
             return nrow; // nrow = nline as the result from above
         }
 
+        public static bool readStockMinuteCheck(int nrow, int[,] x)
+        {
+            if (nrow != 382)
+                return false;
+
+            // time inc ? 
+            // amount inc ? 
+            for (int i = 1; i < 382; i++)
+            {
+                if (x[i, 0] < x[i - 1, 0])
+                    return false;
+                if (x[i, 7] < x[i - 1, 7])
+                    return false;
+            }
+            return true;
+        }
+
         public static int read_Stock_Minute(int date, string stock, int[,] x)
         {
             if (date < 0)
@@ -1177,6 +1194,8 @@ namespace Pre_Processor
                 //    break;
                 //}
             }
+
+            // 이 부분은 필요가 없을 듯 한 데 왜 들어가 있는 지 모르겠네 ? 
             for (int i = nrow; i < g.MAX_ROW; i++)
             {
                 for (int j = 0; j < 12; j++)
@@ -1203,30 +1222,6 @@ namespace Pre_Processor
                     }
                 }
             }
-
-            //if(stock == "KODEX 레버리지" || 
-            //  stock == "KODEX 200선물인버스2X" ||
-            //  stock == "KODEX 코스닥150레버리지" ||
-            //  stock == "KODEX 코스닥150선물인버스")
-            //{
-            //    for (int i = 0; i < g.money_shift; i++)
-            //    {
-            //        x[nrow + i, 4] = x[nrow - 1, 4];
-            //        x[nrow + i, 5] = x[nrow - 1, 5];
-            //        x[nrow + i, 6] = x[nrow - 1, 6];
-            //        x[nrow + i, 10] = x[nrow - 1, 10];
-            //        x[nrow + i, 11] = x[nrow - 1, 11];
-            //    }
-            //    for (int i = 0; i < nrow; i++)
-            //    {
-            //        x[i, 4] = x[i + g.money_shift, 4];
-            //        x[i, 5] = x[i + g.money_shift, 5];
-            //        x[i, 6] = x[i + g.money_shift, 6];
-            //        x[i, 10] = x[i + g.money_shift, 10];
-            //        x[i, 11] = x[i + g.money_shift, 11];
-            //    }
-            //}
-
 
             return nrow;
         }

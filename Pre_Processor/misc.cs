@@ -16,6 +16,7 @@ namespace Pre_Processor
     {
         static CPUTILLib.CpStockCode _cpstockcode;
 
+       
      
         public static int current_date()
         {
