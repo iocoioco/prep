@@ -9,6 +9,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -1832,8 +1833,24 @@ namespace Pre_Processor
 
 
 
+        private void 통계_프누_종누(List<List<double>> 프누, List<List<double>> 종누)
+        {
+            if(프누.Count != 종누.Count) return;
 
-     
+            double[] 프누_avr = new double [382];
+            double[] 프누_dev = new double[382];
+            double[] 종누_avr = new double[382];
+            double[] 종누_dev = new double[382];
+
+            for (int i = 1; i < 382; i++)
+            {
+                프누_avr[i] = 프누[i].Sum() / 프누[i].Count;
+                프누_dev[i] = Math.Sqrt(프누[i].Sum(y => Math.Pow(y - 프누_avr[i], 2)) / (프누[i].Count - 1));
+                종누_avr[i] = 종누[i].Sum() / 종누[i].Count;
+                종누_dev[i] = Math.Sqrt(종누[i].Sum(y => Math.Pow(y - 종누_avr[i], 2)) / (종누[i].Count - 1));
+            }
+        }
+
         private void 통계_working()
         {
             rd.read_변수();
@@ -1913,7 +1930,12 @@ namespace Pre_Processor
                     }
                 }
 
-                g.clicked_Stock = stock;
+                if (count_success_read_stock_minute == 0) // no successful minute data
+                    continue;
+
+                통계_프누_종누(프누, 종누);
+
+                //g.clicked_Stock = stock;
                 //ms.Naver_호가_txt(2, -1, -1, 0, 0);
 
                 string str = stock;
