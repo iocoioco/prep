@@ -66,10 +66,12 @@ namespace Pre_Processor
         static CPUTILLib.CpCybos _cc = new CPUTILLib.CpCybos();
 
         public static List<List<string>> Gl = new List<List<string>>(); // group set list
+
         public Form1()
         {
             InitializeComponent();
             dataGridView1.Hide();
+            통계_working(); // MOD
         }
 
 
@@ -1851,16 +1853,19 @@ namespace Pre_Processor
             }
         }
 
-        private void 통계_working()
+        private void 통계_working() // MOD
         {
             rd.read_변수();
             rd.read_제어();
+
+            g.shortform = true; // MOD
             rd.read_업종_상관(); // 업종 & 상관 : 다 읽은 후 종목은 전일 거래액 순서로 정리함
+
 
             int start_date = Convert.ToInt32(textBox3.Text);
             int end_date = Convert.ToInt32(textBox4.Text);
 
-            string path = @"C:\WORK\data\통계.txt";
+            string path = @"C:\WORK\data\통계_working.txt";
 
             if (File.Exists(path))
                 File.Delete(path);
@@ -1876,6 +1881,8 @@ namespace Pre_Processor
                 var 거분_list = new List<double>();
 
                 var 프누 = new List<List<double>>();
+
+
                 var 종누 = new List<List<double>>();
 
                 for (int i = 0; i < 382; i++)
@@ -1919,14 +1926,14 @@ namespace Pre_Processor
                         }
 
                         value = (double)(x[j, 4] - x[j - 1, 4]) * money_factor;
-                        if (value > 0.01)
+                        if (value > 0.01) // positive side only
                             프분_list.Add(value);
                         value = (double)(x[j, 7] - x[j - 1, 7]) * money_factor;
                         거분_list.Add(value);
 
-                        int id = (x[i, 0] / 10000 - 9) * 60 + (x[i, 0] % 10000) / 100 + 1;
-                        프누[id].Add(x[i, 4] * money_factor);
-                        종누[id].Add(x[i, 7] * money_factor);
+                        int id = (x[j, 0] / 10000 - 9) * 60 + (x[j, 0] % 10000) / 100 + 1; // if nrow == 382, maybe no need, i.e. if data correct, id = j
+                        프누[id].Add(x[j, 4] * money_factor); 
+                        종누[id].Add(x[j, 7] * money_factor);
                     }
                 }
 
@@ -2107,7 +2114,7 @@ namespace Pre_Processor
 
         private void 통계(object sender, EventArgs e)
         {
-            통계();   
+            통계_working();   
         }
     }
 }
