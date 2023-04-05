@@ -1835,22 +1835,7 @@ namespace Pre_Processor
 
 
 
-        private void 통계_프누_종누(List<List<double>> 프누, List<List<double>> 종누)
-        {
-            double[] 프누_avr = new double [382];
-            double[] 프누_dev = new double[382];
-            double[] 종누_avr = new double[382];
-            double[] 종누_dev = new double[382];
-
-            for (int i = 1; i < 382; i++)
-            {
-                프누_avr[i] = 프누[i].Sum() / 프누[i].Count;
-                프누_dev[i] = Math.Sqrt(프누[i].Sum(y => Math.Pow(y - 프누_avr[i], 2)) / (프누[i].Count - 1));
-                종누_avr[i] = 종누[i].Sum() / 종누[i].Count;
-                종누_dev[i] = Math.Sqrt(종누[i].Sum(y => Math.Pow(y - 종누_avr[i], 2)) / (종누[i].Count - 1));
-            }
-        }
-
+      
         private void 통계_working() // MOD
         {
             rd.read_변수();
