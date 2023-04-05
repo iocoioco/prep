@@ -1837,8 +1837,6 @@ namespace Pre_Processor
 
         private void 통계_프누_종누(List<List<double>> 프누, List<List<double>> 종누)
         {
-            if(프누.Count != 종누.Count) return;
-
             double[] 프누_avr = new double [382];
             double[] 프누_dev = new double[382];
             double[] 종누_avr = new double[382];
@@ -1862,9 +1860,9 @@ namespace Pre_Processor
             rd.read_업종_상관(); // 업종 & 상관 : 다 읽은 후 종목은 전일 거래액 순서로 정리함
 
 
-            int start_date = Convert.ToInt32(textBox3.Text);
-            int end_date = Convert.ToInt32(textBox4.Text);
-
+            int start_date = 20210302; // MOD
+            int end_date = Convert.ToInt32(DateTime.Now.Date.ToString("yyyyMMdd"));
+           
             string path = @"C:\WORK\data\통계_working.txt";
 
             if (File.Exists(path))
@@ -1880,8 +1878,8 @@ namespace Pre_Processor
                 var 프분_list = new List<double>();
                 var 거분_list = new List<double>();
 
-                var 프누 = new List<List<double>>();
-
+                var 프누 = new List<List<double>>(); 
+                 
 
                 var 종누 = new List<List<double>>();
 
@@ -1896,8 +1894,7 @@ namespace Pre_Processor
                 int 전일종가 = rd.read_전일종가(stock);
                 double money_factor = 전일종가 / g.억원;
 
-                if (stock.Contains("KODEX") || stock.Contains("KBSTAR"))
-                    continue;
+
 
                 // find g.nCol * g.nRow maximum date and time
                 // in order of descending
@@ -1916,11 +1913,19 @@ namespace Pre_Processor
 
                     for (int j = 1; j < nrow; j++)
                     {
-                        if (x[j, 0] / 100 - x[j - 1, 0] / 100 != 1 || // minute difference = 1
-                            x[j, 1] < -3000 || x[j, 1] > 3000 ||     // price less than 3,000, and larger than -3,000
-                            x[j, 4] - x[j - 1, 4] < 0 ||
-                        x[j, 7] - x[j - 1, 7] < 0 ||                        // 거분 > 0
-                        x[j, 0] > 150000)                                // before 1500
+                        if ( (x[j, 0] / 100) % 100 == 0)
+                        {
+                            if (x[j, 0] / 100 - x[j - 1, 0] / 100 != 41)
+                                continue;
+                        }
+                        else
+                        {
+                            if (x[j, 0] / 100 - x[j - 1, 0] / 100 != 1)
+                                continue;
+                        }
+                         
+                        if (x[j, 1] < -3000 || x[j, 1] > 3000 ||     // price less than 3,000, and larger than -3,000
+                            x[j, 7] - x[j - 1, 7] < 0 )                 // negative deal (not possible)
                         {
                             continue;
                         }
@@ -1935,10 +1940,22 @@ namespace Pre_Processor
                         프누[id].Add(x[j, 4] * money_factor); 
                         종누[id].Add(x[j, 7] * money_factor);
                     }
+                    if (프누.Count != 종누.Count)
+                    {
+                        MessageBox.Show("프누 & 종누 숫자 차이");
+                    }
                 }
-
+                
                 if (count_success_read_stock_minute == 0) // no successful minute data
                     continue;
+
+                for (int i = 1; i < 382; i++)
+                {
+                    if(count_success_read_stock_minute != 프누[i].Count)
+                        MessageBox.Show("프누 array 숫자 불일치");
+                    if (count_success_read_stock_minute != 종누[i].Count)
+                        MessageBox.Show("종누 array 숫자 불일치");
+                }
 
                 통계_프누_종누(프누, 종누);
 
