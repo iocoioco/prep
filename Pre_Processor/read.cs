@@ -1119,7 +1119,28 @@ namespace Pre_Processor
             {
                 if (x[i, 0] < x[i - 1, 0])
                     return false;
+
                 if (x[i, 7] < x[i - 1, 7])
+                    return false;
+
+                if ((x[i, 0] / 100) % 100 == 0)
+                {
+                    if (x[i, 0] / 100 - x[i - 1, 0] / 100 != 41)
+                        return false;
+                }
+                else
+                {
+                    if (x[i, 0] / 100 - x[i - 1, 0] / 100 != 1)
+                        return false;
+                }
+
+                if (x[i, 1] < -3000 || x[i, 1] > 3000 ||     // price less than 3,000, and larger than -3,000
+                    x[i, 7] - x[i - 1, 7] < 0)                 // negative deal (not possible)
+                {
+                    return false;
+                }
+                int id = (x[i, 0] / 10000 - 9) * 60 + (x[i, 0] % 10000) / 100 + 1; // if nrow == 382, maybe no need, i.e. if data correct, id = i
+                if (id < 1 || id >= 382)
                     return false;
             }
             return true;

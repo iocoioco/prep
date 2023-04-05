@@ -1906,37 +1906,21 @@ namespace Pre_Processor
 
                     int[,] x = new int[400, 12];
                     int nrow = rd.read_Stock_Minute(i, stock, x); // i -> date
-                    if (!rd.readStockMinuteCheck(nrow, x)) // nrow == 382 ?, time inc ? amount inc ? 
+                    if (!rd.readStockMinuteCheck(nrow, x)) // if minute data is not absolute continue
                         continue;
                     else
                         count_success_read_stock_minute++;
 
                     for (int j = 1; j < nrow; j++)
                     {
-                        if ( (x[j, 0] / 100) % 100 == 0)
-                        {
-                            if (x[j, 0] / 100 - x[j - 1, 0] / 100 != 41)
-                                continue;
-                        }
-                        else
-                        {
-                            if (x[j, 0] / 100 - x[j - 1, 0] / 100 != 1)
-                                continue;
-                        }
-                         
-                        if (x[j, 1] < -3000 || x[j, 1] > 3000 ||     // price less than 3,000, and larger than -3,000
-                            x[j, 7] - x[j - 1, 7] < 0 )                 // negative deal (not possible)
-                        {
-                            continue;
-                        }
-
                         value = (double)(x[j, 4] - x[j - 1, 4]) * money_factor;
                         if (value > 0.01) // positive side only
                             프분_list.Add(value);
                         value = (double)(x[j, 7] - x[j - 1, 7]) * money_factor;
                         거분_list.Add(value);
 
-                        int id = (x[j, 0] / 10000 - 9) * 60 + (x[j, 0] % 10000) / 100 + 1; // if nrow == 382, maybe no need, i.e. if data correct, id = j
+                        int id = (x[j, 0] / 10000 - 9) * 60 + (x[j, 0] % 10000) / 100 + 1;
+
                         프누[id].Add(x[j, 4] * money_factor); 
                         종누[id].Add(x[j, 7] * money_factor);
                     }
@@ -1957,7 +1941,22 @@ namespace Pre_Processor
                         MessageBox.Show("종누 array 숫자 불일치");
                 }
 
-                통계_프누_종누(프누, 종누);
+                double[] 프누_avr = new double[382];
+                double[] 프누_dev = new double[382];
+                double[] 종누_avr = new double[382];
+                double[] 종누_dev = new double[382];
+
+                for (int i = 1; i < 382; i++)
+                {
+                    프누_avr[i] = 프누[i].Sum() / 프누[i].Count;
+                    프누_dev[i] = Math.Sqrt(프누[i].Sum(y => Math.Pow(y - 프누_avr[i], 2)) / (프누[i].Count - 1));
+                    종누_avr[i] = 종누[i].Sum() / 종누[i].Count;
+                    종누_dev[i] = Math.Sqrt(종누[i].Sum(y => Math.Pow(y - 종누_avr[i], 2)) / (종누[i].Count - 1));
+                }
+
+
+
+
 
                 //g.clicked_Stock = stock;
                 //ms.Naver_호가_txt(2, -1, -1, 0, 0);
