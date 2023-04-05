@@ -1875,8 +1875,8 @@ namespace Pre_Processor
                 int count_success_read_stock_minute = 0;
                 string stock = o.종목;
 
-                var 프분_list = new List<double>();
-                var 거분_list = new List<double>();
+                var 프분 = new List<double>();
+                var 거분 = new List<double>();
 
                 var 프누 = new List<List<double>>(); 
                  
@@ -1915,9 +1915,9 @@ namespace Pre_Processor
                     {
                         value = (double)(x[j, 4] - x[j - 1, 4]) * money_factor;
                         if (value > 0.01) // positive side only
-                            프분_list.Add(value);
+                            프분.Add(value);
                         value = (double)(x[j, 7] - x[j - 1, 7]) * money_factor;
-                        거분_list.Add(value);
+                        거분.Add(value);
 
                         int id = (x[j, 0] / 10000 - 9) * 60 + (x[j, 0] % 10000) / 100 + 1;
 
@@ -1964,10 +1964,10 @@ namespace Pre_Processor
                 string str = stock;
                 double avr = 0.0;
                 double dev = 0.0;
-                if (프분_list.Count > 10)
+                if (프분.Count > 10)
                 {
-                    avr = 프분_list.Sum() / 프분_list.Count;
-                    dev = Math.Sqrt(프분_list.Sum(y => Math.Pow(y - avr, 2)) / (프분_list.Count - 1));
+                    avr = 프분.Sum() / 프분.Count;
+                    dev = Math.Sqrt(프분.Sum(y => Math.Pow(y - avr, 2)) / (프분.Count - 1));
                 }
                 if(avr < 0.001)
                     str += "\t" + "0.0";
@@ -1980,10 +1980,10 @@ namespace Pre_Processor
                  
                 avr = 0.0;
                 dev = 0.0;
-                if (거분_list.Count >10) 
+                if (거분.Count >10) 
                 {
-                    avr = 거분_list.Sum() / 거분_list.Count;
-                    dev = Math.Sqrt(거분_list.Sum(y => Math.Pow(y - avr, 2)) / (거분_list.Count - 1));
+                    avr = 거분.Sum() / 거분.Count;
+                    dev = Math.Sqrt(거분.Sum(y => Math.Pow(y - avr, 2)) / (거분.Count - 1));
                 }
                 if (avr < 0.001)
                     str += "\t" + "0.0";
