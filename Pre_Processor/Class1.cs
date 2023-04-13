@@ -879,17 +879,20 @@ namespace Pre_Processor
                 foreach (string line1 in lines1)
                 {
                     string[] texts1 = line1.Split(' ');
-                    value1[inc1++] = Convert.ToDouble(texts1[4]);
+                    value1[inc1++] = Convert.ToDouble(texts1[4]); // 종가
                 }
 
                 double sum_percentage1 = 0.0;
                 for (int i = 0; i < inc1 - 1; i++)
                 {
+                    // 전일대비 상승 비율 0.15% -> 0.15/100.0 = 0.0015
                     percent1[i] = (value1[i + 1] - value1[i]) / value1[i];
                     sum_percentage1 += Math.Abs(percent1[i]);
                 }
                 for (int i = 0; i < inc1 - 1; i++)
                 {
+                    // 일간 상승율 divided by 상승율 절대값 합
+                    // 표준화 ? 
                     percent1[i] /= sum_percentage1;
                 }
 
@@ -922,7 +925,9 @@ namespace Pre_Processor
                     }
                     for (int i = 0; i < inc2 - 1; i++)
                     {
-                        percent2[i] /= sum_percentage2;
+                        // 일간 상승율 divided by 상승율 절대값 합
+                        // 표준화 ? 
+                        percent2[i] /= sum_percentage2; 
                     }
 
                     int numberofuse = 0;
@@ -941,7 +946,8 @@ namespace Pre_Processor
                         {
                             //double fac = (numberofuse - 2 - i) / (double)(numberofuse - 2);
                             //fac = 1.0;
-                            difference += Math.Abs((percent1[inc1 - 2 - i] - percent2[inc2 - 2 - i]));
+                            // 두 종목 상승 차의 합이 가장 적은 종목이 1위
+                            difference += Math.Abs((percent1[inc1 - 2 - i] - percent2[inc2 - 2 - i])); 
                             //double value= ComputeCoeff(percent1, percent2);
                         }
                     }
