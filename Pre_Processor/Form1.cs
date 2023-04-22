@@ -1853,8 +1853,12 @@ namespace Pre_Processor
 
             StreamWriter sw = File.CreateText(path);
 
+            int processing_count = 0;
+
             foreach (var o in g.ogl_data) // 혼합 2 종목 빠져시 to-jsb 보다 2 종목 작음
             {
+                textBox6.Text = "통계 진행 : " + processing_count++.ToString();
+
                 int count_success_read_stock_minute = 0;
                 string stock = o.종목;
 
