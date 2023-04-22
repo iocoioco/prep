@@ -71,7 +71,7 @@ namespace Pre_Processor
         {
             InitializeComponent();
             dataGridView1.Hide();
-            통계_working(); // MOD
+           
         }
 
 
@@ -1534,7 +1534,7 @@ namespace Pre_Processor
             네이버_테마(1);
             일주월();
             시가총액();
-            통계();
+            통계_working();
         }
 
 
@@ -1838,17 +1838,15 @@ namespace Pre_Processor
       
         private void 통계_working() // MOD
         {
-            rd.read_변수();
-            rd.read_제어();
+            // rd.read_변수();
+            textBox6.Text = "통계 진행 중";
 
-            g.shortform = true; // MOD
             rd.read_업종_상관(); // 업종 & 상관 : 다 읽은 후 종목은 전일 거래액 순서로 정리함
 
-
-            int start_date = 20210302; // MOD
+            int start_date = 20220302; // MOD
             int end_date = Convert.ToInt32(DateTime.Now.Date.ToString("yyyyMMdd"));
            
-            string path = @"C:\WORK\data\통계_working.txt";
+            string path = @"C:\WORK\data\통계.txt";
 
             if (File.Exists(path))
                 File.Delete(path);
@@ -1864,8 +1862,6 @@ namespace Pre_Processor
                 var 거분 = new List<double>();
 
                 var 프누 = new List<List<double>>(); 
-                 
-
                 var 종누 = new List<List<double>>();
 
                 for (int i = 0; i < 382; i++)
@@ -1940,9 +1936,6 @@ namespace Pre_Processor
                 }
 
 
-
-
-
                 //g.clicked_Stock = stock;
                 //ms.Naver_호가_txt(2, -1, -1, 0, 0);
 
@@ -1954,7 +1947,8 @@ namespace Pre_Processor
                     avr = 프분.Sum() / 프분.Count;
                     dev = Math.Sqrt(프분.Sum(y => Math.Pow(y - avr, 2)) / (프분.Count - 1));
                 }
-                if(avr < 0.001)
+                str += "\t" + 프분.Count;
+                if (avr < 0.001)
                     str += "\t" + "0.0";
                 else
                     str += "\t" + avr.ToString("#.####");
@@ -1970,6 +1964,7 @@ namespace Pre_Processor
                     avr = 거분.Sum() / 거분.Count;
                     dev = Math.Sqrt(거분.Sum(y => Math.Pow(y - avr, 2)) / (거분.Count - 1));
                 }
+                str += "\t" + 거분.Count;
                 if (avr < 0.001)
                     str += "\t" + "0.0";
                 else
@@ -1982,12 +1977,14 @@ namespace Pre_Processor
                 sw.WriteLine("{0}", str);
             }
             sw.Close();
+            textBox6.Text = "통계 진행 완료";
         }
 
 
 
-        private void 통계()
+        private void 통계_old()
         {
+            return;
             rd.read_변수();
             rd.read_제어();
             rd.read_업종_상관(); // 업종 & 상관 : 다 읽은 후 종목은 전일 거래액 순서로 정리함
@@ -2076,6 +2073,7 @@ namespace Pre_Processor
                     avr = 프분_list.Sum() / 프분_list.Count;
                     dev = Math.Sqrt(프분_list.Sum(y => Math.Pow(y - avr, 2)) / (프분_list.Count - 1));
                 }
+                str += "\t" + 프분_list.Count.ToString();
                 if (avr < 0.001)
                     str += "\t" + "0.0";
                 else
@@ -2092,6 +2090,7 @@ namespace Pre_Processor
                     avr = 거분_list.Sum() / 거분_list.Count;
                     dev = Math.Sqrt(거분_list.Sum(y => Math.Pow(y - avr, 2)) / (거분_list.Count - 1));
                 }
+                str += "\t" + 거분_list.Count.ToString();
                 if (avr < 0.001)
                     str += "\t" + "0.0";
                 else

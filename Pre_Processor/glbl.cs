@@ -14,7 +14,7 @@ namespace Pre_Processor
     {
         public static string Account;
         public static string MachineName;
-        public static bool shortform;
+        public static bool shortform = false;
 
         public static int date;
         public static bool r8_기업정보 = false;
