@@ -1979,9 +1979,14 @@ namespace Pre_Processor
                     str += "\t" + dev.ToString("#.####");
 
                 sw.WriteLine("{0}", str);
+
+                if (프분.Count < 5000)
+                    wr.w(o.종목);
             }
             sw.Close();
             textBox6.Text = "통계 진행 완료";
+
+
         }
 
 
