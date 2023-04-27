@@ -1841,7 +1841,7 @@ namespace Pre_Processor
             // rd.read_변수();
             textBox6.Text = "통계 진행 중";
 
-            rd.read_업종_상관(); // MODI 상관을 읽지 않은 듯, 업종 & 상관 : 다 읽은 후 종목은 전일 거래액 순서로 정리함
+            rd.read_업종_상관(); // MODI 상관을 읽지 않은 듯, library 작업할 것, to-jsb와 미스매치
 
             int start_date = 20220302; // MOD
             int end_date = Convert.ToInt32(DateTime.Now.Date.ToString("yyyyMMdd"));
