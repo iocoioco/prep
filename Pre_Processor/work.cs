@@ -322,9 +322,15 @@ namespace Pre_Processor
             o.전일종가 = rd.read_전일종가(stock);
 
             o.avr = 0.0;
+            o.dev = 0.0;
+            o.dev_avr = ""; 
             int days = 20;
             o.dev_avr = calcurate_종목일중변동평균편차(stock, days, ref o.avr, ref o.dev,
                 ref o.avr_dealt, ref o.min_dealt, ref o.max_dealt, ref o.일평균거래량, ref o.pass.long_high);
+
+            if (o.dev_avr == "")
+                return false;
+
             o.일평균거래액 = (int)(o.전일종가 * (o.일평균거래량 / g.억원));
             if (o.일평균거래량 == 0)
                 return false;
@@ -757,14 +763,18 @@ namespace Pre_Processor
         //     }
 
 
+        // avr_dealt, min_dealt, max_dealt : not used, just for reference
         public static string calcurate_종목일중변동평균편차(string stock, int days, ref double avr, ref double dev,
                                     ref int avr_dealt, ref int min_dealt, ref int max_dealt, ref ulong 일평균거래량, ref int long_high)
         {
-            string path = @"C:\WORK\data\일\" + stock + ".txt";
+            string path = @"C:\Work\data\일\" + stock + ".txt";
             if (!File.Exists(path))
-                return " ";
+                return "";
 
             List<string> lines = File.ReadLines(path).Reverse().Take(days + 100).ToList(); // 파일 후반 읽기
+
+            if (lines.Count < 1) // 신규상장의 경우 데이터 숫자 20 보다 적음
+                return "";
 
             List<Double> day_list = new List<Double>();
             List<Double> long_day_list = new List<Double>();
@@ -776,13 +786,25 @@ namespace Pre_Processor
             min_dealt = 1000000; // 단위 억원
             일평균거래량 = 0;
 
-            int day_count = 0;
-            foreach (var line in lines)
+            int days_count = 0;
+            // 20일 일평균거래량, avr, dev, 
+            for (int i = 0; i < 20; i++)
             {
-                string[] words = line.Split(' ');
+                if (i == lines.Count) // 신규 등 lines 숫자 20개 보다 작은 경우
+                    break;
+
+                string[] words = lines[i].Split(' ');
+                if (words.Length != 10)
+                    return "";
+                if (Convert.ToDouble(words[5]) == 0 &&
+                  Convert.ToDouble(words[6]) == 0 &&
+                  Convert.ToDouble(words[7]) == 0 &&
+                  Convert.ToDouble(words[8]) == 0)
+                    return "";
+
                 double start_price = Convert.ToDouble(words[1]); // 시가
                 double close_price = Convert.ToDouble(words[4]); // 종가
-                일평균거래량 += Convert.ToUInt64(words[5]); // 종가
+                일평균거래량 += Convert.ToUInt64(words[5]); // 
 
                 day_dealt = (int)(Convert.ToInt32(words[5]) * close_price / g.억원); // 일거래량 X 종가 / 억원
                 avr_dealt += day_dealt;
@@ -795,44 +817,46 @@ namespace Pre_Processor
 
                 day_list.Add(diff);
 
-                day_count++;
-                if (day_count > days)
-                    break;
+                days_count++;
             }
 
-            if (day_list.Count == 0)
+            if (days_count == 0)
                 return "";
 
-            avr_dealt = avr_dealt / day_list.Count;
+            avr_dealt = avr_dealt / days_count;
             double temp_avr = 0.0;
             dev = 0.0;
-            if (day_list.Count > 0)
+            if (days_count > 0)
             {
-                temp_avr = day_list.Sum() / day_list.Count;
-                if (day_list.Count <= 1)
+                temp_avr = day_list.Sum() / days_count;
+                if (days_count <= 1)
                     dev = 0;
                 else
-                    dev = Math.Sqrt(day_list.Sum(x => Math.Pow(x - temp_avr, 2)) / (day_list.Count - 1));
+                    dev = Math.Sqrt(day_list.Sum(x => Math.Pow(x - temp_avr, 2)) / (days_count - 1));
             }
 
             string str = temp_avr.ToString("0.#") + "/" + dev.ToString("0.#");
             avr = temp_avr;
 
-            일평균거래량 = 일평균거래량 / (ulong)day_list.Count;
+            일평균거래량 = 일평균거래량 / (ulong)days_count;
 
-            // 120일 전고
+            // 120일 중 전고
             long_high = 0;
             foreach (var line in lines)
             {
                 string[] words = line.Split(' ');
-                int close_price = Convert.ToInt32(words[4]); // 종가
+                for (int i = 1; i <= 4; i++)
+                {
+                    int price = Convert.ToInt32(words[i]); // 시가, 고가, 저가, 종가
 
-                if (close_price > long_high) // currently long_high is not percentage
-                    long_high = close_price;
+                    if (price > long_high) // currently long_high is not percentage
+                        long_high = price;
+                }
             }
 
             return str;
         }
+
 
 
 

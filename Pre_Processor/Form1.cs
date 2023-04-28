@@ -1836,12 +1836,12 @@ namespace Pre_Processor
 
 
       
-        private void 통계_working() // MOD
+        private void 통계_working() // MOD,  g.ogldata 1581, 통계 1573
         {
             // rd.read_변수();
             textBox6.Text = "통계 진행 중";
 
-            rd.read_업종_상관(); // MODI 상관을 읽지 않은 듯, library 작업할 것, to-jsb와 미스매치
+            rd.read_업종_상관(); 
 
             int start_date = 20220302; // MOD
             int end_date = Convert.ToInt32(DateTime.Now.Date.ToString("yyyyMMdd"));

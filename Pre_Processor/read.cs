@@ -897,7 +897,7 @@ namespace Pre_Processor
 
         public static void read_상관(List<string> gl, List<string> GL_title, List<List<string>> GL)
         {
-            string filename = @"C:\Work\data\상관 small.txt";
+            string filename = @"C:\Work\data\상관.txt";
 
             if (!File.Exists(filename))
             {
