@@ -1,6 +1,8 @@
 ﻿
 
+using Library;
 using Microsoft.Win32;
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -825,6 +827,113 @@ namespace Pre_Processor
         // 상관관계
         //
         //
+
+        //public static void ReadDaysAndCalculate(string stock, int days,
+        //   ref double AvrRiseRate, ref double DevRiseRate, ref double MaxRiseRate,
+        //   ref int AvrMoney, ref int MinMoney, ref int MaxMoney, ref int DateMaxMoney,
+        //   ref ulong AvrNumber, ref int SixMonthHigh)
+        //{
+        //    string path = @"C:\Work\data\일\" + stock + ".txt";
+        //    if (!File.Exists(path))
+        //        return;
+
+        //    List<string> lines = File.ReadLines(path).Reverse().Take(days + 100).ToList(); // read 120 days data reveresely
+
+        //    List<Double> rate_diff_by_days_list = new List<Double>();
+
+        //    int day_dealt_by_money;
+
+        //    AvrMoney = 0;
+        //    MaxMoney = 0;
+        //    MinMoney = 1000000; // initialize min by 1000000억
+        //    AvrNumber = 0;
+        //    DateMaxMoney = 0;
+        //    MaxRiseRate = -30.0 - 1.0; // initialize -31.0 as ...
+
+        //    double yesterday_close_price = 0.0;
+        //    for (int i = days; i >= 0; i--)
+        //    {
+        //        string[] words = lines[i].Split(' ');
+
+        //        if (yesterday_close_price < 0.0001) // compare with small number
+        //        {
+        //            yesterday_close_price = Convert.ToDouble(words[4]); // previous close_price of initial day
+        //            continue;
+        //        }
+
+        //        double close_price = Convert.ToDouble(words[4]);
+        //        ulong day_dealt_by_number = Convert.ToUInt64(words[5]);
+        //        if (day_dealt_by_number == 0)
+        //            break;
+
+        //        AvrNumber += day_dealt_by_number;
+
+        //        day_dealt_by_money = (int)(Convert.ToInt32(words[5]) * close_price / 100000000); // 일거래량 X 종가 / 억원
+        //        AvrMoney += day_dealt_by_money;
+        //        if (day_dealt_by_money > MaxMoney)
+        //        {
+        //            MaxMoney = day_dealt_by_money;
+        //            DateMaxMoney = Convert.ToInt32(words[0]) % 1000;
+        //        }
+
+        //        if (day_dealt_by_money < MinMoney)
+        //        {
+        //            MinMoney = day_dealt_by_money;
+        //        }
+
+        //        double rate_diff_by_days = (close_price - yesterday_close_price) /
+        //            yesterday_close_price * 100;
+        //        if (MaxRiseRate < rate_diff_by_days)
+        //        {
+        //            MaxRiseRate = rate_diff_by_days;
+        //        }
+        //        rate_diff_by_days_list.Add(rate_diff_by_days);
+
+        //        // set close_price for the calculation of next day
+        //        yesterday_close_price = close_price;
+        //    }
+
+        //    if (rate_diff_by_days_list.Count == 0)
+        //        return;
+
+        //    AvrMoney = AvrMoney / rate_diff_by_days_list.Count;
+        //    AvrRiseRate = 0.0;
+        //    DevRiseRate = 0.0;
+        //    if (rate_diff_by_days_list.Count > 0)
+        //    {
+        //        AvrRiseRate = rate_diff_by_days_list.Sum() / rate_diff_by_days_list.Count;
+        //        if (rate_diff_by_days_list.Count <= 1)
+        //            DevRiseRate = 0;
+        //        else
+        //        {
+        //            double temp_avr = AvrRiseRate; // ref cannot be inserted in anonymous expression
+        //            DevRiseRate = Math.Sqrt(rate_diff_by_days_list.Sum(x => Math.Pow(x - temp_avr, 2))
+        //               / (rate_diff_by_days_list.Count - 1));
+        //        }
+        //    }
+        //    AvrNumber = AvrNumber / (ulong)rate_diff_by_days_list.Count;
+
+        //    // 120 days high, approximately 6 months
+        //    SixMonthHigh = 0;
+        //    foreach (var line in lines)
+        //    {
+        //        string[] words = line.Split(' ');
+
+        //        ulong day_dealt_by_number = Convert.ToUInt64(words[5]);
+        //        if (day_dealt_by_number == 0)
+        //            continue;
+
+        //        for (int i = 1; i <= 4; i++)
+        //        {
+        //            int price = Convert.ToInt32(words[i]);
+
+        //            if (price > SixMonthHigh) // currently SixMonthHigh is not percentage
+        //                SixMonthHigh = price;
+        //        }
+        //    }
+        //}
+
+
         private void button4_Click_1(object sender, EventArgs e)
         {
             textBox6.Text = "상관관계" + " is Processing";
@@ -838,11 +947,28 @@ namespace Pre_Processor
             int 일평균거래액 = 0, 일최소거래액 = 0, 일최대거래액 = 0;
             int MaximumDate = 0;
             double MaximumPriceRiseRate = 0;
+
+
+
+            double avr_rise_rate = 0;
+            double dev_rise_rate = 0;
+            double max_rise_rate = 0;
+            int avr_money = 0;
+            int min_money = 0;
+            int max_money = 0;
+            int date_max_money = 0;
+            ulong avr_number = 0;
+            int six_months_high = 0;
             foreach (var stock in _gl)
             {
+                PreProcessing.ReadDaysAndCalculate(stock, 20,
+                    ref avr_rise_rate, ref dev_rise_rate, ref max_rise_rate,
+                    ref avr_money, ref min_money, ref max_money, ref date_max_money,
+                    ref avr_number, ref six_months_high);
+
                 Pre_Processor_Class1.calcurate_종목일중변동평균편차(stock, days, ref avr, ref dev, ref 일평균거래액,
                                              ref 일최소거래액, ref 일최대거래액, ref MaximumDate, ref MaximumPriceRiseRate);
-                if (일최대거래액 > 500)
+                if (max_money > 500)
                     selected_gl.Add(stock);
             }
 
