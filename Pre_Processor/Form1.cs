@@ -970,9 +970,10 @@ namespace Pre_Processor
             {
                 Pre_Processor_Class1.calcurate_종목일중변동평균편차(stock, days, ref avr, ref dev, ref 일평균거래액,
                                              ref 일최소거래액, ref 일최대거래액, ref MaximumDate, ref MaximumPriceRiseRate);
-                if (일최대거래액 > 300)
+                if (일최대거래액 > 5000)
                     selected_gl.Add(stock);
             }
+
 
             int array_length = 100;
             int print_length = 20;

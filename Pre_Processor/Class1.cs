@@ -1,20 +1,12 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
-using static System.Windows.Forms.LinkLabel;
 
 namespace Pre_Processor
 {
@@ -62,7 +54,7 @@ namespace Pre_Processor
                     전일종가 = Convert.ToDouble(words[4]); // 전일종가
                     continue;
                 }
-                    
+
                 int 시가 = Convert.ToInt32(words[1]); // 시가
                 int 고가 = Convert.ToInt32(words[2]); // 고가
                 int 저가 = Convert.ToInt32(words[3]); // 저가
@@ -72,9 +64,9 @@ namespace Pre_Processor
 
                 if (riseofrate > MaximumPriceRiseRate)
                     MaximumPriceRiseRate = riseofrate;
-                
+
                 일거래량 = Convert.ToInt32(words[5]); // 누적거래량, the last day -> the first
-                if(stock == "삼성전자" && 일거래량 == 0)
+                if (stock == "삼성전자" && 일거래량 == 0)
                     MessageBox.Show("삼성전자 일거래량 = 0");
 
                 일거래액 = (int)(일거래량 * (종가 / 100000000.0)); // 억원
@@ -84,7 +76,7 @@ namespace Pre_Processor
                     일최대거래액 = 일거래액;
                     MaxmumDate = Convert.ToInt32(words[0]) % 1000;
                 }
-                    
+
                 if (일거래액 < 일최소거래액)
                     일최소거래액 = 일거래액;
 
@@ -129,7 +121,7 @@ namespace Pre_Processor
         public static int Read_Stock_Minute(int date, string stock, int[,] x)
         {
             int MAX_ROW = 382;
-            
+
 
             string file = @"C:\WORK\분\" + date.ToString() + "\\" + stock + ".txt";
             if (!File.Exists(file))
@@ -191,7 +183,7 @@ namespace Pre_Processor
                 //    break;
                 //}
             }
-            
+
 
             return nrow;
         }
@@ -199,7 +191,7 @@ namespace Pre_Processor
 
         public static int Read_Stock_Minute_LasLine(int date, string stock, int[] x)
         {
-          
+
             string file = @"C:\WORK\분\" + date.ToString() + "\\" + stock + ".txt";
             if (!File.Exists(file))
             {
@@ -253,7 +245,7 @@ namespace Pre_Processor
         public static void 시총순서(List<string> gl)
         {
             var 종목 = new List<Tuple<double, string>> { };
-           
+
             foreach (var stock in gl)
             {
                 if (stock.Contains("KODEX")) continue;
@@ -288,7 +280,7 @@ namespace Pre_Processor
             foreach (string line in grlines)
             {
                 string[] words = line.Split('\t');
-               
+
                 if (words[0].Length > 0)
                 {
                     _gl.Add(words[0]);
@@ -432,7 +424,7 @@ namespace Pre_Processor
 
             //wk.write_on_temp(GL_title, GL);
         }
-      
+
         public static string calcurate_종목일중변동평균편차(string stockname, ref double 양의변동, ref double 음의변동)
         {
             string path = @"C:\WORK\data\일\\" + stockname + ".txt";
@@ -495,7 +487,7 @@ namespace Pre_Processor
             {
                 string[] words = line.Split(' ');
 
-                if(Convert.ToInt32(words[1]) > lower_limit)
+                if (Convert.ToInt32(words[1]) > lower_limit)
                 {
                     if (words[0] == "") continue; // WN code check needed for misspelling
                     //string newname = words[0].Replace("_", " "); 사용하려면 아래의 words[0] 수정할 것
@@ -535,7 +527,7 @@ namespace Pre_Processor
                 {
                     string[] words = line.Split(' '); // empty spaces also recognized as words, word.lenght can be larger than 4
 
-                   
+
                     foreach (string stock in words)
                     {
                         if (stock == "") // \N code check needed for misspelling
@@ -560,7 +552,7 @@ namespace Pre_Processor
 
         }
 
-        
+
         public static List<string> read_그룹4(List<List<string>> cL)
         {
             List<string> blist = new List<string>();
@@ -570,7 +562,7 @@ namespace Pre_Processor
                 List<string> alist = new List<string>();
 
                 string[] words = line.Split(' ');
-               
+
                 foreach (string stockname in words)
                 {
                     if (stockname == "") continue; // WN code check needed for misspelling
@@ -586,9 +578,9 @@ namespace Pre_Processor
                     alist.Add(newname);
                     blist.Add(newname);
                 }
-                if(alist.Count > 0)
+                if (alist.Count > 0)
                     cL.Add(alist);
-               
+
             }
             var uniqueItemsList = blist.Distinct().ToList();
             return uniqueItemsList;
@@ -619,7 +611,7 @@ namespace Pre_Processor
                 string[] words = line.Split(' ');
 
                 string code = "";
-                foreach(var str in words)
+                foreach (var str in words)
                 {
                     if (str == "")
                         continue;
@@ -627,7 +619,7 @@ namespace Pre_Processor
                     {
                         code = str;
                         break;
-                    }    
+                    }
                 }
                 alist.Add(code);
             }
@@ -808,7 +800,7 @@ namespace Pre_Processor
                 return -1;
             }
             string[] grlines = File.ReadAllLines(path, Encoding.Default);
-            for(int i = 1; i < grlines.Length; i++)
+            for (int i = 1; i < grlines.Length; i++)
             {
                 string[] words = grlines[i].Split(' ');
 
@@ -849,11 +841,11 @@ namespace Pre_Processor
         {
             double[] values = new double[ArrayLength];
 
-            double[] RateRiseFirst     = new double[ArrayLength];
+            double[] RateRiseFirst = new double[ArrayLength];
             double[] RateRiseSecond = new double[ArrayLength];
 
             string path = @"C:\WORK\data\";
-            path += ("상관" + ".txt");
+            path += ("Correlation" + ".txt");
             if (File.Exists(path))
                 File.Delete(path);
 
@@ -898,7 +890,7 @@ namespace Pre_Processor
                     {
                         continue;
                     }
-                    
+
                     lines = File.ReadLines(path).Reverse().Take(ArrayLength).ToList();
 
                     inc = 0;
@@ -921,11 +913,18 @@ namespace Pre_Processor
                 sw.WriteLine("{0}", stockname1);
 
                 inc = 0;
-                foreach(var item in stocks)
+                foreach (var item in stocks)
                 {
-                    sw.WriteLine("     {0} \t {1}", item.Item1, item.Item2);
+                    decimal d = Convert.ToDecimal(item.Item1);
+                    string t = String.Format("{0:0.000}", d);
+                    if(d < 0)
+                        sw.WriteLine("    {0}\t{1}", t, item.Item2);
+                    else
+                        sw.WriteLine("     {0}\t{1}", t, item.Item2);
+
                     if (inc++ > PrintLength) { break; }
                 }
+                sw.WriteLine();
             }
             sw.Close();
         }
@@ -943,7 +942,7 @@ namespace Pre_Processor
             List<string> alist = new List<string>();
 
             string path = @"C:\WORK\data\";
-            path += ("상관" + ".txt");
+            path += ("Correlation" + ".txt");
             if (File.Exists(path))
             {
                 File.Delete(path);
@@ -993,7 +992,7 @@ namespace Pre_Processor
                     {
                         continue;
                     }
-                    
+
                     string[] lines2 = File.ReadAllLines(path2);
                     if (lines2.Length < 20) // 신규상장 제외 (20일 이하는 상관에서 제외)
                         continue;
@@ -1015,7 +1014,7 @@ namespace Pre_Processor
                     {
                         // 일간 상승율 divided by 상승율 절대값 합
                         // 표준화 ? 
-                        percent2[i] /= sum_percentage2; 
+                        percent2[i] /= sum_percentage2;
                     }
 
                     int numberofuse = 0;
@@ -1023,7 +1022,7 @@ namespace Pre_Processor
                     for (int iter = 0; iter < 2; iter++) // 200일, 300일, 400일, 500일 순차진행
                     {
                         if (iter == 0) numberofuse = 20;
-                       // if (iter == 1) numberofuse = 60;
+                        // if (iter == 1) numberofuse = 60;
                         //if (iter == 2) numberofuse = 400;
                         //if (iter == 3) numberofuse = 500;
                         int min = Math.Min(inc1, inc2);
@@ -1035,7 +1034,7 @@ namespace Pre_Processor
                             //double fac = (numberofuse - 2 - i) / (double)(numberofuse - 2);
                             //fac = 1.0;
                             // 두 종목 상승 차의 합이 가장 적은 종목이 1위
-                            difference += Math.Abs((percent1[inc1 - 2 - i] - percent2[inc2 - 2 - i])); 
+                            difference += Math.Abs((percent1[inc1 - 2 - i] - percent2[inc2 - 2 - i]));
                             //double value= ComputeCoeff(percent1, percent2);
                         }
                     }
@@ -1145,7 +1144,7 @@ namespace Pre_Processor
             return uniqueItemsList;
         }
 
-     
+
 
 
         public static List<string> read_그룹_네이버_업종(List<List<string>> GL)
