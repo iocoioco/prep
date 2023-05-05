@@ -644,7 +644,7 @@ namespace Pre_Processor
 
 
 
-        public static double ComputeCoeff(string stockname, double[] values1, double[] values2)
+        public static double PearsonCorrelation(double[] values1, double[] values2)
         {
             if (values1.Length != values2.Length)
             {

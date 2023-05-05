@@ -1,6 +1,6 @@
 ﻿
 
-using Library;
+
 using Microsoft.Win32;
 
 using System;
@@ -937,9 +937,10 @@ namespace Pre_Processor
         private void button4_Click_1(object sender, EventArgs e)
         {
             textBox6.Text = "상관관계" + " is Processing";
-            _gl = Pre_Processor_Class1.read_그룹_네이버_테마();
-            //_gl = Pre_Processor_Class1.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
-            Pre_Processor_Class1.시총순서(_gl);
+
+            List<List<string>> Gl = new List<List<string>>();
+            List<List<string>> GL = new List<List<string>>();
+            _gl = rd.read_그룹_네이버_업종(Gl, GL); // if file not exist, return nothing, 제외종목 제거
 
             List<string> selected_gl = new List<string>();
             int days = 20;
@@ -950,29 +951,32 @@ namespace Pre_Processor
 
 
 
-            double avr_rise_rate = 0;
-            double dev_rise_rate = 0;
-            double max_rise_rate = 0;
-            int avr_money = 0;
-            int min_money = 0;
-            int max_money = 0;
-            int date_max_money = 0;
-            ulong avr_number = 0;
-            int six_months_high = 0;
-            foreach (var stock in _gl)
+            //double avr_rise_rate = 0;
+            //double dev_rise_rate = 0;
+            //double max_rise_rate = 0;
+            //int avr_money = 0;
+            //int min_money = 0;
+            //int max_money = 0;
+            //int date_max_money = 0;
+            //ulong avr_number = 0;
+            //int six_months_high = 0;
+            //foreach (var stock in _gl)
+            //{
+            //    PreProcessing.ReadDaysAndCalculate(stock, 20,
+            //        ref avr_rise_rate, ref dev_rise_rate, ref max_rise_rate,
+            //        ref avr_money, ref min_money, ref max_money, ref date_max_money,
+            //        ref avr_number, ref six_months_high);
+            foreach(var stock in _gl)
             {
-                PreProcessing.ReadDaysAndCalculate(stock, 20,
-                    ref avr_rise_rate, ref dev_rise_rate, ref max_rise_rate,
-                    ref avr_money, ref min_money, ref max_money, ref date_max_money,
-                    ref avr_number, ref six_months_high);
-
                 Pre_Processor_Class1.calcurate_종목일중변동평균편차(stock, days, ref avr, ref dev, ref 일평균거래액,
                                              ref 일최소거래액, ref 일최대거래액, ref MaximumDate, ref MaximumPriceRiseRate);
-                if (max_money > 500)
+                if (일최대거래액 > 300)
                     selected_gl.Add(stock);
             }
 
-            Pre_Processor_Class1.cal_상관관계(selected_gl);
+            int array_length = 100;
+            int print_length = 20;
+            Pre_Processor_Class1.Pearson(array_length, print_length, selected_gl);
             textBox6.Text = "상관관계" + " is Processed";
         }
 

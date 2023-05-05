@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using static System.Windows.Forms.LinkLabel;
 
 namespace Pre_Processor
 {
@@ -831,6 +832,7 @@ namespace Pre_Processor
             }
             return null;
         }
+
         public static int find_순서(string name, List<string> singleList)
         {
             int index = 0;
@@ -842,6 +844,92 @@ namespace Pre_Processor
             }
             return -1;
         }
+
+        public static void Pearson(int ArrayLength, int PrintLength, List<string> sL)
+        {
+            double[] values = new double[ArrayLength];
+
+            double[] RateRiseFirst     = new double[ArrayLength];
+            double[] RateRiseSecond = new double[ArrayLength];
+
+            string path = @"C:\WORK\data\";
+            path += ("상관" + ".txt");
+            if (File.Exists(path))
+                File.Delete(path);
+
+            Stream FS = new FileStream(path, FileMode.CreateNew, FileAccess.Write);
+            StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
+
+            foreach (string stockname1 in sL)
+            {
+                path = @"C:\WORK\data\일\";
+                path += (stockname1 + ".txt");
+                if (!File.Exists(path))
+                {
+                    continue;
+                }
+
+                List<string> lines = File.ReadLines(path).Reverse().Take(ArrayLength).ToList();
+
+                int inc = 0;
+                foreach (string line in lines)
+                {
+                    string[] words = line.Split(' ');
+                    values[inc++] = Convert.ToDouble(words[4]); // 종가
+                }
+
+                for (int i = 0; i < inc - 1; i++)
+                {
+                    RateRiseFirst[i] = (values[i + 1] - values[i]) / values[i];
+                }
+
+                var stocks = new List<Tuple<double, string>> { };
+
+                foreach (string stockname2 in sL)
+                {
+                    path = @"C:\WORK\data\일\";
+                    path += (stockname2 + ".txt");
+                    if (!File.Exists(path))
+                    {
+                        continue;
+                    }
+
+                    if (stockname1 == stockname2 || !File.Exists(path))
+                    {
+                        continue;
+                    }
+                    
+                    lines = File.ReadLines(path).Reverse().Take(ArrayLength).ToList();
+
+                    inc = 0;
+                    foreach (string line in lines)
+                    {
+                        string[] words = line.Split(' ');
+                        values[inc++] = Convert.ToDouble(words[4]); // 종가
+                    }
+
+                    for (int i = 0; i < inc - 1; i++)
+                    {
+                        RateRiseSecond[i] = (values[i + 1] - values[i]) / values[i];
+                    }
+
+                    stocks.Add(Tuple.Create(wk.PearsonCorrelation(RateRiseFirst, RateRiseSecond), stockname2));
+                }
+
+                stocks = stocks.OrderByDescending(t => t.Item1).ToList();
+
+                sw.WriteLine("{0}", stockname1);
+
+                inc = 0;
+                foreach(var item in stocks)
+                {
+                    sw.WriteLine("     {0} \t {1}", item.Item1, item.Item2);
+                    if (inc++ > PrintLength) { break; }
+                }
+            }
+            sw.Close();
+        }
+
 
         public static void cal_상관관계(List<string> sL)
         {
