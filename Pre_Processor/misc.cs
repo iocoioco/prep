@@ -311,9 +311,9 @@ namespace Pre_Processor
 
             string sound_file;
             if (sub_directory == "")
-                sound_file = @"C:\WORK\소\" + sound + ".wav";
+                sound_file = @"C:\병신\소\" + sound + ".wav";
             else
-                sound_file = @"C:\WORK\소\" + sub_directory + "\\" + sound + ".wav";
+                sound_file = @"C:\병신\소\" + sub_directory + "\\" + sound + ".wav";
 
             if (!File.Exists(sound_file))
             {
@@ -338,7 +338,7 @@ namespace Pre_Processor
 
             g.stock o = g.ogl_data[index];
 
-            string temp_file = @"C:\WORK\" + "temp" + ".txt";
+            string temp_file = @"C:\병신\" + "temp" + ".txt";
 
             lock (g.lockObject)
             {
@@ -394,7 +394,7 @@ namespace Pre_Processor
         public static void setting_코스피_코스닥합성()
         {
             string file;
-            file = @"C:\WORK\data\KODEX_FACTOR" + ".txt";
+            file = @"C:\병신\data\KODEX_FACTOR" + ".txt";
 
             if (!File.Exists(file))
                 File.Create(file).Dispose();
@@ -606,7 +606,7 @@ namespace Pre_Processor
 		{
 		DateTime date = DateTime.Now; // Or whatever
 		string temp = date.ToString("HHmm") + " " + stock + " :  buy";
-		string path = @"C:\WORK\매매.txt";
+		string path = @"C:\병신\매매.txt";
 		StreamWriter sw = File.AppendText(path);
 		sw.WriteLine("{0}", temp);
 		sw.Close();
@@ -617,7 +617,7 @@ namespace Pre_Processor
 		{
 		DateTime date = DateTime.Now; // Or whatever
 		string temp = date.ToString("HHmm") + " " + stock + " : sell";
-		string path = @"C:\WORK\매매.txt";
+		string path = @"C:\병신\매매.txt";
 		StreamWriter sw = File.AppendText(path);
 		sw.WriteLine("{0}", temp);
 		sw.Close();

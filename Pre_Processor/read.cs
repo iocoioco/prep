@@ -55,7 +55,7 @@ namespace Pre_Processor
         public static void read_stocks_in_directory(List<string> gl)
         {
             g.sl.Clear();
-            string path = @"C:\Work\분\" + g.date.ToString();
+            string path = @"C:\병신\분\" + g.date.ToString();
             if (!Directory.Exists(path))
             {
                 return;
@@ -87,7 +87,7 @@ namespace Pre_Processor
 
         public static void read_시간별거래비율(List<List<string>> 누적)
         {
-            string[] grlines = File.ReadAllLines(@"C:\WORK\data\누적.txt", Encoding.Default);
+            string[] grlines = File.ReadAllLines(@"C:\병신\data\누적.txt", Encoding.Default);
             foreach (string line in grlines)
             {
                 List<string> alist = new List<string>();
@@ -105,7 +105,7 @@ namespace Pre_Processor
 
         public static void read_누적(double[] 누적)
         {
-            string[] grlines = File.ReadAllLines(@"C:\WORK\data\누적.txt", Encoding.Default);
+            string[] grlines = File.ReadAllLines(@"C:\병신\data\누적.txt", Encoding.Default);
             int count = 0;
             foreach (string line in grlines)
             {
@@ -116,7 +116,7 @@ namespace Pre_Processor
 
         public static void read_or_set_stocks()
         {
-            string path = @"C:\WORK\분" + "\\" + g.date.ToString();
+            string path = @"C:\병신\분" + "\\" + g.date.ToString();
             Directory.CreateDirectory(path); // read_or_set_stocks
 
             if (wk.return_index_of_ogldata("코스피혼합") < 0)
@@ -343,7 +343,7 @@ namespace Pre_Processor
 
         public static void read_상승()
         {
-            string file = @"C:\WORK\상승.txt";
+            string file = @"C:\병신\상승.txt";
 
             if (!File.Exists(file))
             {
@@ -458,7 +458,7 @@ namespace Pre_Processor
         public static void read_제어()
         {
 
-            string filename = @"C:\WORK\제어.txt";
+            string filename = @"C:\병신\제어.txt";
 
 
             if (!File.Exists(filename)) return;
@@ -722,7 +722,7 @@ namespace Pre_Processor
             }
 
             // the following lines to check the integrity of data
-            string path = @"C:\WORK\temp_변수.txt";
+            string path = @"C:\병신\temp_변수.txt";
             StreamWriter sw = File.AppendText(path);
 
             string str = line;
@@ -741,7 +741,7 @@ namespace Pre_Processor
                 date = Convert.ToInt32(now.ToString("yyyyMMdd"));
             }
 
-            string file = @"C:\WORK\분\" + date.ToString() + "\\" + stock + ".txt";
+            string file = @"C:\병신\분\" + date.ToString() + "\\" + stock + ".txt";
             if (!File.Exists(file)) return -1;
             string[] grlines = System.IO.File.ReadAllLines(file, Encoding.Default);
 
@@ -772,7 +772,7 @@ namespace Pre_Processor
 
         public static double read_시총(string stock)
         {
-            string[] grlines = File.ReadAllLines(@"C:\WORK\data\시총.txt", Encoding.Default);
+            string[] grlines = File.ReadAllLines(@"C:\병신\data\시총.txt", Encoding.Default);
             foreach (string line in grlines)
             {
                 string[] words = line.Split(' ');
@@ -789,7 +789,7 @@ namespace Pre_Processor
         {
             List<string> gl_list = new List<string>();
 
-            string filename = @"C:\Work\data\제외.txt"; ;
+            string filename = @"C:\병신\data\제외.txt"; ;
 
             string[] grlines = File.ReadAllLines(filename);
 
@@ -814,7 +814,7 @@ namespace Pre_Processor
         {
             // 종목별 배당된 주식숫자로부터 각 종목의 Weighting Factor 계산하여 저장
 
-            string filename = @"C:\Work\data\지수.txt";
+            string filename = @"C:\병신\data\지수.txt";
 
             if (!File.Exists(filename))
             {
@@ -864,7 +864,7 @@ namespace Pre_Processor
 
         public static void read_그룹_네이버_테마(List<string> tsl, List<string> tsl_그룹_상관, List<string> GL_title, List<List<string>> GL)
         {
-            string filepath = @"C:\WORK\data\그룹_네이버_테마.txt"; // QQQ
+            string filepath = @"C:\병신\data\그룹_네이버_테마.txt"; // QQQ
             if (!File.Exists(filepath))
                 return;
 
@@ -897,7 +897,7 @@ namespace Pre_Processor
 
         public static void read_상관(List<string> gl, List<string> GL_title, List<List<string>> GL)
         {
-            string filename = @"C:\Work\data\상관.txt";
+            string filename = @"C:\병신\data\상관.txt";
 
             if (!File.Exists(filename))
             {
@@ -970,7 +970,7 @@ namespace Pre_Processor
                 date = Convert.ToInt32(now.ToString("yyyyMMdd"));
             }
 
-            string file = @"C:\WORK\분\" + date.ToString() + "\\" + stock + ".txt";
+            string file = @"C:\병신\분\" + date.ToString() + "\\" + stock + ".txt";
             if (!File.Exists(file))
                 return -1;
 
@@ -1037,7 +1037,7 @@ namespace Pre_Processor
         public static int read_Stock_Seven_Lines_Reverse_From_Endtime
             (int date, string stock, int end_time, int nline, int[,] x)
         {
-            string file = @"C:\WORK\분\" + date.ToString() + "\\" + stock + ".txt";
+            string file = @"C:\병신\분\" + date.ToString() + "\\" + stock + ".txt";
             if (!File.Exists(file))
                 return -1;
 
@@ -1154,7 +1154,7 @@ namespace Pre_Processor
                 date = Convert.ToInt32(now.ToString("yyyyMMdd"));
             }
 
-            string file = @"C:\WORK\분\" + date.ToString() + "\\" + stock + ".txt";
+            string file = @"C:\병신\분\" + date.ToString() + "\\" + stock + ".txt";
             if (!File.Exists(file))
             {
                 return 0;
@@ -1256,7 +1256,7 @@ namespace Pre_Processor
                 date = Convert.ToInt32(now.ToString("yyyyMMdd"));
             }
 
-            string file = @"C:\WORK\분\" + date.ToString() + "\\" + stock + ".txt";
+            string file = @"C:\병신\분\" + date.ToString() + "\\" + stock + ".txt";
             if (!File.Exists(file))
                 return 0;
 
@@ -1325,13 +1325,13 @@ namespace Pre_Processor
             switch (dwm)
             {
                 case "일":
-                    file = @"C:\WORK\data\일\" + stock + ".txt"; ;   // 틱,분,일,주,월 단위 데이터
+                    file = @"C:\병신\data\일\" + stock + ".txt"; ;   // 틱,분,일,주,월 단위 데이터
                     break;
                 case "주":
-                    file = @"C:\WORK\data\주\" + stock + ".txt"; ;   // 틱,분,일,주,월 단위 데이터
+                    file = @"C:\병신\data\주\" + stock + ".txt"; ;   // 틱,분,일,주,월 단위 데이터
                     break;
                 case "월":
-                    file = @"C:\WORK\data\월\" + stock + ".txt"; ;   // 틱,분,일,주,월 단위 데이터
+                    file = @"C:\병신\data\월\" + stock + ".txt"; ;   // 틱,분,일,주,월 단위 데이터
                     break;
                 default:
                     break;
@@ -1359,7 +1359,7 @@ namespace Pre_Processor
 
         public static int read_전일종가_전일거래액_천만원(string stock)
         {
-            string path = @"C:\WORK\data\일\" + stock + ".txt";
+            string path = @"C:\병신\data\일\" + stock + ".txt";
             if (!File.Exists(path))
             {
                 return -1;
@@ -1377,7 +1377,7 @@ namespace Pre_Processor
         public static int read_전일종가(string stock)
         {
 
-            string path = @"C:\WORK\data\일\" + stock + ".txt";
+            string path = @"C:\병신\data\일\" + stock + ".txt";
             if (!File.Exists(path))
             {
                 return -1;
@@ -1396,7 +1396,7 @@ namespace Pre_Processor
 
             List<string> gl_list = new List<string>();
 
-            string filepath = @"C:\WORK\data\그룹_네이버_업종.txt";
+            string filepath = @"C:\병신\data\그룹_네이버_업종.txt";
             if (!File.Exists(filepath))
             {
                 return gl_list;
@@ -1464,7 +1464,7 @@ namespace Pre_Processor
 
             List<string> gl_list = new List<string>();
 
-            string filepath = @"C:\WORK\data\그룹_네이버_업종.txt";
+            string filepath = @"C:\병신\data\그룹_네이버_업종.txt";
             if (!File.Exists(filepath))
             {
                 return gl_list;

@@ -206,7 +206,7 @@ namespace Pre_Processor
 
             string path = "";
 
-            path = @"C:\WORK\틱\";
+            path = @"C:\병신\틱\";
             path = path + _workingDay;
 
             bool exists = Directory.Exists(path);
@@ -273,7 +273,7 @@ namespace Pre_Processor
                 {
                     string path = "";
 
-                    path = @"C:\WORK\분\";
+                    path = @"C:\병신\분\";
                     path = path + _workingDay;
 
                     bool exists = System.IO.Directory.Exists(path);
@@ -345,7 +345,7 @@ namespace Pre_Processor
 
             string path = "";
 
-            path = @"C:\WORK\분\";
+            path = @"C:\병신\분\";
             path = path + _workingDay;
 
             bool exists = System.IO.Directory.Exists(path);
@@ -620,13 +620,13 @@ namespace Pre_Processor
             switch (_variable[0])
             {
                 case "일":
-                    path = @"C:\WORK\data\일\";
+                    path = @"C:\병신\data\일\";
                     break;
                 case "주":
-                    path = @"C:\WORK\data\주\";
+                    path = @"C:\병신\data\주\";
                     break;
                 case "월":
-                    path = @"C:\WORK\data\월\";
+                    path = @"C:\병신\data\월\";
                     break;
                 default:
                     break;
@@ -665,7 +665,7 @@ namespace Pre_Processor
 
             string code = _cpsvr7254.GetHeaderValue(0); // 종목코드
             string stockname = _cpstockcode.CodeToName(code);
-            string path = @"C:\WORK\량\" + stockname + ".txt";
+            string path = @"C:\병신\량\" + stockname + ".txt";
             if (File.Exists(path))
                 File.Delete(path);
 
@@ -754,7 +754,7 @@ namespace Pre_Processor
 
         public void _Stock_Chart_시총_stockChart()
         {
-            string file = @"C:\WORK\data\시총.txt";
+            string file = @"C:\병신\data\시총.txt";
 
             if (File.Exists(file))
                 File.Delete(file);
@@ -803,7 +803,7 @@ namespace Pre_Processor
             string text1 = _Stock_Chart_시총.GetDibMsg1();
             string text2 = _Stock_Chart_시총.GetDibMsg2();
 
-            Stream FS = new FileStream(@"C:\WORK\data\시총.txt", FileMode.Append, FileAccess.Write);
+            Stream FS = new FileStream(@"C:\병신\data\시총.txt", FileMode.Append, FileAccess.Write);
             StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
 
             int count = (int)_Stock_Chart_시총.GetHeaderValue(1);
@@ -833,7 +833,7 @@ namespace Pre_Processor
         //   ref int AvrMoney, ref int MinMoney, ref int MaxMoney, ref int DateMaxMoney,
         //   ref ulong AvrNumber, ref int SixMonthHigh)
         //{
-        //    string path = @"C:\Work\data\일\" + stock + ".txt";
+        //    string path = @"C:\병신\data\일\" + stock + ".txt";
         //    if (!File.Exists(path))
         //        return;
 
@@ -970,14 +970,14 @@ namespace Pre_Processor
             {
                 Pre_Processor_Class1.calcurate_종목일중변동평균편차(stock, days, ref avr, ref dev, ref 일평균거래액,
                                              ref 일최소거래액, ref 일최대거래액, ref MaximumDate, ref MaximumPriceRiseRate);
-                if (일최대거래액 > 5000)
+                if (일평균거래액 > 10)
                     selected_gl.Add(stock);
             }
 
 
-            int array_length = 100;
+            int days_of_array = 100;
             int print_length = 20;
-            Pre_Processor_Class1.Pearson(array_length, print_length, selected_gl);
+            Pre_Processor_Class1.Pearson(days_of_array, print_length, selected_gl);
             textBox6.Text = "상관관계" + " is Processed";
         }
 
@@ -991,7 +991,7 @@ namespace Pre_Processor
             //_gl = Pre_Processor_Class1.read_그룹4(Gl);
             //_gl = Pre_Processor_Class1.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
             _gl = Pre_Processor_Class1.read_그룹_네이버_업종(GL);
-            string path = @"C:\WORK\그룹_" + textBox2.Text + ".txt";
+            string path = @"C:\병신\그룹_" + textBox2.Text + ".txt";
             if (File.Exists(path))
                 File.Delete(path);
 
@@ -1049,7 +1049,7 @@ namespace Pre_Processor
             string text2 = _cpsvr7254.GetDibMsg2();
 
             string code = _cpsvr7254.GetHeaderValue(0);
-            string path = @"C:\WORK\매\" + _cm.CodeToName(code) + ".txt";
+            string path = @"C:\병신\매\" + _cm.CodeToName(code) + ".txt";
 
             if (File.Exists(path))
                 File.Delete(path);
@@ -1101,7 +1101,7 @@ namespace Pre_Processor
             _Stock_Chart6_stockChart();
 
 
-            Stream FS = new FileStream(@"C:\WORK\시총_.txt", FileMode.Append, FileAccess.Write);
+            Stream FS = new FileStream(@"C:\병신\시총_.txt", FileMode.Append, FileAccess.Write);
             StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
 
             시총.Sort();
@@ -1119,7 +1119,7 @@ namespace Pre_Processor
 
         public void _Stock_Chart6_stockChart()
         {
-            string file = @"C:\WORK\시총.txt";
+            string file = @"C:\병신\시총.txt";
 
             if (File.Exists(file))
                 File.Delete(file);
@@ -1166,7 +1166,7 @@ namespace Pre_Processor
             string text1 = _Stock_Chart6.GetDibMsg1();
             string text2 = _Stock_Chart6.GetDibMsg2();
 
-            Stream FS = new FileStream(@"C:\WORK\시총.txt", FileMode.Append, FileAccess.Write);
+            Stream FS = new FileStream(@"C:\병신\시총.txt", FileMode.Append, FileAccess.Write);
             StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
 
             int count = (int)_Stock_Chart6.GetHeaderValue(1);
@@ -1193,7 +1193,7 @@ namespace Pre_Processor
         {
             var list = Pre_Processor_Class1.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
 
-            string path = @"C:\WORK\" + "그룹" + textBox2.Text + ".txt";
+            string path = @"C:\병신\" + "그룹" + textBox2.Text + ".txt";
 
             Stream FS = new FileStream(path, FileMode.Create, FileAccess.Write);
             StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
@@ -1231,12 +1231,12 @@ namespace Pre_Processor
             var doc = new HtmlAgilityPack.HtmlDocument();
             HtmlAgilityPack.HtmlWeb web = new HtmlAgilityPack.HtmlWeb();
 
-            string file = @"C:\WORK\data\" + "그룹_네이버_업종" + ".txt";
+            string file = @"C:\병신\data\" + "그룹_네이버_업종" + ".txt";
             if (File.Exists(file))
             {
                 File.Delete(file);
             }
-            Stream FS = new FileStream(@"C:\WORK\data\" + "그룹_네이버_업종" + ".txt", FileMode.CreateNew, FileAccess.Write);
+            Stream FS = new FileStream(@"C:\병신\data\" + "그룹_네이버_업종" + ".txt", FileMode.CreateNew, FileAccess.Write);
             StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
 
             int[] themeRemove = new int[] { 25 }; // 환율하락수혜
@@ -1346,15 +1346,15 @@ namespace Pre_Processor
             var doc = new HtmlAgilityPack.HtmlDocument();
             HtmlAgilityPack.HtmlWeb web = new HtmlAgilityPack.HtmlWeb();
 
-            string file = @"C:\WORK\data\" + "그룹_네이버_업종" + ".txt";
+            string file = @"C:\병신\data\" + "그룹_네이버_업종" + ".txt";
             if (File.Exists(file))
             {
                 File.Delete(file);
             }
-            Stream FS = new FileStream(@"C:\WORK\data\" + "그룹_네이버_업종" + ".txt", FileMode.CreateNew, FileAccess.Write);
+            Stream FS = new FileStream(@"C:\병신\data\" + "그룹_네이버_업종" + ".txt", FileMode.CreateNew, FileAccess.Write);
             StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
 
-            var lines = File.ReadAllLines(@"C:\WORK\data\" + "업종_url" + ".txt");
+            var lines = File.ReadAllLines(@"C:\병신\data\" + "업종_url" + ".txt");
 
             int count = 0;
             int upjong_count = 0;
@@ -1386,7 +1386,7 @@ namespace Pre_Processor
             textBox6.Text = upjong_count.ToString() + "/" + count.ToString() + " are Processed";
 
 
-            //File.WriteAllText(@"C:\WORK\" + "temp" + ".txt", all_stock);
+            //File.WriteAllText(@"C:\병신\" + "temp" + ".txt", all_stock);
 
             //var table = doc.DocumentNode.SelectSingleNode("//table"); // ok
 
@@ -1499,12 +1499,12 @@ namespace Pre_Processor
             var doc = new HtmlAgilityPack.HtmlDocument();
             HtmlAgilityPack.HtmlWeb web = new HtmlAgilityPack.HtmlWeb();
 
-            string file = @"C:\WORK\data\" + "그룹_네이버_테마" + ".txt";
+            string file = @"C:\병신\data\" + "그룹_네이버_테마" + ".txt";
             if (File.Exists(file))
             {
                 File.Delete(file);
             }
-            Stream FS = new FileStream(@"C:\WORK\data\" + "그룹_네이버_테마" + ".txt", FileMode.CreateNew, FileAccess.Write);
+            Stream FS = new FileStream(@"C:\병신\data\" + "그룹_네이버_테마" + ".txt", FileMode.CreateNew, FileAccess.Write);
             StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
 
             int[] themeRemove = new int[1];
@@ -1609,15 +1609,15 @@ namespace Pre_Processor
             var doc = new HtmlAgilityPack.HtmlDocument();
             HtmlAgilityPack.HtmlWeb web = new HtmlAgilityPack.HtmlWeb();
 
-            string file = @"C:\WORK\data\" + "그룹_네이버_테마" + ".txt";
+            string file = @"C:\병신\data\" + "그룹_네이버_테마" + ".txt";
             if (File.Exists(file))
             {
                 File.Delete(file);
             }
-            Stream FS = new FileStream(@"C:\WORK\data\" + "그룹_네이버_테마" + ".txt", FileMode.CreateNew, FileAccess.Write);
+            Stream FS = new FileStream(@"C:\병신\data\" + "그룹_네이버_테마" + ".txt", FileMode.CreateNew, FileAccess.Write);
             StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
 
-            var lines = File.ReadAllLines(@"C:\WORK\data\" + "테마_url" + ".txt");
+            var lines = File.ReadAllLines(@"C:\병신\data\" + "테마_url" + ".txt");
 
             int count = 0;
             int theme_count = 0;
@@ -1686,10 +1686,10 @@ namespace Pre_Processor
             if (HHmm <= 1530)
                 reference_date--; // 당일 데이터가 저장되어 있지 않아 전일 기준 Processing
 
-            string[] grlines = File.ReadAllLines(@"C:\WORK\data\시총.txt", Encoding.Default);
+            string[] grlines = File.ReadAllLines(@"C:\병신\data\시총.txt", Encoding.Default);
 
             // 저장파일 "프돈외기" 있으면 삭제 후 재생성
-            string path = @"C:\WORK\data\프돈외기.txt";
+            string path = @"C:\병신\data\프돈외기.txt";
             if (File.Exists(path))
                 File.Delete(path);
 
@@ -1703,7 +1703,7 @@ namespace Pre_Processor
             //sw.Write(str);
 
 
-            string temp_path = @"C:\WORK\temp.txt";
+            string temp_path = @"C:\병신\temp.txt";
             if (File.Exists(temp_path))
                 File.Delete(temp_path);
 
@@ -1836,7 +1836,7 @@ namespace Pre_Processor
 
 
 
-            string path = @"C:\WORK\평점.txt";
+            string path = @"C:\병신\평점.txt";
             var lines = File.ReadAllLines(path, Encoding.Default);
 
 
@@ -1914,12 +1914,12 @@ namespace Pre_Processor
            
             if (e.ColumnIndex == 5)
             {
-                string file = @"C:\WORK\" + "평점" + ".txt";
+                string file = @"C:\병신\" + "평점" + ".txt";
                 if (File.Exists(file))
                 {
                     File.Delete(file);
                 }
-                Stream FS = new FileStream(@"C:\WORK\" + "평점" + ".txt", FileMode.CreateNew, FileAccess.Write);
+                Stream FS = new FileStream(@"C:\병신\" + "평점" + ".txt", FileMode.CreateNew, FileAccess.Write);
                 StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
 
                 for (int k = 0; k < dtb1.Rows.Count; k++)
@@ -1977,7 +1977,7 @@ namespace Pre_Processor
             int start_date = 20220302; // MOD
             int end_date = Convert.ToInt32(DateTime.Now.Date.ToString("yyyyMMdd"));
            
-            string path = @"C:\WORK\data\통계.txt";
+            string path = @"C:\병신\data\통계.txt";
 
             if (File.Exists(path))
                 File.Delete(path);
@@ -2132,7 +2132,7 @@ namespace Pre_Processor
             int start_date = Convert.ToInt32(textBox3.Text);
             int end_date = Convert.ToInt32(textBox4.Text);
 
-            string path = @"C:\WORK\data\통계.txt";
+            string path = @"C:\병신\data\통계.txt";
 
             if (File.Exists(path))
                 File.Delete(path);
@@ -2320,7 +2320,7 @@ namespace Pre_Processor
 //textBox6.Text = theme_count.ToString() + "/" + count.ToString() + " are Processed";
 
 
-//File.WriteAllText(@"C:\WORK\" + "temp" + ".txt", all_stock);
+//File.WriteAllText(@"C:\병신\" + "temp" + ".txt", all_stock);
 
 //var table = doc.DocumentNode.SelectSingleNode("//table"); // ok
 
@@ -2413,7 +2413,7 @@ private static void _stockmst_Received()
 /*var items = new List<Tuple<int, string>> { };
             foreach (var name in sL)
             {
-                string path = @"C:\WORK\분\" + date.ToString() +
+                string path = @"C:\병신\분\" + date.ToString() +
                     "\\" + name + ".txt";
 
                 if (!File.Exists(path))
