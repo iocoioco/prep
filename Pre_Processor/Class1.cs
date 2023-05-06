@@ -838,6 +838,105 @@ namespace Pre_Processor
             return -1;
         }
 
+        public static void PearsonInDays(int ArrayLength, int PrintLength, List<string> sL)
+        {
+            double[] values = new double[ArrayLength];
+
+            double[] RateRiseFirst = new double[ArrayLength];
+            double[] RateRiseSecond = new double[ArrayLength];
+
+            string path = @"C:\병신\data\";
+            path += ("Correlation" + ".txt");
+            if (File.Exists(path))
+                File.Delete(path);
+
+            Stream FS = new FileStream(path, FileMode.CreateNew, FileAccess.Write);
+            StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
+
+            foreach (string stockname1 in sL)
+            {
+                path = @"C:\병신\data\일\";
+                path += (stockname1 + ".txt");
+                if (!File.Exists(path))
+                {
+                    continue;
+                }
+
+                List<string> lines = File.ReadLines(path).Reverse().Take(ArrayLength).ToList();
+                if (lines.Count != ArrayLength) // Array Length
+                    continue;
+                string[] words_check = lines[0].Split(' '); // 거래중지
+                if (words_check[5] == "0")
+                    continue;
+
+                int inc = 0;
+                foreach (string line in lines)
+                {
+                    string[] words = line.Split(' ');
+                    var start = Convert.ToDouble(words[1]); // 시가
+                    var high = Convert.ToDouble(words[2]); // 고가
+                    var low  = Convert.ToDouble(words[3]); // 저가
+                    RateRiseFirst[inc++] = (high - low) / (double)start;
+                }
+
+                var stocks = new List<Tuple<double, string>> { };
+
+                foreach (string stockname2 in sL)
+                {
+                    path = @"C:\병신\data\일\";
+                    path += (stockname2 + ".txt");
+                    if (!File.Exists(path))
+                    {
+                        continue;
+                    }
+
+                    if (stockname1 == stockname2 || !File.Exists(path))
+                    {
+                        continue;
+                    }
+
+                    lines = File.ReadLines(path).Reverse().Take(ArrayLength).ToList();
+                    if (lines.Count != ArrayLength) // Array Length
+                        continue;
+                    words_check = lines[0].Split(' '); // 거래중지
+                    if (words_check[5] == "0")
+                        continue;
+
+                    inc = 0;
+                    foreach (string line in lines)
+                    {
+                        string[] words = line.Split(' ');
+                        var start = Convert.ToDouble(words[1]); // 시가
+                        var high = Convert.ToDouble(words[2]); // 고가
+                        var low = Convert.ToDouble(words[3]); // 저가
+                        RateRiseSecond[inc++] = (high - low) / (double)start;
+                    }
+
+                    stocks.Add(Tuple.Create(wk.PearsonCorrelation(RateRiseFirst, RateRiseSecond), stockname2));
+                }
+
+                stocks = stocks.OrderByDescending(t => t.Item1).ToList();
+
+                sw.WriteLine("{0}", stockname1);
+
+                inc = 0;
+                foreach (var item in stocks)
+                {
+                    decimal d = Convert.ToDecimal(item.Item1);
+                    string t = String.Format("{0:0.000}", d);
+                    if (d < 0)
+                        sw.WriteLine("    {0}\t{1}", t, item.Item2);
+                    else
+                        sw.WriteLine("     {0}\t{1}", t, item.Item2);
+
+                    if (inc++ > PrintLength) { break; }
+                }
+                sw.WriteLine();
+            }
+            sw.Close();
+        }
+
+
         public static void Pearson(int ArrayLength, int PrintLength, List<string> sL)
         {
             double[] values = new double[ArrayLength];
@@ -863,6 +962,11 @@ namespace Pre_Processor
                 }
 
                 List<string> lines = File.ReadLines(path).Reverse().Take(ArrayLength).ToList();
+                if (lines.Count != ArrayLength) // Array Length
+                    continue;
+                string[] words_check = lines[0].Split(' '); // 거래중지
+                if (words_check[5] == "0")
+                    continue;
 
                 int inc = 0;
                 foreach (string line in lines)
@@ -893,6 +997,11 @@ namespace Pre_Processor
                     }
 
                     lines = File.ReadLines(path).Reverse().Take(ArrayLength).ToList();
+                    if (lines.Count != ArrayLength) // Array Length
+                        continue;
+                    words_check = lines[0].Split(' '); // 거래중지
+                    if (words_check[5] == "0")
+                        continue;
 
                     inc = 0;
                     foreach (string line in lines)

@@ -936,48 +936,30 @@ namespace Pre_Processor
 
         private void button4_Click_1(object sender, EventArgs e)
         {
-            textBox6.Text = "상관관계" + " is Processing";
 
+            List<List<string>> tgl = new List<List<string>>();
+            List<string> total_stock_list = new List<string>();
             List<List<string>> Gl = new List<List<string>>();
             List<List<string>> GL = new List<List<string>>();
-            _gl = rd.read_그룹_네이버_업종(Gl, GL); // if file not exist, return nothing, 제외종목 제거
+            List<string> 상관_group_total_stock_list = new List<string>();
+            List<string> tgl_title = new List<string>();
 
-            List<string> selected_gl = new List<string>();
-            int days = 20;
-            double avr = 0, dev = 0;
-            int 일평균거래액 = 0, 일최소거래액 = 0, 일최대거래액 = 0;
-            int MaximumDate = 0;
-            double MaximumPriceRiseRate = 0;
+            total_stock_list = rd.read_그룹_네이버_업종(Gl, GL); // if file not exist, return nothing, 제외종목 제거
 
-
-
-            //double avr_rise_rate = 0;
-            //double dev_rise_rate = 0;
-            //double max_rise_rate = 0;
-            //int avr_money = 0;
-            //int min_money = 0;
-            //int max_money = 0;
-            //int date_max_money = 0;
-            //ulong avr_number = 0;
-            //int six_months_high = 0;
-            //foreach (var stock in _gl)
-            //{
-            //    PreProcessing.ReadDaysAndCalculate(stock, 20,
-            //        ref avr_rise_rate, ref dev_rise_rate, ref max_rise_rate,
-            //        ref avr_money, ref min_money, ref max_money, ref date_max_money,
-            //        ref avr_number, ref six_months_high);
-            foreach(var stock in _gl)
+            wk.일평균거래액10억이상종목선택(total_stock_list, 10);
+            rd.read_상관(상관_group_total_stock_list, tgl_title, tgl); // if file not exist, just stock added
+            foreach (var item in 상관_group_total_stock_list)
             {
-                Pre_Processor_Class1.calcurate_종목일중변동평균편차(stock, days, ref avr, ref dev, ref 일평균거래액,
-                                             ref 일최소거래액, ref 일최대거래액, ref MaximumDate, ref MaximumPriceRiseRate);
-                if (일평균거래액 > 10)
-                    selected_gl.Add(stock);
+                if (total_stock_list.Contains(item))
+                    continue;
+                else
+                    total_stock_list.Add(item);
             }
 
-
+            textBox6.Text = "상관관계" + " is Processing";
             int days_of_array = 100;
             int print_length = 20;
-            Pre_Processor_Class1.Pearson(days_of_array, print_length, selected_gl);
+            Pre_Processor_Class1.Pearson(days_of_array, print_length, total_stock_list);
             textBox6.Text = "상관관계" + " is Processed";
         }
 
