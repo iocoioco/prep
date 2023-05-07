@@ -838,7 +838,8 @@ namespace Pre_Processor
             return -1;
         }
 
-        public static void PearsonInDays(int ArrayLength, int PrintLength, List<string> sL)
+
+        public static void PearsonRateDifferenceInDays(int ArrayLength, int PrintLength, List<string> sL) 
         {
             double[] values = new double[ArrayLength];
 
@@ -856,7 +857,7 @@ namespace Pre_Processor
             foreach (string stockname1 in sL)
             {
                 path = @"C:\병신\data\일\";
-                path += (stockname1 + ".txt");
+                path += (stockname1 + ".txt"); 
                 if (!File.Exists(path))
                 {
                     continue;
@@ -912,12 +913,13 @@ namespace Pre_Processor
                         RateRiseSecond[inc++] = (high - low) / (double)start;
                     }
 
-                    stocks.Add(Tuple.Create(wk.PearsonCorrelation(RateRiseFirst, RateRiseSecond), stockname2));
+                    stocks.Add(Tuple.Create(wk.PearsonCorrelationCalculation(RateRiseFirst, RateRiseSecond), stockname2));
                 }
 
                 stocks = stocks.OrderByDescending(t => t.Item1).ToList();
 
-                sw.WriteLine("{0}", stockname1);
+                string s = " " + stockname1;
+                sw.WriteLine("{0}", s);
 
                 inc = 0;
                 foreach (var item in stocks)
@@ -937,7 +939,7 @@ namespace Pre_Processor
         }
 
 
-        public static void Pearson(int ArrayLength, int PrintLength, List<string> sL)
+        public static void PearsonRateDifferenceBetweenDays(int ArrayLength, int PrintLength, List<string> sL)
         {
             double[] values = new double[ArrayLength];
 
@@ -1015,12 +1017,13 @@ namespace Pre_Processor
                         RateRiseSecond[i] = (values[i + 1] - values[i]) / values[i];
                     }
 
-                    stocks.Add(Tuple.Create(wk.PearsonCorrelation(RateRiseFirst, RateRiseSecond), stockname2));
+                    stocks.Add(Tuple.Create(wk.PearsonCorrelationCalculation(RateRiseFirst, RateRiseSecond), stockname2));
                 }
 
                 stocks = stocks.OrderByDescending(t => t.Item1).ToList();
 
-                sw.WriteLine("{0}", stockname1);
+                var s = " " + stockname1;
+                sw.WriteLine("{0}", s);
 
                 inc = 0;
                 foreach (var item in stocks)

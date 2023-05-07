@@ -959,7 +959,7 @@ namespace Pre_Processor
             textBox6.Text = "상관관계" + " is Processing";
             int days_of_array = 100;
             int print_length = 20;
-            Pre_Processor_Class1.Pearson(days_of_array, print_length, total_stock_list);
+            Pre_Processor_Class1.PearsonRateDifferenceBetweenDays(days_of_array, print_length, total_stock_list);
             textBox6.Text = "상관관계" + " is Processed";
         }
 
