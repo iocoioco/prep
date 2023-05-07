@@ -1978,14 +1978,18 @@ namespace Pre_Processor
                 var 프분 = new List<double>();
                 var 거분 = new List<double>();
 
-                var 프누 = new List<List<double>>(); 
-                var 종누 = new List<List<double>>();
+                var 배차 = new List<double>();
+                var 배합 = new List<double>();
 
-                for (int i = 0; i < 382; i++)
-                {
-                    프누.Add(new List<double>());
-                    종누.Add(new List<double>());
-                }
+                //var 프누 = new List<List<double>>(); 
+                //var 종누 = new List<List<double>>();
+
+              
+                //for (int i = 0; i < 382; i++)
+                //{
+                //    프누.Add(new List<double>());
+                //    종누.Add(new List<double>());
+                //}
 
                 double value = 0.0;
 
@@ -2017,46 +2021,52 @@ namespace Pre_Processor
                         value = (double)(x[j, 7] - x[j - 1, 7]) * money_factor;
                         거분.Add(value);
 
-                        int id = (x[j, 0] / 10000 - 9) * 60 + (x[j, 0] % 10000) / 100 + 1;
+                        배차.Add(x[j, 8] - x[j - 1, 9]);
+                        배합.Add(x[j, 8] - x[j - 1, 9]);
 
-                        프누[id].Add(x[j, 4] * money_factor); 
-                        종누[id].Add(x[j, 7] * money_factor);
+                        //int id = (x[j, 0] / 10000 - 9) * 60 + (x[j, 0] % 10000) / 100 + 1;
+
+                        //프누[id].Add(x[j, 4] * money_factor); 
+                        //종누[id].Add(x[j, 7] * money_factor);
                     }
-                    if (프누.Count != 종누.Count)
-                    {
-                        MessageBox.Show("프누 & 종누 숫자 차이");
-                    }
+                    //if (프누.Count != 종누.Count)
+                    //{
+                    //    MessageBox.Show("프누 & 종누 숫자 불일치");
+                    //}
                 }
                 
                 if (count_success_read_stock_minute == 0) // no successful minute data
                     continue;
 
-                for (int i = 1; i < 382; i++)
-                {
-                    if(count_success_read_stock_minute != 프누[i].Count)
-                        MessageBox.Show("프누 array 숫자 불일치");
-                    if (count_success_read_stock_minute != 종누[i].Count)
-                        MessageBox.Show("종누 array 숫자 불일치");
-                }
+                //for (int i = 1; i < 382; i++)
+                //{
+                //    if(count_success_read_stock_minute != 프누[i].Count)
+                //        MessageBox.Show("프누 array 숫자 불일치");
+                //    if (count_success_read_stock_minute != 종누[i].Count)
+                //        MessageBox.Show("종누 array 숫자 불일치");
+                //}
 
-                double[] 프누_avr = new double[382];
-                double[] 프누_dev = new double[382];
-                double[] 종누_avr = new double[382];
-                double[] 종누_dev = new double[382];
+                //double[] 프누_avr = new double[382];
+                //double[] 프누_dev = new double[382];
+                //double[] 종누_avr = new double[382];
+                //double[] 종누_dev = new double[382];
 
-                for (int i = 1; i < 382; i++)
-                {
-                    프누_avr[i] = 프누[i].Sum() / 프누[i].Count;
-                    프누_dev[i] = Math.Sqrt(프누[i].Sum(y => Math.Pow(y - 프누_avr[i], 2)) / (프누[i].Count - 1));
-                    종누_avr[i] = 종누[i].Sum() / 종누[i].Count;
-                    종누_dev[i] = Math.Sqrt(종누[i].Sum(y => Math.Pow(y - 종누_avr[i], 2)) / (종누[i].Count - 1));
-                }
+                //for (int i = 1; i < 382; i++)
+                //{
+                //    프누_avr[i] = 프누[i].Sum() / 프누[i].Count;
+                //    프누_dev[i] = Math.Sqrt(프누[i].Sum(y => Math.Pow(y - 프누_avr[i], 2)) / (프누[i].Count - 1));
+                //    종누_avr[i] = 종누[i].Sum() / 종누[i].Count;
+                //    종누_dev[i] = Math.Sqrt(종누[i].Sum(y => Math.Pow(y - 종누_avr[i], 2)) / (종누[i].Count - 1));
+                //}
 
 
                 //g.clicked_Stock = stock;
                 //ms.Naver_호가_txt(2, -1, -1, 0, 0);
 
+
                 string str = stock;
+
+                // 프분
                 double avr = 0.0;
                 double dev = 0.0;
                 if (프분.Count > 10)
@@ -2074,6 +2084,7 @@ namespace Pre_Processor
                 else
                     str += "\t" + dev.ToString("#.####");
                  
+                // 거분
                 avr = 0.0;
                 dev = 0.0;
                 if (거분.Count >10) 
@@ -2081,7 +2092,44 @@ namespace Pre_Processor
                     avr = 거분.Sum() / 거분.Count;
                     dev = Math.Sqrt(거분.Sum(y => Math.Pow(y - avr, 2)) / (거분.Count - 1));
                 }
-                str += "\t" + 거분.Count;
+                // str += "\t" + 거분.Count;
+                if (avr < 0.001)
+                    str += "\t" + "0.0";
+                else
+                    str += "\t" + avr.ToString("#.####");
+                if (dev < 0.001)
+                    str += "\t" + "0.0";
+                else
+                    str += "\t" + dev.ToString("#.####");
+
+                // 배차
+                avr = 0.0;
+                dev = 0.0;
+                if (배차.Count > 10)
+                {
+                    avr = 배차.Sum() / 배차.Count;
+                    dev = Math.Sqrt(배차.Sum(y => Math.Pow(y - avr, 2)) / (배차.Count - 1));
+                }
+                // str += "\t" + 배차.Count;
+                if (avr < 0.001)
+                    str += "\t" + "0.0";
+                else
+                    str += "\t" + avr.ToString("#.####");
+                if (dev < 0.001)
+                    str += "\t" + "0.0";
+                else
+                    str += "\t" + dev.ToString("#.####");
+
+
+                // 배합
+                avr = 0.0;
+                dev = 0.0;
+                if (배합.Count > 10)
+                {
+                    avr = 배합.Sum() / 배합.Count;
+                    dev = Math.Sqrt(배합.Sum(y => Math.Pow(y - avr, 2)) / (배합.Count - 1));
+                }
+                // str += "\t" + 배합.Count;
                 if (avr < 0.001)
                     str += "\t" + "0.0";
                 else
@@ -2093,7 +2141,7 @@ namespace Pre_Processor
 
                 sw.WriteLine("{0}", str);
 
-                if (프분.Count < 5000)
+                if (프분.Count < 5000) // write down to temp.txt
                     wr.w(o.종목);
             }
             sw.Close();
