@@ -2022,7 +2022,7 @@ namespace Pre_Processor
                         거분.Add(value);
 
                         배차.Add(x[j, 8] - x[j - 1, 9]);
-                        배합.Add(x[j, 8] - x[j - 1, 9]);
+                        배합.Add(x[j, 8] + x[j - 1, 9]);
 
                         //int id = (x[j, 0] / 10000 - 9) * 60 + (x[j, 0] % 10000) / 100 + 1;
 
