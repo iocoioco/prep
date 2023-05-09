@@ -2111,10 +2111,7 @@ namespace Pre_Processor
                     dev = Math.Sqrt(배차.Sum(y => Math.Pow(y - avr, 2)) / (배차.Count - 1));
                 }
                 // str += "\t" + 배차.Count;
-                if (avr < 0.001)
-                    str += "\t" + "0.0";
-                else
-                    str += "\t" + avr.ToString("#.####");
+                str += "\t" + avr.ToString("#.####");
                 if (dev < 0.001)
                     str += "\t" + "0.0";
                 else
@@ -2130,10 +2127,7 @@ namespace Pre_Processor
                     dev = Math.Sqrt(배합.Sum(y => Math.Pow(y - avr, 2)) / (배합.Count - 1));
                 }
                 // str += "\t" + 배합.Count;
-                if (avr < 0.001)
-                    str += "\t" + "0.0";
-                else
-                    str += "\t" + avr.ToString("#.####");
+                str += "\t" + avr.ToString("#.####");
                 if (dev < 0.001)
                     str += "\t" + "0.0";
                 else
