@@ -2021,8 +2021,8 @@ namespace Pre_Processor
                         value = (double)(x[j, 7] - x[j - 1, 7]) * money_factor;
                         거분.Add(value);
 
-                        배차.Add(x[j, 8] - x[j - 1, 9]);
-                        배합.Add(x[j, 8] + x[j - 1, 9]);
+                        배차.Add(x[j, 8] - x[j, 9]);
+                        배합.Add(x[j, 8] + x[j, 9]);
 
                         //int id = (x[j, 0] / 10000 - 9) * 60 + (x[j, 0] % 10000) / 100 + 1;
 
