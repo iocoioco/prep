@@ -918,7 +918,7 @@ namespace Pre_Processor
 
                 stocks = stocks.OrderByDescending(t => t.Item1).ToList();
 
-                string s = " " + stockname1;
+                string s = stockname1;
                 sw.WriteLine("{0}", s);
 
                 inc = 0;
@@ -927,9 +927,9 @@ namespace Pre_Processor
                     decimal d = Convert.ToDecimal(item.Item1);
                     string t = String.Format("{0:0.000}", d);
                     if (d < 0)
-                        sw.WriteLine("    {0}\t{1}", t, item.Item2);
+                        sw.WriteLine("{0}\t{1}", t, item.Item2);
                     else
-                        sw.WriteLine("     {0}\t{1}", t, item.Item2);
+                        sw.WriteLine("{0}\t{1}", t, item.Item2);
 
                     if (inc++ > PrintLength) { break; }
                 }
