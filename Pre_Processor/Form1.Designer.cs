@@ -52,10 +52,10 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(559, 122);
-            this.button1.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.button1.Location = new System.Drawing.Point(727, 163);
+            this.button1.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(315, 34);
+            this.button1.Size = new System.Drawing.Size(410, 45);
             this.button1.TabIndex = 0;
             this.button1.Text = "일,주,월 자료(button1)";
             this.button1.UseVisualStyleBackColor = true;
@@ -63,10 +63,10 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(108, 278);
-            this.button2.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.button2.Location = new System.Drawing.Point(140, 371);
+            this.button2.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(315, 34);
+            this.button2.Size = new System.Drawing.Size(410, 45);
             this.button2.TabIndex = 1;
             this.button2.Text = "시작일, 종료일 지정 일별 4개(button2)";
             this.button2.UseVisualStyleBackColor = true;
@@ -74,10 +74,10 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(559, 165);
-            this.button3.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.button3.Location = new System.Drawing.Point(727, 220);
+            this.button3.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(231, 43);
+            this.button3.Size = new System.Drawing.Size(300, 57);
             this.button3.TabIndex = 2;
             this.button3.Text = "시총계산(button3)";
             this.button3.UseVisualStyleBackColor = true;
@@ -85,58 +85,58 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(105, 463);
-            this.button4.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.button4.Location = new System.Drawing.Point(136, 617);
+            this.button4.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(251, 34);
+            this.button4.Size = new System.Drawing.Size(326, 45);
             this.button4.TabIndex = 3;
-            this.button4.Text = "상관관계(button4)";
+            this.button4.Text = "Pearson Correlation";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click_1);
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(465, 278);
-            this.textBox3.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.textBox3.Location = new System.Drawing.Point(604, 371);
+            this.textBox3.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(141, 28);
+            this.textBox3.Size = new System.Drawing.Size(182, 35);
             this.textBox3.TabIndex = 6;
             this.textBox3.Text = "20220101";
             this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(641, 278);
-            this.textBox4.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.textBox4.Location = new System.Drawing.Point(833, 371);
+            this.textBox4.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(141, 28);
+            this.textBox4.Size = new System.Drawing.Size(182, 35);
             this.textBox4.TabIndex = 7;
             this.textBox4.Text = "20230317";
             // 
             // textBox6
             // 
-            this.textBox6.Location = new System.Drawing.Point(108, 598);
-            this.textBox6.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.textBox6.Location = new System.Drawing.Point(140, 797);
+            this.textBox6.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(314, 28);
+            this.textBox6.Size = new System.Drawing.Size(407, 35);
             this.textBox6.TabIndex = 8;
             this.textBox6.Text = "Processing Status";
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(812, 278);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.textBox1.Location = new System.Drawing.Point(1056, 371);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(141, 28);
+            this.textBox1.Size = new System.Drawing.Size(182, 35);
             this.textBox1.TabIndex = 9;
             this.textBox1.Text = "분";
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(108, 328);
-            this.button5.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.button5.Location = new System.Drawing.Point(140, 437);
+            this.button5.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(442, 34);
+            this.button5.Size = new System.Drawing.Size(575, 45);
             this.button5.TabIndex = 10;
             this.button5.Text = "개인,외인,연금,금투 등 일별 매매동향(button5)";
             this.button5.UseVisualStyleBackColor = true;
@@ -144,19 +144,17 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(361, 386);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox2.Location = new System.Drawing.Point(469, 515);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(159, 28);
+            this.textBox2.Size = new System.Drawing.Size(206, 35);
             this.textBox2.TabIndex = 12;
             this.textBox2.Text = "3000";
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(108, 379);
-            this.button7.Margin = new System.Windows.Forms.Padding(2);
+            this.button7.Location = new System.Drawing.Point(140, 505);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(232, 65);
+            this.button7.Size = new System.Drawing.Size(302, 87);
             this.button7.TabIndex = 13;
             this.button7.Text = "시총얼마이상그룹파일만들기(button7)";
             this.button7.UseVisualStyleBackColor = true;
@@ -164,10 +162,10 @@
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(559, 11);
-            this.button9.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.button9.Location = new System.Drawing.Point(727, 15);
+            this.button9.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(428, 34);
+            this.button9.Size = new System.Drawing.Size(556, 45);
             this.button9.TabIndex = 15;
             this.button9.Text = "종목 업종별 정렬(button9)";
             this.button9.UseVisualStyleBackColor = true;
@@ -175,10 +173,10 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(559, 78);
-            this.button6.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.button6.Location = new System.Drawing.Point(727, 104);
+            this.button6.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(428, 34);
+            this.button6.Size = new System.Drawing.Size(556, 45);
             this.button6.TabIndex = 17;
             this.button6.Text = "종목 테마별 정렬(button6)";
             this.button6.UseVisualStyleBackColor = true;
@@ -186,10 +184,9 @@
             // 
             // button10
             // 
-            this.button10.Location = new System.Drawing.Point(119, 165);
-            this.button10.Margin = new System.Windows.Forms.Padding(2);
+            this.button10.Location = new System.Drawing.Point(155, 220);
             this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(271, 64);
+            this.button10.Size = new System.Drawing.Size(352, 85);
             this.button10.TabIndex = 19;
             this.button10.Text = "업종, 테마, 일, 시총, 통계";
             this.button10.UseVisualStyleBackColor = true;
@@ -197,10 +194,10 @@
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(108, 514);
-            this.button8.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.button8.Location = new System.Drawing.Point(140, 685);
+            this.button8.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(428, 58);
+            this.button8.Size = new System.Drawing.Size(556, 77);
             this.button8.TabIndex = 20;
             this.button8.Text = "지난 기간 중 최대거래액 기준 순서 졍열(button8)";
             this.button8.UseVisualStyleBackColor = true;
@@ -208,10 +205,10 @@
             // 
             // button11
             // 
-            this.button11.Location = new System.Drawing.Point(559, 227);
-            this.button11.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.button11.Location = new System.Drawing.Point(727, 303);
+            this.button11.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(428, 34);
+            this.button11.Size = new System.Drawing.Size(556, 45);
             this.button11.TabIndex = 21;
             this.button11.Text = "프돈외기(button11)";
             this.button11.UseVisualStyleBackColor = true;
@@ -222,21 +219,19 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.ColumnHeadersVisible = false;
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowHeadersWidth = 82;
             this.dataGridView1.RowTemplate.Height = 37;
-            this.dataGridView1.Size = new System.Drawing.Size(309, 88);
+            this.dataGridView1.Size = new System.Drawing.Size(402, 117);
             this.dataGridView1.TabIndex = 22;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
             // button12
             // 
-            this.button12.Location = new System.Drawing.Point(119, 92);
-            this.button12.Margin = new System.Windows.Forms.Padding(2);
+            this.button12.Location = new System.Drawing.Point(155, 123);
             this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(271, 64);
+            this.button12.Size = new System.Drawing.Size(352, 85);
             this.button12.TabIndex = 23;
             this.button12.Text = "프돈외기";
             this.button12.UseVisualStyleBackColor = true;
@@ -245,9 +240,10 @@
             // 
             // button13
             // 
-            this.button13.Location = new System.Drawing.Point(617, 387);
+            this.button13.Location = new System.Drawing.Point(802, 516);
+            this.button13.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button13.Name = "button13";
-            this.button13.Size = new System.Drawing.Size(257, 39);
+            this.button13.Size = new System.Drawing.Size(334, 52);
             this.button13.TabIndex = 24;
             this.button13.Text = "통계";
             this.button13.UseVisualStyleBackColor = true;
@@ -255,9 +251,9 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1318, 678);
+            this.ClientSize = new System.Drawing.Size(1713, 904);
             this.Controls.Add(this.button13);
             this.Controls.Add(this.button12);
             this.Controls.Add(this.dataGridView1);
@@ -277,7 +273,7 @@
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);

@@ -2078,11 +2078,11 @@ namespace Pre_Processor
                 if (avr < 0.001)
                     str += "\t" + "0.0";
                 else
-                    str += "\t" + avr.ToString("#.####");
+                    str += "\t" + avr.ToString("#.##");
                 if (dev < 0.001)
                     str += "\t" + "0.0"; 
                 else
-                    str += "\t" + dev.ToString("#.####");
+                    str += "\t" + dev.ToString("#.##");
                  
                 // 거분
                 avr = 0.0;
@@ -2096,11 +2096,11 @@ namespace Pre_Processor
                 if (avr < 0.001)
                     str += "\t" + "0.0";
                 else
-                    str += "\t" + avr.ToString("#.####");
+                    str += "\t" + avr.ToString("#.##");
                 if (dev < 0.001)
                     str += "\t" + "0.0";
                 else
-                    str += "\t" + dev.ToString("#.####");
+                    str += "\t" + dev.ToString("#.##");
 
                 // 배차
                 avr = 0.0;
@@ -2111,11 +2111,11 @@ namespace Pre_Processor
                     dev = Math.Sqrt(배차.Sum(y => Math.Pow(y - avr, 2)) / (배차.Count - 1));
                 }
                 // str += "\t" + 배차.Count;
-                str += "\t" + avr.ToString("#.####");
+                str += "\t" + avr.ToString("#.##");
                 if (dev < 0.001)
                     str += "\t" + "0.0";
                 else
-                    str += "\t" + dev.ToString("#.####");
+                    str += "\t" + dev.ToString("#.##");
 
 
                 // 배합
@@ -2127,11 +2127,11 @@ namespace Pre_Processor
                     dev = Math.Sqrt(배합.Sum(y => Math.Pow(y - avr, 2)) / (배합.Count - 1));
                 }
                 // str += "\t" + 배합.Count;
-                str += "\t" + avr.ToString("#.####");
+                str += "\t" + avr.ToString("#.##");
                 if (dev < 0.001)
                     str += "\t" + "0.0";
                 else
-                    str += "\t" + dev.ToString("#.####");
+                    str += "\t" + dev.ToString("#.##");
 
                 sw.WriteLine("{0}", str);
 
@@ -2241,11 +2241,11 @@ namespace Pre_Processor
                 if (avr < 0.001)
                     str += "\t" + "0.0";
                 else
-                    str += "\t" + avr.ToString("#.####");
+                    str += "\t" + avr.ToString("#.##");
                 if (dev < 0.001)
                     str += "\t" + "0.0";
                 else
-                    str += "\t" + dev.ToString("#.####");
+                    str += "\t" + dev.ToString("#.##");
 
                 avr = 0.0;
                 dev = 0.0;
@@ -2258,11 +2258,11 @@ namespace Pre_Processor
                 if (avr < 0.001)
                     str += "\t" + "0.0";
                 else
-                    str += "\t" + avr.ToString("#.####");
+                    str += "\t" + avr.ToString("#.##");
                 if (dev < 0.001)
                     str += "\t" + "0.0";
                 else
-                    str += "\t" + dev.ToString("#.####");
+                    str += "\t" + dev.ToString("#.##");
 
                 sw.WriteLine("{0}", str);
             }
