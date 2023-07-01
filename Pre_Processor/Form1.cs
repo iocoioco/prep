@@ -2005,6 +2005,11 @@ namespace Pre_Processor
 
                     for (int j = 1; j < nrow; j++)
                     {
+                        double interval_by_seconds = ms.total_Seconds(x[j - 1, 0], x[j, 0]);
+                        if (interval_by_seconds > 75.0 || interval_by_seconds < 45.0) // interval_by_seconds larger than 70 seconds, then skip
+                        {
+                            continue;
+                        }
                         value = (double)(x[j, 4] - x[j - 1, 4]) * money_factor;
                         if (value > 0.01) // positive side only
                             프분.Add(value);
