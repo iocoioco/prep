@@ -1990,7 +1990,7 @@ namespace Pre_Processor
 
                 // find g.nCol * g.nRow maximum date and time
                 // in order of descending
-                for (int i = start_date; i <= end_date; i++)
+                for (int i = end_date; i >= start_date; i--)
                 {
                     g.date = i;
                     if (stock.Contains("KODEX") || stock.Contains("혼합"))
@@ -2023,6 +2023,9 @@ namespace Pre_Processor
 
                         //프누[id].Add(x[j, 4] * money_factor); 
                         //종누[id].Add(x[j, 7] * money_factor);
+
+                        if (count_success_read_stock_minute >= 20) // 한 달치만 읽고 계산하는 것으로 세팅
+                            break;
                     }
                     //if (프누.Count != 종누.Count)
                     //{
@@ -2030,7 +2033,7 @@ namespace Pre_Processor
                     //}
                 }
                 
-                if (count_success_read_stock_minute == 0) // no successful minute data
+                if (count_success_read_stock_minute == 0) // 하루치도 없는 경우 무시하고 다음 종목으로
                     continue;
 
                 //for (int i = 1; i < 382; i++)
@@ -2060,11 +2063,12 @@ namespace Pre_Processor
 
 
                 string str = stock;
+                int minimum_number_of_data_for_processing = 100;
 
                 // 프분
                 double avr = 0.0;
                 double dev = 0.0;
-                if (프분.Count > 10)
+                if (프분.Count > minimum_number_of_data_for_processing)
                 {
                     avr = 프분.Sum() / 프분.Count;
                     dev = Math.Sqrt(프분.Sum(y => Math.Pow(y - avr, 2)) / (프분.Count - 1));
@@ -2082,7 +2086,7 @@ namespace Pre_Processor
                 // 거분
                 avr = 0.0;
                 dev = 0.0;
-                if (거분.Count >10) 
+                if (거분.Count >count_success_read_stock_minute) 
                 {
                     avr = 거분.Sum() / 거분.Count;
                     dev = Math.Sqrt(거분.Sum(y => Math.Pow(y - avr, 2)) / (거분.Count - 1));
@@ -2100,7 +2104,7 @@ namespace Pre_Processor
                 // 배차
                 avr = 0.0;
                 dev = 0.0;
-                if (배차.Count > 10)
+                if (배차.Count > minimum_number_of_data_for_processing)
                 {
                     avr = 배차.Sum() / 배차.Count;
                     dev = Math.Sqrt(배차.Sum(y => Math.Pow(y - avr, 2)) / (배차.Count - 1));
@@ -2116,7 +2120,7 @@ namespace Pre_Processor
                 // 배합
                 avr = 0.0;
                 dev = 0.0;
-                if (배합.Count > 10)
+                if (배합.Count > minimum_number_of_data_for_processing)
                 {
                     avr = 배합.Sum() / 배합.Count;
                     dev = Math.Sqrt(배합.Sum(y => Math.Pow(y - avr, 2)) / (배합.Count - 1));
@@ -2135,8 +2139,6 @@ namespace Pre_Processor
             }
             sw.Close();
             textBox6.Text = "통계 진행 완료";
-
-
         }
 
 
