@@ -1221,7 +1221,7 @@ namespace Pre_Processor
             Stream FS = new FileStream(@"C:\병신\data\" + "그룹_네이버_업종" + ".txt", FileMode.CreateNew, FileAccess.Write);
             StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
 
-            int[] themeRemove = new int[] { }; // 환율하락수혜
+            int[] themeRemove = new int[] {25}; // 환율하락수혜
             //int[] themeRemove = new int [] {31, // 환율하락수혜
             //    38, // 홈쇼핑
             //    66, // 줄기세포
@@ -1260,12 +1260,7 @@ namespace Pre_Processor
 
                 string url = i.ToString();
 
-
                 var newurl = "https://finance.naver.com/sise/sise_group_detail.nhn?type=upjong&no=" + url;
-
-
-
-
 
 
                 // if newurl is invalid, skip
@@ -1279,11 +1274,6 @@ namespace Pre_Processor
                     continue;
                 }
                 response.Close();
-
-
-
-
-
 
                 doc = web.Load(newurl);
                 if (doc == null)
