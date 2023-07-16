@@ -1646,7 +1646,7 @@ namespace Pre_Processor
             통계_working();
             상관계산(); // 12 분 
         }
-
+         
 
         private void 프돈외기()
         {
