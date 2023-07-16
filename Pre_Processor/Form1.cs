@@ -597,7 +597,7 @@ namespace Pre_Processor
                 // 출력자료 요청
                 if (_Stock_Chart_일주월.GetDibStatus() == 0)
                 {
-                    int result = _Stock_Chart_일주월.BlockRequest();
+                    int result = _Stock_Chart_일주월.BlockRequest(); 
                     if (result != 0)
                     {
                         i--; // to try again with the same stock
@@ -936,7 +936,11 @@ namespace Pre_Processor
 
         private void button4_Click_1(object sender, EventArgs e)
         {
+            상관계산();
+        }
 
+        private void 상관계산()
+        {
             List<List<string>> tgl = new List<List<string>>();
             List<string> total_stock_list = new List<string>();
             List<List<string>> Gl = new List<List<string>>();
@@ -951,7 +955,7 @@ namespace Pre_Processor
             foreach (var item in 상관_group_total_stock_list)
             {
                 if (total_stock_list.Contains(item))
-                    continue;
+                    continue; 
                 else
                     total_stock_list.Add(item);
             }
@@ -962,6 +966,8 @@ namespace Pre_Processor
             Pre_Processor_Class1.PearsonRateDifferenceBetweenDays(days_of_array, print_length, total_stock_list);
             textBox6.Text = "상관관계" + " is Processed";
         }
+
+        
 
 
         //	투자주체별현황을 일별/기간별, 순매수/매매비중을 일자별
@@ -1633,11 +1639,12 @@ namespace Pre_Processor
 
         private void button10_Click(object sender, EventArgs e)
         {
-            네이버_업종();
-            네이버_테마(1);
+            네이버_업종(); // 1 분
+            네이버_테마(1); // 1 분
             일주월();
             시가총액();
             통계_working();
+            상관계산(); // 12 분 
         }
 
 

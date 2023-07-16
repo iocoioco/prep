@@ -90,7 +90,7 @@
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(326, 45);
             this.button4.TabIndex = 3;
-            this.button4.Text = "Pearson Correlation";
+            this.button4.Text = "상관 : Pearson Correlation";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click_1);
             // 
@@ -241,7 +241,7 @@
             // button13
             // 
             this.button13.Location = new System.Drawing.Point(802, 516);
-            this.button13.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button13.Margin = new System.Windows.Forms.Padding(4);
             this.button13.Name = "button13";
             this.button13.Size = new System.Drawing.Size(334, 52);
             this.button13.TabIndex = 24;
