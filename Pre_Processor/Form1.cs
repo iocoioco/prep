@@ -2010,6 +2010,9 @@ namespace Pre_Processor
                     else
                         count_success_read_stock_minute++;
 
+                    if (count_success_read_stock_minute == 20)
+                        break;
+
                     for (int j = 1; j < nrow; j++)
                     {
                         double interval_by_seconds = ms.total_Seconds(x[j - 1, 0], x[j, 0]);
