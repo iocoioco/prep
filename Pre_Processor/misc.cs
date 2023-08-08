@@ -16,8 +16,20 @@ namespace Pre_Processor
     {
         static CPUTILLib.CpStockCode _cpstockcode;
 
-       
-     
+
+        public static bool is_stock(string stock)
+        {
+            _cpstockcode = new CPUTILLib.CpStockCode();
+            if (stock == "")
+                return false;
+
+
+            string code = _cpstockcode.NameToCode(stock); // 코스피혼합, 코스닥혼합 code.Length = 0 제외될 것임
+            if (code.Length == 7)
+                return true;
+            else
+                return false;
+        }
         public static int current_date()
         {
             // 토, 일요일이면 시작판의 Default 시작날짜를 금요일로 수정

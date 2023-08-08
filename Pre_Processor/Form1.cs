@@ -539,10 +539,80 @@ namespace Pre_Processor
         private void button1_Click_1(object sender, EventArgs e)
         {
             일주월();
+
+            // to delete all last line containing words[5, 6, 7] = "0"
+            _Stock_Chart_일주월_stockChart_post(); 
+
         }
 
-        public void _Stock_Chart_일주월_stockChart()
+        public void _Stock_Chart_일주월_stockChart_post()
         {
+            string path = @"C:\병신\data\일";
+            if (!Directory.Exists(path))
+            {
+                return;
+            }
+            var sl = Directory.GetFiles(path, "*.txt")
+                     .Select(Path.GetFileName)
+                     .ToList();
+
+            int countoflastlinezeros = 0;
+            foreach (var file in sl)
+            {
+                // if file not txt type
+                if(!file.Contains(".txt"))
+                { continue; }
+
+                // if not stock txt file
+                string stock = file.Replace(".txt", "");
+                if(!ms.is_stock(stock))
+                { continue; }
+
+                string filepath = path + "\\" + file;
+                string lastline = File.ReadLines(filepath).Last(); // last line read 
+
+                string[] words = lastline.Split(' ');
+                if (words[5] == "0" && words[6] == "0" && words[7] == "0")
+                    countoflastlinezeros++;
+            }
+
+            if (countoflastlinezeros > 1000)
+            {
+                foreach (var file in sl)
+                {
+                    // if file not txt type
+                    if (!file.Contains(".txt"))
+                    { continue; }
+
+                    // if not stock txt file
+                    string stock = file.Replace(".txt", "");
+                    if (!ms.is_stock(stock))
+                    { continue; }
+
+                    string filepath = path + "\\" + file;
+
+                    string lastline = File.ReadLines(filepath).Last(); // last line read 
+
+                    string[] words = lastline.Split(' ');
+                    if (words[5] == "0" && words[6] == "0" && words[7] == "0")
+                    {
+                        List<string> lines = File.ReadAllLines(filepath).ToList();
+                        if (File.Exists(filepath))
+                        {
+                            File.Delete(filepath);
+                        }
+
+                        File.WriteAllLines(filepath, lines.GetRange(0, lines.Count - 1).ToArray());
+                    }
+                        
+                }
+            }
+
+        }
+            public void _Stock_Chart_일주월_stockChart()
+        {
+            
+ 
             for (int i = 0; i < _gl.Count; i++)
             {
 
@@ -605,6 +675,8 @@ namespace Pre_Processor
                     }
                 }
             }
+
+
         }
 
 
@@ -647,9 +719,15 @@ namespace Pre_Processor
             for (int k = numberofData - 1; k >= 0; k--)
             {
                 sw.WriteLine("{0} {1} {2} {3} {4} {5} {6} {7} {8} {9}",
-                    _Stock_Chart_일주월.GetDataValue(0, k), _Stock_Chart_일주월.GetDataValue(1, k), _Stock_Chart_일주월.GetDataValue(2, k),
-                    _Stock_Chart_일주월.GetDataValue(3, k), _Stock_Chart_일주월.GetDataValue(4, k), _Stock_Chart_일주월.GetDataValue(5, k),
-                    _Stock_Chart_일주월.GetDataValue(6, k), _Stock_Chart_일주월.GetDataValue(7, k), _Stock_Chart_일주월.GetDataValue(8, k),
+                    _Stock_Chart_일주월.GetDataValue(0, k), 
+                    _Stock_Chart_일주월.GetDataValue(1, k), 
+                    _Stock_Chart_일주월.GetDataValue(2, k),
+                    _Stock_Chart_일주월.GetDataValue(3, k), 
+                    _Stock_Chart_일주월.GetDataValue(4, k), 
+                    _Stock_Chart_일주월.GetDataValue(5, k),
+                    _Stock_Chart_일주월.GetDataValue(6, k), 
+                    _Stock_Chart_일주월.GetDataValue(7, k), 
+                    _Stock_Chart_일주월.GetDataValue(8, k),
                     _Stock_Chart_일주월.GetDataValue(9, k));
                 // 날짜, 시가, 고가, 저가, 종가, 거래량, 누적매도, 누적매수, 외국인보유, 기관누적순매수
             }
