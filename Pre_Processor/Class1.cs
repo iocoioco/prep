@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Pre_Processor
 {
@@ -966,10 +967,17 @@ namespace Pre_Processor
 
                 List<string> lines = File.ReadLines(path).Reverse().Take(ArrayLength).ToList();
                 if (lines.Count != ArrayLength) // Array Length
+                {
+                    wr.wt(lines.Count.ToString() + " days : " + stockname1);
                     continue;
+                }
+                    
                 string[] words_check = lines[0].Split(' '); // 거래중지
                 if (words_check[5] == "0")
+                {
+                    wr.wt("거래중지             : " + stockname1);
                     continue;
+                }
 
                 int inc = 0;
                 foreach (string line in lines)
@@ -1001,10 +1009,15 @@ namespace Pre_Processor
 
                     lines = File.ReadLines(path).Reverse().Take(ArrayLength).ToList();
                     if (lines.Count != ArrayLength) // Array Length
+                    {
                         continue;
+                    }
+                        
                     words_check = lines[0].Split(' '); // 거래중지
                     if (words_check[5] == "0")
+                    {
                         continue;
+                    }
 
                     inc = 0;
                     foreach (string line in lines)

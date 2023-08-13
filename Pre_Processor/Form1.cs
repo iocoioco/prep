@@ -1026,6 +1026,8 @@ namespace Pre_Processor
             List<string> 상관_group_total_stock_list = new List<string>();
             List<string> tgl_title = new List<string>();
 
+            textBox6.Text = "상관관계" + " is Processing";
+
             total_stock_list = rd.read_그룹_네이버_업종(Gl, GL); // if file not exist, return nothing, 제외종목 제거
 
             wk.일평균거래액10억이상종목선택(total_stock_list, 10);
@@ -1038,10 +1040,10 @@ namespace Pre_Processor
                     total_stock_list.Add(item);
             }
 
-            textBox6.Text = "상관관계" + " is Processing";
-            int days_of_array = 100;
+            int days_of_array = 50;
             int print_length = 20;
-            Pre_Processor_Class1.PearsonRateDifferenceBetweenDays(days_of_array, print_length, total_stock_list);
+           Pre_Processor_Class1.PearsonRateDifferenceBetweenDays(days_of_array, print_length, total_stock_list);
+
             textBox6.Text = "상관관계" + " is Processed";
         }
 
