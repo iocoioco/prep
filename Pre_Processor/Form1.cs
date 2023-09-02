@@ -2085,7 +2085,7 @@ namespace Pre_Processor
 
                     int[,] x = new int[400, 12];
                     int nrow = rd.read_Stock_Minute(i, stock, x); // i -> date
-                    if (!rd.readStockMinuteCheck(nrow, x)) // if minute data is not perfect continue to next date
+                    if (!rd.readStockMinuteCheck(nrow, x)) // check usability of minute data 
                         continue;
                     else
                         count_success_read_stock_minute++;
@@ -2101,7 +2101,7 @@ namespace Pre_Processor
                             continue;
                         }
                         value = (double)(x[j, 4] - x[j - 1, 4]) * money_factor;
-                        if (value > 0.01) // positive side only
+                        if (value > 0.001) // positive side only
                             프분.Add(value);
                         value = (double)(x[j, 7] - x[j - 1, 7]) * money_factor;
                         거분.Add(value);
