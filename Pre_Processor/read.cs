@@ -1112,35 +1112,38 @@ namespace Pre_Processor
         {
             if (nrow != 382)
                 return false;
+            if (x[381, 0] / 100 != 1520) // end time is not 1520
+                return false;
 
             // time inc ? 
             // amount inc ? 
             for (int i = 1; i < 382; i++)
             {
-                if (x[i, 0] < x[i - 1, 0])
+                if (x[i, 0] < x[i - 1, 0]) // time passing backwards
                     return false;
 
-                if (x[i, 7] < x[i - 1, 7])
+                if (x[i, 7] < x[i - 1, 7]) // negative deal
                     return false;
 
+
+                // x[i, 0] - x[i - 1, 0] miniute difference should be 1 miniute
                 if ((x[i, 0] / 100) % 100 == 0)
                 {
-                    if (x[i, 0] / 100 - x[i - 1, 0] / 100 != 41)
+                    if (x[i, 0] / 100 - x[i - 1, 0] / 100 != 41) // o'clock i.e. 1000, 1100 ... 
                         return false;
                 }
                 else
                 {
-                    if (x[i, 0] / 100 - x[i - 1, 0] / 100 != 1)
+                    if (x[i, 0] / 100 - x[i - 1, 0] / 100 != 1) // not o'clock i.e. 1001 etc
                         return false;
                 }
 
-                if (x[i, 1] < -3000 || x[i, 1] > 3000 ||     // price less than 3,000, and larger than -3,000
-                    x[i, 7] - x[i - 1, 7] < 0)                 // negative deal (not possible)
+                if (x[i, 1] < -3000 || x[i, 1] > 3000)     // price less than 3,000, and larger than -3,000
                 {
                     return false;
                 }
-                int id = (x[i, 0] / 10000 - 9) * 60 + (x[i, 0] % 10000) / 100 + 1; // if nrow == 382, maybe no need, i.e. if data correct, id = i
-                if (id < 1 || id >= 382)
+                int sequence_id = (x[i, 0] / 10000 - 9) * 60 + (x[i, 0] % 10000) / 100 + 1; 
+                if (sequence_id < 1 || sequence_id >= 382)
                     return false;
             }
             return true;

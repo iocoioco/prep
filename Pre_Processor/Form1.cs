@@ -2058,15 +2058,15 @@ namespace Pre_Processor
                 var 배차 = new List<double>();
                 var 배합 = new List<double>();
 
-                //var 프누 = new List<List<double>>(); 
-                //var 종누 = new List<List<double>>();
+                var 프누 = new List<List<double>>(); 
+                var 종누 = new List<List<double>>();
 
               
-                //for (int i = 0; i < 382; i++)
-                //{
-                //    프누.Add(new List<double>());
-                //    종누.Add(new List<double>());
-                //}
+                for (int i = 0; i < 382; i++)
+                {
+                    프누.Add(new List<double>());
+                    종누.Add(new List<double>());
+                }
 
                 double value = 0.0;
 
@@ -2085,7 +2085,7 @@ namespace Pre_Processor
 
                     int[,] x = new int[400, 12];
                     int nrow = rd.read_Stock_Minute(i, stock, x); // i -> date
-                    if (!rd.readStockMinuteCheck(nrow, x)) // if minute data is not absolute continue
+                    if (!rd.readStockMinuteCheck(nrow, x)) // if minute data is not perfect continue to next date
                         continue;
                     else
                         count_success_read_stock_minute++;
