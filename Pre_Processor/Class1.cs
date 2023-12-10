@@ -283,17 +283,11 @@ namespace Pre_Processor
             {
                 string[] words = line.Split('\t');
 
-                if (words[0].Length > 0)
+                if (words[0].Length > 0 && !_gl.Contains(words[0]))
                 {
                     _gl.Add(words[0]);
                 }
             }
-
-            _gl.Add("KODEX 레버리지"); // 0504
-            _gl.Add("KODEX 200선물인버스2X");
-            _gl.Add("KODEX 코스닥150레버리지");
-            _gl.Add("KODEX 코스닥150선물인버스");
-
         }
 
         public static bool isStock(string stock)
@@ -304,7 +298,7 @@ namespace Pre_Processor
 
 
             string code = _cpstockcode.NameToCode(stock); // 코스피혼합, 코스닥혼합 code.Length = 0 제외될 것임
-            if (code.Length == 7)
+            if (code.Length == 7 && code[0] == 'A')
                 return true;
             else
                 return false;
@@ -345,6 +339,8 @@ namespace Pre_Processor
                         continue;
                     }
                 }
+                if (!isStock(item))
+                    continue;
                 if (!gl.Contains(item))
                     gl.Add(item); // for single
                 if (!temp_Gl.Contains(item))
@@ -1301,7 +1297,10 @@ namespace Pre_Processor
                 if (words[0] != "")
                 {
                     string stockname = words[0].Replace(" *", ""); // 코스닥 * 표시되어 있어 제거, 코스피는 없음
-                    if (!isStock(stockname))
+                    if (!isStock(stockname)) // code starts from 'A'
+                        continue;
+
+                    if (gl_list.Contains(stockname))
                         continue;
 
                     gl_list.Add(stockname); // for single
