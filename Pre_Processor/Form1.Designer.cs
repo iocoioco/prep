@@ -47,6 +47,7 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.button12 = new System.Windows.Forms.Button();
             this.button13 = new System.Windows.Forms.Button();
+            this.button14 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -247,13 +248,24 @@
             this.button13.TabIndex = 24;
             this.button13.Text = "통계";
             this.button13.UseVisualStyleBackColor = true;
-            this.button13.Click += new System.EventHandler(this.통계);
+            this.button13.Click += new System.EventHandler(this.통계_Click);
+            // 
+            // button14
+            // 
+            this.button14.Location = new System.Drawing.Point(825, 667);
+            this.button14.Name = "button14";
+            this.button14.Size = new System.Drawing.Size(311, 51);
+            this.button14.TabIndex = 25;
+            this.button14.Text = "통계_지수";
+            this.button14.UseVisualStyleBackColor = true;
+            this.button14.Click += new System.EventHandler(this.통계_지수_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1713, 904);
+            this.Controls.Add(this.button14);
             this.Controls.Add(this.button13);
             this.Controls.Add(this.button12);
             this.Controls.Add(this.dataGridView1);
@@ -304,6 +316,7 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button button12;
         private System.Windows.Forms.Button button13;
+        private System.Windows.Forms.Button button14;
     }
 }
 

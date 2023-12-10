@@ -1,6 +1,7 @@
 ﻿
 
 
+using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
 
 using System;
@@ -17,6 +18,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Xml.Linq;
+using static Pre_Processor.g;
 
 namespace Pre_Processor
 {
@@ -1341,8 +1343,8 @@ namespace Pre_Processor
             int theme_count = 0;
             for (int i = 0; i < 1000; i++)
             {
-                if (themeRemove.Contains(i))
-                    continue;
+                //if (themeRemove.Contains(i))
+                //    continue;
 
                 string url = i.ToString();
 
@@ -1719,11 +1721,20 @@ namespace Pre_Processor
 
         private void button10_Click(object sender, EventArgs e)
         {
+            string original_directory = @"C:\병신\data";
+            string copy_directory = original_directory + " Copy";
+
+            if (Directory.Exists(copy_directory)) Directory.Delete(copy_directory, true);
+
+            Directory.CreateDirectory(copy_directory);
+            FileSystem.CopyDirectory(original_directory, copy_directory);
+
             네이버_업종(); // 1 분
             네이버_테마(1); // 1 분
             일주월();
             시가총액();
-            통계_working();
+            통계();
+            통계_지수();
             상관계산(); // 12 분 
         }
          
@@ -2026,7 +2037,7 @@ namespace Pre_Processor
 
 
       
-        private void 통계_working() // MOD,  g.ogldata 1581, 통계 1573
+        private void 통계() // MOD,  g.ogldata 1581, 통계 1573
         {
             // rd.read_변수();
             textBox6.Text = "통계 진행 중";
@@ -2061,7 +2072,11 @@ namespace Pre_Processor
                 var 프누 = new List<List<double>>(); 
                 var 종누 = new List<List<double>>();
 
-              
+
+                var 코스피가격차이 = new List<double>();
+                var 코스닥가격차이 = new List<double>();
+
+
                 for (int i = 0; i < 382; i++)
                 {
                     프누.Add(new List<double>());
@@ -2081,7 +2096,14 @@ namespace Pre_Processor
                 {
                     g.date = i;
                     if (stock.Contains("KODEX") || stock.Contains("혼합"))
+                    {
+                        if(stock.Contains("KODEX 레버리지") || stock.Contains("KODEX 코스닥150레버리지"))
+                        {
+                            break;
+                        }
                         continue;
+                    }
+                        
 
                     int[,] x = new int[400, 12];
                     int nrow = rd.read_Stock_Minute(i, stock, x); // i -> date
@@ -2100,7 +2122,22 @@ namespace Pre_Processor
                         {
                             continue;
                         }
-                        value = (double)(x[j, 4] - x[j - 1, 4]) * money_factor;
+
+                        if (stock.Contains("KODEX 레버리지"))
+                        {
+                            value = (double)(x[j, 0] - x[j - 1, 0]);
+                            코스피가격차이.Add(value);
+                            continue;
+                        }
+                        if (stock.Contains("KODEX 코스닥150레버리지"))
+                        {
+                            value = (double)(x[j, 0] - x[j - 1, 0]);
+                            코스닥가격차이.Add(value);
+                            continue;
+                        }
+
+
+                            value = (double)(x[j, 4] - x[j - 1, 4]) * money_factor;
                         if (value > 0.001) // positive side only
                             프분.Add(value);
                         value = (double)(x[j, 7] - x[j - 1, 7]) * money_factor;
@@ -2231,130 +2268,77 @@ namespace Pre_Processor
             textBox6.Text = "통계 진행 완료";
         }
 
-
-
-        private void 통계_old()
+        private void 통계_지수() // MOD,  g.ogldata 1581, 통계 1573
         {
-            return;
-            rd.read_변수();
-            rd.read_제어();
-            rd.read_업종_상관(); // 업종 & 상관 : 다 읽은 후 종목은 전일 거래액 순서로 정리함
+            // rd.read_변수();
+            textBox6.Text = "통계 지수 진행 중";
 
-            int start_date = Convert.ToInt32(textBox3.Text);
-            int end_date = Convert.ToInt32(textBox4.Text);
+            int start_date = 20220302; // MOD
+            int end_date = Convert.ToInt32(DateTime.Now.Date.ToString("yyyyMMdd"));
 
-            string path = @"C:\병신\data\통계.txt";
+            string path = @"C:\병신\data\통계_지수.txt";
 
             if (File.Exists(path))
                 File.Delete(path);
 
             StreamWriter sw = File.CreateText(path);
 
-            foreach (var o in g.ogl_data) // 혼합 2 종목 빠져시 to-jsb 보다 2 종목 작음
+            int processing_count = 0;
+
+
+            var 지수종목 = new List<string>();
+            지수종목.Add("KODEX 레버리지");
+            지수종목.Add("KODEX 코스닥150레버리지");
+           
+            foreach (var stock in 지수종목) // 혼합 2 종목 빠져시 to-jsb 보다 2 종목 작음
             {
-                string stock = o.종목;
+                int count_success_read_stock_minute = 0;
 
-                var 프분_list = new List<double>();
-                var 거분_list = new List<double>();
+                var 지수종목_가격차이 = new List<double>();
 
-                var 프누_avr = new List<List<double>>();
-                var 프누_dev = new List<List<double>>();
-                var 종누_avr = new List<List<double>>();
-                var 종누_dev = new List<List<double>>();
-
-                for (int i = 0; i < 382; i++)
-                {
-                    프누_avr.Add(new List<double>());
-                    프누_dev.Add(new List<double>());
-                    종누_avr.Add(new List<double>());
-                    종누_dev.Add(new List<double>());
-                }
-
-                double value = 0.0;
-
-                int 전일종가 = rd.read_전일종가(stock);
-
-                if (stock.Contains("KODEX") || stock.Contains("KBSTAR"))
-                    continue;
-
-                // find g.nCol * g.nRow maximum date and time
-                // in order of descending
-                for (int i = start_date; i <= end_date; i++)
+                for (int i = end_date; i >= start_date; i--)
                 {
                     g.date = i;
-                    if (stock.Contains("KODEX") || stock.Contains("혼합"))
-                        continue;
 
-                    int[,] x = new int[382, 12];
+                    int[,] x = new int[400, 12];
                     int nrow = rd.read_Stock_Minute(i, stock, x); // i -> date
-
-
-                    if (nrow < 200)
+                    if (!rd.readStockMinuteCheck(nrow, x)) // check usability of minute data 
                         continue;
+                    else
+                        count_success_read_stock_minute++;
+
+                    if (count_success_read_stock_minute == 60)
+                        break;
 
                     for (int j = 1; j < nrow; j++)
                     {
-                        if (x[j, 0] / 100 - x[j - 1, 0] / 100 != 1 || // minute difference = 1
-                            x[j, 1] < -3000 || x[j, 1] > 3000 ||     // price less than 3,000, and larger than -3,000
-                            x[j, 4] - x[j - 1, 4] < 0 ||
-                        x[j, 7] - x[j - 1, 7] < 0 ||                        // 거분 > 0
-                        x[j, 0] > 150000)                                // before 1500
+                        double interval_by_seconds = ms.total_Seconds(x[j - 1, 0], x[j, 0]);
+                        if (interval_by_seconds > 75.0 || interval_by_seconds < 45.0) // interval_by_seconds larger than 70 seconds, then skip
                         {
                             continue;
                         }
 
-                        value = (double)(x[j, 4] - x[j - 1, 4]) * 전일종가;
-                        value /= g.억원;
-                        if (value > 0.01)
-                            프분_list.Add(value);
-                        value = (double)(x[j, 7] - x[j - 1, 7]) * 전일종가;
-                        value /= g.억원;
-                        거분_list.Add(value);
+                        지수종목_가격차이.Add((double)(x[j, 1] - x[j - 1, 1]));
                     }
                 }
 
-                g.clicked_Stock = stock;
-                //ms.Naver_호가_txt(2, -1, -1, 0, 0);
+                if (count_success_read_stock_minute == 0) // 하루치도 없는 경우 무시하고 다음 종목으로
+                    continue;
 
-                string str = stock;
+                // 프분
                 double avr = 0.0;
                 double dev = 0.0;
-                if (프분_list.Count > 10)
-                {
-                    avr = 프분_list.Sum() / 프분_list.Count;
-                    dev = Math.Sqrt(프분_list.Sum(y => Math.Pow(y - avr, 2)) / (프분_list.Count - 1));
-                }
-                str += "\t" + 프분_list.Count.ToString();
-                if (avr < 0.001)
-                    str += "\t" + "0.0";
-                else
-                    str += "\t" + avr.ToString("#.##");
-                if (dev < 0.001)
-                    str += "\t" + "0.0";
-                else
-                    str += "\t" + dev.ToString("#.##");
-
-                avr = 0.0;
-                dev = 0.0;
-                if (거분_list.Count > 10)
-                {
-                    avr = 거분_list.Sum() / 거분_list.Count;
-                    dev = Math.Sqrt(거분_list.Sum(y => Math.Pow(y - avr, 2)) / (거분_list.Count - 1));
-                }
-                str += "\t" + 거분_list.Count.ToString();
-                if (avr < 0.001)
-                    str += "\t" + "0.0";
-                else
-                    str += "\t" + avr.ToString("#.##");
-                if (dev < 0.001)
-                    str += "\t" + "0.0";
-                else
-                    str += "\t" + dev.ToString("#.##");
+                avr = 지수종목_가격차이.Sum() / 지수종목_가격차이.Count;
+                dev = Math.Sqrt(지수종목_가격차이.Sum(y => Math.Pow(y - avr, 2)) / (지수종목_가격차이.Count - 1));
+                string str = "";
+                str += stock + "\t" + dev.ToString("#.##");
 
                 sw.WriteLine("{0}", str);
             }
             sw.Close();
+            textBox6.Text = "통계 지수 진행 완료";
         }
+
 
 
 
@@ -2363,9 +2347,19 @@ namespace Pre_Processor
 
         }
 
-        private void 통계(object sender, EventArgs e)
+        //private void 통계(object sender, EventArgs e)
+        //{
+        //    통계_working();
+        //}
+
+        private void 통계_지수_Click(object sender, EventArgs e)
         {
-            통계_working();   
+            통계_지수();
+        }
+
+        private void 통계_Click(object sender, EventArgs e)
+        {
+            통계();
         }
     }
 }

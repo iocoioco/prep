@@ -39,6 +39,7 @@
     <Reference Include="Library">
       <HintPath>..\..\Library\Library\bin\Debug\net7.0\Library.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
