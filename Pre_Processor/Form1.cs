@@ -2318,7 +2318,7 @@ namespace Pre_Processor
         private void 통계_지수() // MOD,  g.ogldata 1581, 통계 1573
         {
             // rd.read_변수();
-            textBox6.Text = "통계 지수 진행 중";
+            textBox6.Text = "지수 분당 변화 avr & dev 진행 중";
 
             int start_date = 20220302; // MOD
             int end_date = Convert.ToInt32(DateTime.Now.Date.ToString("yyyyMMdd"));
@@ -2329,6 +2329,10 @@ namespace Pre_Processor
                 File.Delete(path);
 
             StreamWriter sw = File.CreateText(path);
+
+            // header writing
+            string str = "// 지수\avr/min\tdev/min";
+            sw.WriteLine("{0}", str);
 
             int processing_count = 0;
 
@@ -2377,8 +2381,8 @@ namespace Pre_Processor
                 double dev = 0.0;
                 avr = 지수종목_가격차이.Sum() / 지수종목_가격차이.Count;
                 dev = Math.Sqrt(지수종목_가격차이.Sum(y => Math.Pow(y - avr, 2)) / (지수종목_가격차이.Count - 1));
-                string str = "";
-                str += stock + "\t" + dev.ToString("#.##");
+                str = "";
+                str += stock + "\t" + avr.ToString("#.##") + "\t" + dev.ToString("#.##");
 
                 sw.WriteLine("{0}", str);
             }
