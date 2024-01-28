@@ -2390,10 +2390,47 @@ namespace Pre_Processor
             textBox6.Text = "통계 지수 진행 완료";
         }
 
+        private void 통계_지수_mixed() // MOD,  g.ogldata 1581, 통계 1573
+        {
+            string url = "https://finance.naver.com/item/main.naver?code=122630";
+
+            var resultDataset = new DataSet();
+
+            //HtmlDocument doc = new HtmlDocument();
+
+            HtmlAgilityPack.HtmlWeb web = new HtmlAgilityPack.HtmlWeb();
+
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+
+            doc = web.Load(url);
 
 
 
-        private void textBox3_TextChanged(object sender, EventArgs e)
+
+            List<List<string>> table =
+            doc.DocumentNode.SelectSingleNode("//table [@class='tb_type1 tb_type1_b']")
+                .Descendants("tr")
+                .Skip(1)
+                .Where(tr => tr.Elements("td").Count() > 1)
+                .Select(tr => tr.Elements("td").Select(td => td.InnerText.Trim()).ToList())
+                .ToList();
+
+
+            int stock_count = 0;
+            string s = "";
+            for (int i = 0; i < table.Count; i++)
+            {
+                s = Encoding.GetEncoding("EUC-KR").GetString(Encoding.GetEncoding("EUC-KR").GetBytes(table[4][0]));
+                //  s = Encoding.UTF8.GetString(bytes1);
+                stock_count = Convert.ToInt32(table[4][1]);
+                i = 0;
+                continue;
+            }
+        }
+    
+
+
+            private void textBox3_TextChanged(object sender, EventArgs e)
         {
 
         }
