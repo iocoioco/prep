@@ -39,8 +39,8 @@ namespace Pre_Processor
             {
                 mixed_data main_table_data = scrapeTableData(종목, 1.0);
 
-                string[] sub_stock = new string[5];
-                double[] factors = new double[5];
+                string[] sub_stock = new string[2];
+                double[] factors = new double[2];
                 int sub_stock_count = 0;
 
                 for (int i = 0; i < main_table_data.stocks.Length; i++)
@@ -52,10 +52,7 @@ namespace Pre_Processor
                         factors[sub_stock_count++] = main_table_data.weight[i];
                     }
                 }
-                foreach (var stock in main_table_data.stocks)
-                {
 
-                }
 
                 mixed_data sub_table_data_0 = scrapeTableData(sub_stock[0], factors[0]);
                 mixed_data sub_table_data_1 = scrapeTableData(sub_stock[1], factors[1]);
@@ -73,8 +70,18 @@ namespace Pre_Processor
                     {
                         stocks.Add(main_table_data.stocks[i]);
                     }
-                    int index = stocks.IndexOf(main_table_data.stocks[i]);
-                    weight[index] += main_table_data.weight[index];
+
+                    int index = -1;
+                    for (int j = 0; j < stocks.Count; j++)
+                    {
+                        if (main_table_data.stocks[i] == stocks[j])
+                        {
+                            index = j;
+                            break;
+                        }
+                    }
+
+                    weight[index] += main_table_data.weight[i];
                 }
 
                 for (int i = 0; i < sub_table_data_0.stocks.Length; i++)
@@ -83,8 +90,17 @@ namespace Pre_Processor
                     {
                         stocks.Add(sub_table_data_0.stocks[i]);
                     }
-                    int index = stocks.IndexOf(sub_table_data_0.stocks[i]);
-                    weight[index] += sub_table_data_0.weight[index];
+                    int index = -1;
+                    for (int j = 0; j < stocks.Count; j++)
+                    {
+                        if (sub_table_data_0.stocks[i] == stocks[j])
+                        {
+                            index = j;
+                            break;
+                        }
+                    }
+
+                    weight[index] += sub_table_data_0.weight[i];
                 }
 
                 for (int i = 0; i < sub_table_data_1.stocks.Length; i++)
@@ -93,15 +109,26 @@ namespace Pre_Processor
                     {
                         stocks.Add(sub_table_data_1.stocks[i]);
                     }
-                    int index = stocks.IndexOf(sub_table_data_1.stocks[i]);
-                    weight[index] += sub_table_data_1.weight[index];
+                    int index = -1;
+                    for (int j = 0; j < stocks.Count; j++)
+                    {
+                        if (sub_table_data_1.stocks[i] == stocks[j])
+                        {
+                            index = j;
+                            break;
+                        }
+                    }
+
+                    weight[index] += sub_table_data_1.weight[i];
                 }
 
+                double weight_sum = 0.0;
                 for (int i = 0; i < stocks.Count; i++)
                 {
                     sw.WriteLine("{0}\t{1}", stocks[i], weight[i]);
+                    weight_sum += weight[i];
                 }
-                sw.WriteLine();
+                sw.WriteLine("{0}", weight_sum);
             }
             sw.Close();
         }
@@ -161,19 +188,24 @@ namespace Pre_Processor
                 }
             }
 
+            //double sum_weight = 0.0;
+            //string[] str = new string[2];
             for (int i = 0; i < stock_count; i++)
             {
                 table_data.weight[i] /= total_amount;
                 table_data.weight[i] *= factor;
 
-                string[] str = new string[2];
-
-                str[0] = table_data.stocks[i];
-                str[1] = table_data.weight[i].ToString();
-
-                wr.w(str);
+                //str[0] = table_data.stocks[i];
+                //str[1] = table_data.weight[i].ToString();
+                //sum_weight += table_data.weight[i];
+                //wr.w(str);
             }
-
+            //str[0] = factor.ToString() + " = ";
+            //str[1] = sum_weight.ToString();
+            //wr.w(str);
+            //str[0] = " ";
+            //str[1] = " ";
+            //wr.w(str);
             return table_data;
         }
     }

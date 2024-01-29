@@ -2452,7 +2452,7 @@ namespace Pre_Processor
 
         private void 지수_종목_비중_Click(object sender, EventArgs e)
         {
-            indx.지수_종목_비중();
+            ssix.지수_종목_비중();
         }
     }
 }
