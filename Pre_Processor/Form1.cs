@@ -2449,6 +2449,11 @@ namespace Pre_Processor
         {
             통계();
         }
+
+        private void 지수_종목_비중_Click(object sender, EventArgs e)
+        {
+            indx.지수_종목_비중();
+        }
     }
 }
 
