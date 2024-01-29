@@ -2368,7 +2368,7 @@ namespace Pre_Processor
                         {
                             continue;
                         }
-
+                         
                         지수종목_가격차이.Add((double)(x[j, 1] - x[j - 1, 1]));
                     }
                 }
