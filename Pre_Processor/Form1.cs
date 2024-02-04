@@ -1599,13 +1599,24 @@ namespace Pre_Processor
             var doc = new HtmlAgilityPack.HtmlDocument();
             HtmlAgilityPack.HtmlWeb web = new HtmlAgilityPack.HtmlWeb();
 
-            string file = @"C:\병신\data\" + "그룹_네이버_테마" + ".txt";
-            if (File.Exists(file))
+            string file_0 = @"C:\병신\data\" + "그룹_네이버_테마" + ".txt";
+            if (File.Exists(file_0))
             {
-                File.Delete(file);
+                File.Delete(file_0);
             }
-            Stream FS = new FileStream(@"C:\병신\data\" + "그룹_네이버_테마" + ".txt", FileMode.CreateNew, FileAccess.Write);
+            Stream FS = new FileStream(file_0, FileMode.CreateNew, FileAccess.Write);
             StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
+
+
+
+
+            string file_1 = @"C:\병신\data\" + "그룹_네이버_테마_번호" + ".txt";
+            if (File.Exists(file_1))
+            {
+                File.Delete(file_1);
+            }
+            Stream FY = new FileStream(file_1, FileMode.CreateNew, FileAccess.Write);
+            StreamWriter sy = new System.IO.StreamWriter(FY, System.Text.Encoding.Default);
 
             int[] themeRemove = new int[1];
             //int[] themeRemove = new int [] {31, // 환율하락수혜
@@ -1646,13 +1657,7 @@ namespace Pre_Processor
 
                 string url = i.ToString();
 
-
                 var newurl = "https://finance.naver.com/sise/sise_group_detail.nhn?type=theme&no=" + url;
-
-
-
-
-
 
                 // if newurl is invalid, skip
                 HttpWebResponse response = null;
@@ -1665,11 +1670,6 @@ namespace Pre_Processor
                     continue;
                 }
                 response.Close();
-
-
-
-
-
 
                 doc = web.Load(newurl);
                 if (doc == null)
@@ -1684,6 +1684,9 @@ namespace Pre_Processor
                 string title = t.Remove(index - 1);
                 sw.WriteLine("{0}", title);
 
+
+                sy.WriteLine("{0}\t{1}", title, i);
+
                 // Stocks Extracted
                 var nodes = doc.DocumentNode.SelectNodes("//div [@class='name_area']");
                 foreach (var item in nodes)
@@ -1695,10 +1698,14 @@ namespace Pre_Processor
                 }
                 sw.WriteLine();
                 theme_count++;
+                if(count % 100 == 0)
+                    textBox6.Text = i.ToString() +" / " + "1,000 " + " 테마 Processing";
             }
             sw.Close();
-            textBox6.Text = theme_count.ToString() + "/" + count.ToString() + " 테마 Processed";
+            sy.Close();
+            textBox6.Text = "테마 Processed";
         }
+
 
 
 

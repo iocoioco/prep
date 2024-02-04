@@ -6,6 +6,7 @@ using System.Diagnostics.Tracing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
@@ -1322,6 +1323,8 @@ namespace Pre_Processor
             var uniqueItemsList = gl_list.Distinct().ToList();
             return uniqueItemsList;
         }
+
+        
 
         public static List<string> read_그룹_네이버_테마()
         {
