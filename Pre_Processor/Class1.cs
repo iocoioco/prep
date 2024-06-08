@@ -121,7 +121,7 @@ namespace Pre_Processor
             return -1;
         }
 
-        public static int Read_Stock_Minute(int date, string stock, int[,] x)
+        public static int ReadStockMinute(int date, string stock, int[,] x)
         {
             int MAX_ROW = 382;
 
@@ -192,7 +192,7 @@ namespace Pre_Processor
         }
 
 
-        public static int Read_Stock_Minute_LasLine(int date, string stock, int[] x)
+        public static int ReadStockMinute_LasLine(int date, string stock, int[] x)
         {
 
             string file = @"C:\병신\분\" + date.ToString() + "\\" + stock + ".txt";

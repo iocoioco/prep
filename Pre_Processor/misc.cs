@@ -366,7 +366,7 @@ namespace Pre_Processor
             if (g.testing)
             {
                 int[,] x = new int[g.MAX_ROW, 12];
-                int nrow = rd.read_Stock_Minute(date, stock, x);
+                int nrow = rd.ReadStockMinute(date, stock, x);
 
                 if (nrow <= 1)
                 {

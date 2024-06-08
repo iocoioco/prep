@@ -78,7 +78,7 @@ namespace Pre_Processor
                 int[,] x = new int[400, 12];
                 int[,] d = new int[400, 2];
 
-                int nrow = rd.read_Stock_Minute(g.date, g.ogl_data[i].종목, x);
+                int nrow = rd.ReadStockMinute(g.date, g.ogl_data[i].종목, x);
                 if (nrow <= 1)
                     continue;
 

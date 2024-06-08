@@ -733,43 +733,7 @@ namespace Pre_Processor
             sw.Close();
         }
 
-        public static int read_stock_minute(int date, string stock, int[,] x)
-        {
-            if (date < 10)
-            {
-                DateTime now = DateTime.Now;
-                date = Convert.ToInt32(now.ToString("yyyyMMdd"));
-            }
-
-            string file = @"C:\병신\분\" + date.ToString() + "\\" + stock + ".txt";
-            if (!File.Exists(file)) return -1;
-            string[] grlines = System.IO.File.ReadAllLines(file, Encoding.Default);
-
-            int nrow = 0;
-            foreach (string line in grlines)
-            {
-                List<string> alist = new List<string>();
-
-                string[] words = line.Split(' ');
-                for (int k = 0; k < words.Length; k++)
-                {
-                    if (k == 4)
-                    {
-                        x[nrow, k] = Convert.ToInt32((int)Convert.ToDouble(words[k]));
-                    }
-                    else
-                    {
-                        x[nrow, k] = Convert.ToInt32(words[k]);
-                    }
-                }
-                if (x[nrow, 0] < 10)
-                    break;
-                else
-                    nrow++;
-            }
-            return nrow;
-        }
-
+       
         public static double read_시총(string stock)
         {
             string[] grlines = File.ReadAllLines(@"C:\병신\data\시총.txt", Encoding.Default);
@@ -1149,7 +1113,7 @@ namespace Pre_Processor
             return true;
         }
 
-        public static int read_Stock_Minute(int date, string stock, int[,] x)
+        public static int ReadStockMinute(int date, string stock, int[,] x)
         {
             if (date < 0)
             {
@@ -1251,7 +1215,7 @@ namespace Pre_Processor
         }
 
 
-        public static int read_Stock_Minute_no_multiply(int date, string stock, int[,] x)
+        public static int ReadStockMinute_no_multiply(int date, string stock, int[,] x)
         {
             if (date < 0)
             {
