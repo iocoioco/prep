@@ -67,7 +67,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="read.cs" />
-    <Compile Include="ssix.cs" />
     <Compile Include="work.cs" />
     <Compile Include="writ.cs" />
     <EmbeddedResource Include="Form1.resx">

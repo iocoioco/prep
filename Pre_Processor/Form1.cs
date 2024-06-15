@@ -22,7 +22,7 @@ using static Pre_Processor.g;
 
 namespace Pre_Processor
 {
-    public partial class Form1 : Form  
+    public partial class Form1 : Form
     {
         static CPUTILLib.CpCodeMgr _cm = new CPUTILLib.CpCodeMgr();
 
@@ -75,9 +75,8 @@ namespace Pre_Processor
         {
             InitializeComponent();
             dataGridView1.Hide();
-           
-        }
 
+        }
 
         // 시작날짜 종료날짜 입력 후 일자별 분 데이터 저장
         //
@@ -479,7 +478,7 @@ namespace Pre_Processor
             List<string> kodex_list = new List<string>();
 
             _gl.Clear();
-            
+
 
             _gl = Pre_Processor_Class1.read_그룹_네이버_업종(GL);
             //Pre_Processor_Class1.read_그룹_네이버_테마(_gl, Gl, GL);
@@ -488,13 +487,13 @@ namespace Pre_Processor
             textBox6.Text = "일 진행 중";
 
 
-            if(!_gl.Contains("KODEX 레버리지"))
+            if (!_gl.Contains("KODEX 레버리지"))
                 _gl.Add("KODEX 레버리지"); // 전체적으로 지수의 흐름을 보고 단타를 치기위함
-            if (!_gl.Contains("KODEX 200선물인버스2X")) 
+            if (!_gl.Contains("KODEX 200선물인버스2X"))
                 _gl.Add("KODEX 200선물인버스2X");
-            if (!_gl.Contains("KODEX 코스닥150레버리지")) 
+            if (!_gl.Contains("KODEX 코스닥150레버리지"))
                 _gl.Add("KODEX 코스닥150레버리지");
-            if (!_gl.Contains("KODEX 코스닥150선물인버스")) 
+            if (!_gl.Contains("KODEX 코스닥150선물인버스"))
                 _gl.Add("KODEX 코스닥150선물인버스");
 
             _Stock_Chart_일주월.Received += new CPSYSDIBLib._ISysDibEvents_ReceivedEventHandler(_Stock_Chart_일주월_Received);
@@ -545,7 +544,7 @@ namespace Pre_Processor
             일주월();
 
             // to delete all last line containing words[5, 6, 7] = "0"
-            _Stock_Chart_일주월_stockChart_post(); 
+            _Stock_Chart_일주월_stockChart_post();
 
         }
 
@@ -564,12 +563,12 @@ namespace Pre_Processor
             foreach (var file in sl)
             {
                 // if file not txt type
-                if(!file.Contains(".txt"))
+                if (!file.Contains(".txt"))
                 { continue; }
 
                 // if not stock txt file
                 string stock = file.Replace(".txt", "");
-                if(!ms.is_stock(stock))
+                if (!ms.is_stock(stock))
                 { continue; }
 
                 string filepath = path + "\\" + file;
@@ -608,15 +607,16 @@ namespace Pre_Processor
 
                         File.WriteAllLines(filepath, lines.GetRange(0, lines.Count - 1).ToArray());
                     }
-                        
+
                 }
             }
 
         }
-            public void _Stock_Chart_일주월_stockChart()
+
+        public void _Stock_Chart_일주월_stockChart()
         {
-            
- 
+
+
             for (int i = 0; i < _gl.Count; i++)
             {
 
@@ -671,7 +671,7 @@ namespace Pre_Processor
                 // 출력자료 요청
                 if (_Stock_Chart_일주월.GetDibStatus() == 0)
                 {
-                    int result = _Stock_Chart_일주월.BlockRequest(); 
+                    int result = _Stock_Chart_일주월.BlockRequest();
                     if (result != 0)
                     {
                         i--; // to try again with the same stock
@@ -682,7 +682,6 @@ namespace Pre_Processor
 
 
         }
-
 
         private void _Stock_Chart_일주월_Received()
         {
@@ -723,66 +722,20 @@ namespace Pre_Processor
             for (int k = numberofData - 1; k >= 0; k--)
             {
                 sw.WriteLine("{0} {1} {2} {3} {4} {5} {6} {7} {8} {9}",
-                    _Stock_Chart_일주월.GetDataValue(0, k), 
-                    _Stock_Chart_일주월.GetDataValue(1, k), 
+                    _Stock_Chart_일주월.GetDataValue(0, k),
+                    _Stock_Chart_일주월.GetDataValue(1, k),
                     _Stock_Chart_일주월.GetDataValue(2, k),
-                    _Stock_Chart_일주월.GetDataValue(3, k), 
-                    _Stock_Chart_일주월.GetDataValue(4, k), 
+                    _Stock_Chart_일주월.GetDataValue(3, k),
+                    _Stock_Chart_일주월.GetDataValue(4, k),
                     _Stock_Chart_일주월.GetDataValue(5, k),
-                    _Stock_Chart_일주월.GetDataValue(6, k), 
-                    _Stock_Chart_일주월.GetDataValue(7, k), 
+                    _Stock_Chart_일주월.GetDataValue(6, k),
+                    _Stock_Chart_일주월.GetDataValue(7, k),
                     _Stock_Chart_일주월.GetDataValue(8, k),
                     _Stock_Chart_일주월.GetDataValue(9, k));
                 // 날짜, 시가, 고가, 저가, 종가, 거래량, 누적매도, 누적매수, 외국인보유, 기관누적순매수
             }
             sw.Close();
         }
-
-
-        /*
-        void _cpsvr7254_Received()
-        {
-            string text1 = _cpsvr7254.GetDibMsg1();
-            string text2 = _cpsvr7254.GetDibMsg2();
-
-            string code = _cpsvr7254.GetHeaderValue(0); // 종목코드
-            string stockname = _cpstockcode.CodeToName(code);
-            string path = @"C:\병신\량\" + stockname + ".txt";
-            if (File.Exists(path))
-                File.Delete(path);
-
-            StreamWriter sw = File.CreateText(path);
-            
-            int count = (int)_cpsvr7254.GetHeaderValue(1); // 종목갯수
-
-            // 어떤 시점을 기준으로 누적수량으로 표시하는 데 보유수량은 아님
-            // 문제점 현재 어떻게 변수를 지정하여도 17일 밖에 나오지 않아 아쉬움
-            for (int k = 0; k < count - 1; k++)
-            {
-                long 일자 = _cpsvr7254.GetDataValue(0, k);
-                long 개인 = _cpsvr7254.GetDataValue(1, k) - _cpsvr7254.GetDataValue(1, k + 1);
-                long 외인 = _cpsvr7254.GetDataValue(2, k) - _cpsvr7254.GetDataValue(2, k + 1);
-                long 기계 = _cpsvr7254.GetDataValue(3, k) - _cpsvr7254.GetDataValue(3, k + 1);
-                long 금투 = _cpsvr7254.GetDataValue(3, k) - _cpsvr7254.GetDataValue(3, k + 1);
-                long 보험 = _cpsvr7254.GetDataValue(3, k) - _cpsvr7254.GetDataValue(3, k + 1);
-                long 투신 = _cpsvr7254.GetDataValue(3, k) - _cpsvr7254.GetDataValue(3, k + 1);
-                long 은행 = _cpsvr7254.GetDataValue(3, k) - _cpsvr7254.GetDataValue(3, k + 1);
-                long 기금 = _cpsvr7254.GetDataValue(3, k) - _cpsvr7254.GetDataValue(3, k + 1);
-                long 연기 = _cpsvr7254.GetDataValue(3, k) - _cpsvr7254.GetDataValue(3, k + 1);
-                long 기법 = _cpsvr7254.GetDataValue(3, k) - _cpsvr7254.GetDataValue(3, k + 1);
-                long 기외 = _cpsvr7254.GetDataValue(3, k) - _cpsvr7254.GetDataValue(3, k + 1);
-                long 사모 = _cpsvr7254.GetDataValue(3, k) - _cpsvr7254.GetDataValue(3, k + 1);
-                long 국가 = _cpsvr7254.GetDataValue(3, k) - _cpsvr7254.GetDataValue(3, k + 1);
-                sw.WriteLine("{0} {1} {2} {3}", 일자, 개인, 외인, 기계);
-
-            }
-            sw.Close();
-        }
-        */
-
-        // 시총계산
-        //
-        //
 
         public void 시가총액()
         {
@@ -801,7 +754,7 @@ namespace Pre_Processor
             //Pre_Processor_Class1.read_그룹_네이버_테마(_gl, Gl, GL);
             Pre_Processor_Class1.read_KODEX(_gl);
 
-          
+
             if (!_gl.Contains("KODEX 레버리지"))
                 _gl.Add("KODEX 레버리지"); // 전체적으로 지수의 흐름을 보고 단타를 치기위함
             if (!_gl.Contains("KODEX 200선물인버스2X"))
@@ -835,9 +788,6 @@ namespace Pre_Processor
             _Stock_Chart_시총_stockChart();
             textBox6.Text = "시가총액 done";
         }
-
-
-
 
         private void button3_Click_1(object sender, EventArgs e)
         {
@@ -915,117 +865,6 @@ namespace Pre_Processor
             sw.Close();
         }
 
-
-        // 상관관계
-        //
-        //
-
-        //public static void ReadDaysAndCalculate(string stock, int days,
-        //   ref double AvrRiseRate, ref double DevRiseRate, ref double MaxRiseRate,
-        //   ref int AvrMoney, ref int MinMoney, ref int MaxMoney, ref int DateMaxMoney,
-        //   ref ulong AvrNumber, ref int SixMonthHigh)
-        //{
-        //    string path = @"C:\병신\data\일\" + stock + ".txt";
-        //    if (!File.Exists(path))
-        //        return;
-
-        //    List<string> lines = File.ReadLines(path).Reverse().Take(days + 100).ToList(); // read 120 days data reveresely
-
-        //    List<Double> rate_diff_by_days_list = new List<Double>();
-
-        //    int day_dealt_by_money;
-
-        //    AvrMoney = 0;
-        //    MaxMoney = 0;
-        //    MinMoney = 1000000; // initialize min by 1000000억
-        //    AvrNumber = 0;
-        //    DateMaxMoney = 0;
-        //    MaxRiseRate = -30.0 - 1.0; // initialize -31.0 as ...
-
-        //    double yesterday_close_price = 0.0;
-        //    for (int i = days; i >= 0; i--)
-        //    {
-        //        string[] words = lines[i].Split(' ');
-
-        //        if (yesterday_close_price < 0.0001) // compare with small number
-        //        {
-        //            yesterday_close_price = Convert.ToDouble(words[4]); // previous close_price of initial day
-        //            continue;
-        //        }
-
-        //        double close_price = Convert.ToDouble(words[4]);
-        //        ulong day_dealt_by_number = Convert.ToUInt64(words[5]);
-        //        if (day_dealt_by_number == 0)
-        //            break;
-
-        //        AvrNumber += day_dealt_by_number;
-
-        //        day_dealt_by_money = (int)(Convert.ToInt32(words[5]) * close_price / 100000000); // 일거래량 X 종가 / 억원
-        //        AvrMoney += day_dealt_by_money;
-        //        if (day_dealt_by_money > MaxMoney)
-        //        {
-        //            MaxMoney = day_dealt_by_money;
-        //            DateMaxMoney = Convert.ToInt32(words[0]) % 1000;
-        //        }
-
-        //        if (day_dealt_by_money < MinMoney)
-        //        {
-        //            MinMoney = day_dealt_by_money;
-        //        }
-
-        //        double rate_diff_by_days = (close_price - yesterday_close_price) /
-        //            yesterday_close_price * 100;
-        //        if (MaxRiseRate < rate_diff_by_days)
-        //        {
-        //            MaxRiseRate = rate_diff_by_days;
-        //        }
-        //        rate_diff_by_days_list.Add(rate_diff_by_days);
-
-        //        // set close_price for the calculation of next day
-        //        yesterday_close_price = close_price;
-        //    }
-
-        //    if (rate_diff_by_days_list.Count == 0)
-        //        return;
-
-        //    AvrMoney = AvrMoney / rate_diff_by_days_list.Count;
-        //    AvrRiseRate = 0.0;
-        //    DevRiseRate = 0.0;
-        //    if (rate_diff_by_days_list.Count > 0)
-        //    {
-        //        AvrRiseRate = rate_diff_by_days_list.Sum() / rate_diff_by_days_list.Count;
-        //        if (rate_diff_by_days_list.Count <= 1)
-        //            DevRiseRate = 0;
-        //        else
-        //        {
-        //            double temp_avr = AvrRiseRate; // ref cannot be inserted in anonymous expression
-        //            DevRiseRate = Math.Sqrt(rate_diff_by_days_list.Sum(x => Math.Pow(x - temp_avr, 2))
-        //               / (rate_diff_by_days_list.Count - 1));
-        //        }
-        //    }
-        //    AvrNumber = AvrNumber / (ulong)rate_diff_by_days_list.Count;
-
-        //    // 120 days high, approximately 6 months
-        //    SixMonthHigh = 0;
-        //    foreach (var line in lines)
-        //    {
-        //        string[] words = line.Split(' ');
-
-        //        ulong day_dealt_by_number = Convert.ToUInt64(words[5]);
-        //        if (day_dealt_by_number == 0)
-        //            continue;
-
-        //        for (int i = 1; i <= 4; i++)
-        //        {
-        //            int price = Convert.ToInt32(words[i]);
-
-        //            if (price > SixMonthHigh) // currently SixMonthHigh is not percentage
-        //                SixMonthHigh = price;
-        //        }
-        //    }
-        //}
-
-
         private void button4_Click_1(object sender, EventArgs e)
         {
             상관계산();
@@ -1053,7 +892,7 @@ namespace Pre_Processor
             List<string> remove_list = new List<string>();
             foreach (var stock in _gl)
             {
-                if(stock.Contains("KODEX") || stock.Contains("KBSTAR"))
+                if (stock.Contains("KODEX") || stock.Contains("KBSTAR"))
                     remove_list.Add(stock);
             }
 
@@ -1079,14 +918,11 @@ namespace Pre_Processor
 
             int days_of_array = 50;
             int print_length = 20;
-           Pre_Processor_Class1.PearsonRateDifferenceBetweenDays(days_of_array, print_length, _gl);
+            Pre_Processor_Class1.PearsonRateDifferenceBetweenDays(days_of_array, print_length, _gl);
 
             textBox6.Text = "상관(Pearson Correlation) done & All done";
         }
-
         
-
-
         //	투자주체별현황을 일별/기간별, 순매수/매매비중을 일자별
         private void button5_Click(object sender, EventArgs e)
         {
@@ -1175,125 +1011,6 @@ namespace Pre_Processor
             sw.Close();
         }
 
-        /*
-        private void button6_click(object sender, EventArgs e)
-        {
-            List<string> alist = new List<string>();
-            _code = Pre_Processor_Class1.read_전종목코드();
-            _gl.Clear();
-            foreach (var code in _code)
-            {
-                string stockname = _cpstockcode.CodeToName(code);
-                _gl.Add(stockname);
-            }
-
-            //Pre_Processor_Class1.calc_평균(_gl, _aV); // calculate day average for each stock, averaging  20 days
-            //Pre_Processor_Class1.read_누적(_mF); // read from file "일중분별누적%" 901 0.017 etc
-
-            // 종목이름 맞는 지 확인
-            foreach (string stockname in _gl)
-            {
-                string code = _cpstockcode.NameToCode(stockname);
-                if (code == null)
-                {
-                    MessageBox.Show(stockname + " Error");
-                    return;
-                }
-            }
-
-            _Stock_Chart6.Received += new CPSYSDIBLib._ISysDibEvents_ReceivedEventHandler(_Stock_Chart6_Received);
-
-            _Stock_Chart6_stockChart();
-
-
-            Stream FS = new FileStream(@"C:\병신\시총_.txt", FileMode.Append, FileAccess.Write);
-            StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
-
-            시총.Sort();
-
-            foreach (var a in 시총)
-            {
-                sw.WriteLine("{0} {1}", a[1], a[0]);
-            }
-
-            sw.Close();
-
-
-            textBox6.Text = "시가총액 Processed";
-        }
-
-        public void _Stock_Chart6_stockChart()
-        {
-            string file = @"C:\병신\시총.txt";
-
-            if (File.Exists(file))
-                File.Delete(file);
-
-            StreamWriter sw = File.CreateText(file);
-            sw.Close();
-
-            for (int i = 0; i < _gl.Count; i++)
-            {
-                //Thread.Sleep(1000); // Less than 15 request in 15 minutes
-                textBox6.Text = "Currently: " + _gl[i] + " is Processing";
-
-                if (_Stock_Chart6.GetDibStatus() == 1)
-                {
-                    Trace.TraceInformation("DibRq 요청 수신대기 중 입니다. 수신이 완료된 후 다시 호출 하십시오.");
-                    continue;
-                }
-
-                string code = _cpstockcode.NameToCode(_gl[i]);
-                if (code.Length < 7)
-                {
-                    continue;
-                }
-
-                object[] fields = new object[1] { 13 };
-
-                _Stock_Chart6.SetInputValue(0, code);   //종목코드
-                _Stock_Chart6.SetInputValue(1, 2);   //요청코드 '1'(기간), '2'(개수)
-                _Stock_Chart6.SetInputValue(5, fields);   // 필드 갯수
-                _Stock_Chart6.SetInputValue(6, 'D');   // 틱,분,일,주,월 단위 데이터
-
-                // 출력자료 요청
-                int result = _Stock_Chart6.BlockRequest();
-                if (result != 0)
-                {
-                    i--; // to try again with the saem stock
-                    continue;
-                }
-            }
-        }
-
-        private void _Stock_Chart6_Received()
-        {
-            string text1 = _Stock_Chart6.GetDibMsg1();
-            string text2 = _Stock_Chart6.GetDibMsg2();
-
-            Stream FS = new FileStream(@"C:\병신\시총.txt", FileMode.Append, FileAccess.Write);
-            StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
-
-            int count = (int)_Stock_Chart6.GetHeaderValue(1);
-
-            string code = _Stock_Chart6.GetHeaderValue(0);
-            string stockname = _cm.CodeToName(code);
-
-            int numberofData = (int)_Stock_Chart6.GetHeaderValue(3);
-            if (numberofData == 0)
-                return;
-
-            ulong price = _Stock_Chart6.GetDataValue(0, 0); // 시총
-
-            string temp_stockname = stockname.Replace(" ", "_");
-
-            sw.WriteLine("{0} {1}", temp_stockname, price / 100000000);
-
-            sw.Close();
-        }
-        */
-
-
         private void button7_Click(object sender, EventArgs e)
         {
             var list = Pre_Processor_Class1.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
@@ -1323,12 +1040,6 @@ namespace Pre_Processor
 
         }
 
-        /*
-        private void button8_Click(object sender, EventArgs e)
-        {
-
-        */
-
         public void 네이버_업종() // 1st
         {
             textBox6.Text = "네이버업종 진행 중";
@@ -1344,7 +1055,7 @@ namespace Pre_Processor
             Stream FS = new FileStream(@"C:\병신\data\" + "그룹_네이버_업종" + ".txt", FileMode.CreateNew, FileAccess.Write);
             StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
 
-            int[] themeRemove = new int[] {25}; // 환율하락수혜
+            int[] themeRemove = new int[] { 25 }; // 환율하락수혜
             //int[] themeRemove = new int [] {31, // 환율하락수혜
             //    38, // 홈쇼핑
             //    66, // 줄기세포
@@ -1426,13 +1137,11 @@ namespace Pre_Processor
                 sw.WriteLine();
                 theme_count++;
 
-                
+
             }
             sw.Close();
             textBox6.Text = "네이버업종 done";
         }
-
-
 
         private void button9_Click(object sender, EventArgs e)
         {
@@ -1528,66 +1237,6 @@ namespace Pre_Processor
         private void Form1_Load(object sender, EventArgs e)
         {
 
-        }
-
-        public static string GetFinalRedirect(string url)
-        {
-            if (string.IsNullOrWhiteSpace(url))
-                return url;
-
-            int maxRedirCount = 8;  // prevent infinite loops
-            string newUrl = url;
-            do
-            {
-                HttpWebRequest req = null;
-                HttpWebResponse resp = null;
-                try
-                {
-                    req = (HttpWebRequest)HttpWebRequest.Create(url);
-                    req.Method = "HEAD";
-                    req.AllowAutoRedirect = false;
-                    resp = (HttpWebResponse)req.GetResponse();
-                    switch (resp.StatusCode)
-                    {
-                        case HttpStatusCode.OK:
-                            return newUrl;
-                        case HttpStatusCode.Redirect:
-                        case HttpStatusCode.MovedPermanently:
-                        case HttpStatusCode.RedirectKeepVerb:
-                        case HttpStatusCode.RedirectMethod:
-                            newUrl = resp.Headers["Location"];
-                            if (newUrl == null)
-                                return url;
-
-                            if (newUrl.IndexOf("://", System.StringComparison.Ordinal) == -1)
-                            {
-                                // Doesn't have a URL Schema, meaning it's a relative or absolute URL
-                                Uri u = new Uri(new Uri(url), newUrl);
-                                newUrl = u.ToString();
-                            }
-                            break;
-                        default:
-                            return newUrl;
-                    }
-                    url = newUrl;
-                }
-                catch (WebException)
-                {
-                    // Return the last known good URL
-                    return newUrl;
-                }
-                catch (Exception ex)
-                {
-                    return null;
-                }
-                finally
-                {
-                    if (resp != null)
-                        resp.Close();
-                }
-            } while (maxRedirCount-- > 0);
-
-            return newUrl;
         }
 
         public void 네이버_테마(int version)
@@ -1696,68 +1345,13 @@ namespace Pre_Processor
                 }
                 sw.WriteLine();
                 theme_count++;
-                
+
             }
             sw.Close();
             sy.Close();
             textBox6.Text = "네이버테마 done";
         }
 
-
-
-
-        public void 네이버_테마()
-        {
-            textBox6.Text = "테마 진행 중";
-
-            var doc = new HtmlAgilityPack.HtmlDocument();
-            HtmlAgilityPack.HtmlWeb web = new HtmlAgilityPack.HtmlWeb();
-
-            string file = @"C:\병신\data\" + "그룹_네이버_테마" + ".txt";
-            if (File.Exists(file))
-            {
-                File.Delete(file);
-            }
-            Stream FS = new FileStream(@"C:\병신\data\" + "그룹_네이버_테마" + ".txt", FileMode.CreateNew, FileAccess.Write);
-            StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
-
-            var lines = File.ReadAllLines(@"C:\병신\data\" + "테마_url" + ".txt");
-
-            int count = 0;
-            int theme_count = 0;
-            foreach (var url in lines)
-            {
-                if (url == "")
-                    continue;
-
-                var newurl = "https://finance.naver.com/sise/sise_group_detail.nhn?type=theme&no=" + url;
-                doc = web.Load(newurl);
-                if (doc == null)
-                {
-                    return;
-                }
-
-                // Title Extracted
-                var t = doc.DocumentNode.SelectSingleNode("//title").InnerText;
-                int index = t.IndexOf(':');
-                string title = t.Remove(index - 1);
-                sw.WriteLine(title);
-
-                // Stocks Extracted
-                var nodes = doc.DocumentNode.SelectNodes("//div [@class='name_area']");
-                foreach (var item in nodes)
-                {
-                    var stock = item.InnerText.ToString();
-                    string stock_trimmed = stock.TrimEnd('*', ' ');
-                    sw.WriteLine(stock_trimmed);
-                    count++;
-                }
-                sw.WriteLine();
-                theme_count++;
-            }
-            sw.Close();
-            textBox6.Text = theme_count.ToString() + "/" + count.ToString() + " 테마 Processed";
-        }
         private void button6_Click(object sender, EventArgs e)
         {
             네이버_테마(1);
@@ -1781,7 +1375,6 @@ namespace Pre_Processor
             통계_지수();
             상관계산(); // 12 분 
         }
-         
 
         private void 프돈외기()
         {
@@ -1881,7 +1474,7 @@ namespace Pre_Processor
                 }
 
                 double money_factor = 전일종가 / 100000000.0; // divided by 억원
-                
+
                 프돈_평균 = 프돈.Sum() / 프돈.Count * money_factor;
                 프돈_편차 = Math.Sqrt(프돈.Sum(t => Math.Pow(t - 프돈_평균, 2)) / (프돈.Count - 1)) * money_factor;
                 프돈_최대 *= money_factor;
@@ -1894,7 +1487,7 @@ namespace Pre_Processor
                 기돈_편차 = Math.Sqrt(기돈.Sum(t => Math.Pow(t - 기돈_평균, 2)) / (기돈.Count - 1)) * money_factor;
                 기돈_최대 *= money_factor;
 
-                
+
                 str += 종목 + "\t" + 시총 + "\t" +
                          ((int)프돈_평균).ToString() + "\t" + ((int)프돈_편차).ToString() + "\t" + ((int)프돈_최대).ToString() + "\t" +
                          ((int)외돈_평균).ToString() + "\t" + ((int)외돈_편차).ToString() + "\t" + ((int)외돈_최대).ToString();
@@ -1912,16 +1505,11 @@ namespace Pre_Processor
             tw.Write("{0}", str_temp);
             tw.Close();
         }
+
         private void 프돈외기(object sender, EventArgs e)
         {
             프돈외기();
         }
-
-
-
-
-
-
 
         private void button8_Click(object sender, EventArgs e)
         {
@@ -1999,6 +1587,7 @@ namespace Pre_Processor
         }
 
         private static DataTable dtb1;
+
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             string stock = (string)dataGridView1.Rows[e.RowIndex].Cells[1].Value;
@@ -2008,11 +1597,11 @@ namespace Pre_Processor
                 CallNaver(stock, 0);
             if (e.ColumnIndex == 3 || e.ColumnIndex == 4)
             {
-                string item = (string) dataGridView1.Rows[e.RowIndex].Cells[2].Value;
+                string item = (string)dataGridView1.Rows[e.RowIndex].Cells[2].Value;
                 string[] words = item.Split(' ');
-                
+
                 int value = Convert.ToInt32(words[0]);
-                if(e.ColumnIndex == 3)
+                if (e.ColumnIndex == 3)
                     value++;
                 else
                     value--;
@@ -2025,7 +1614,7 @@ namespace Pre_Processor
 
                 dtb1.Rows[e.RowIndex][2] = t;
             }
-           
+
             if (e.ColumnIndex == 5)
             {
                 string file = @"C:\병신\" + "평점" + ".txt";
@@ -2039,12 +1628,13 @@ namespace Pre_Processor
                 for (int k = 0; k < dtb1.Rows.Count; k++)
                 {
                     string str = dtb1.Rows[k][1].ToString() + "\t" + dtb1.Rows[k][2].ToString();
-                
+
                     sw.WriteLine(str);
                 }
                 sw.Close();
             }
         }
+
         public static void CallNaver(string stock, int selection)
         {
             CPUTILLib.CpStockCode _cd = new CPUTILLib.CpStockCode();
@@ -2078,9 +1668,6 @@ namespace Pre_Processor
             프돈외기();
         }
 
-
-
-      
         private void 통계() // MOD,  g.ogldata 1581, 통계 1573
         {
             // rd.read_변수();
@@ -2110,7 +1697,7 @@ namespace Pre_Processor
 
             int start_date = 20220302; // MOD
             int end_date = Convert.ToInt32(DateTime.Now.Date.ToString("yyyyMMdd"));
-           
+
             string path = @"C:\병신\data\통계.txt";
 
             if (File.Exists(path))
@@ -2122,9 +1709,9 @@ namespace Pre_Processor
 
             foreach (var stock in _gl) // 혼합 2 종목 빠져시 to-jsb 보다 2 종목 작음
             {
-                
+
                 int count_success_ReadStockMinute = 0;
-     
+
 
                 var 프분 = new List<double>();
                 var 거분 = new List<double>();
@@ -2132,7 +1719,7 @@ namespace Pre_Processor
                 var 배차 = new List<double>();
                 var 배합 = new List<double>();
 
-                var 프누 = new List<List<double>>(); 
+                var 프누 = new List<List<double>>();
                 var 종누 = new List<List<double>>();
 
 
@@ -2159,13 +1746,13 @@ namespace Pre_Processor
                     g.date = i;
                     if (stock.Contains("KODEX") || stock.Contains("혼합"))
                     {
-                        if(stock.Contains("KODEX 레버리지") || stock.Contains("KODEX 코스닥150레버리지"))
+                        if (stock.Contains("KODEX 레버리지") || stock.Contains("KODEX 코스닥150레버리지"))
                         {
                             break;
                         }
                         continue;
                     }
-                        
+
 
                     int[,] x = new int[400, 12];
                     int nrow = rd.ReadStockMinute(i, stock, x); // i -> date
@@ -2188,7 +1775,7 @@ namespace Pre_Processor
 
 
 
-                            value = (double)(x[j, 4] - x[j - 1, 4]) * money_factor;
+                        value = (double)(x[j, 4] - x[j - 1, 4]) * money_factor;
                         if (value > 0.001) // positive side only
                             프분.Add(value);
                         value = (double)(x[j, 7] - x[j - 1, 7]) * money_factor;
@@ -2210,7 +1797,7 @@ namespace Pre_Processor
                     //    MessageBox.Show("프누 & 종누 숫자 불일치");
                     //}
                 }
-                
+
                 if (count_success_ReadStockMinute == 0) // 하루치도 없는 경우 무시하고 다음 종목으로
                     continue;
 
@@ -2257,14 +1844,14 @@ namespace Pre_Processor
                 else
                     str += "\t" + avr.ToString("#.##");
                 if (dev < 0.001)
-                    str += "\t" + "0.0"; 
+                    str += "\t" + "0.0";
                 else
                     str += "\t" + dev.ToString("#.##");
-                 
+
                 // 거분
                 avr = 0.0;
                 dev = 0.0;
-                if (거분.Count >count_success_ReadStockMinute) 
+                if (거분.Count > count_success_ReadStockMinute)
                 {
                     avr = 거분.Sum() / 거분.Count;
                     dev = Math.Sqrt(거분.Sum(y => Math.Pow(y - avr, 2)) / (거분.Count - 1));
@@ -2344,7 +1931,7 @@ namespace Pre_Processor
             var 지수종목 = new List<string>();
             지수종목.Add("KODEX 레버리지");
             지수종목.Add("KODEX 코스닥150레버리지");
-           
+
             foreach (var stock in 지수종목) // 혼합 2 종목 빠져시 to-jsb 보다 2 종목 작음
             {
                 int count_success_ReadStockMinute = 0;
@@ -2372,7 +1959,7 @@ namespace Pre_Processor
                         {
                             continue;
                         }
-                         
+
                         지수종목_가격차이.Add((double)(x[j, 1] - x[j - 1, 1]));
                     }
                 }
@@ -2394,55 +1981,10 @@ namespace Pre_Processor
             textBox6.Text = "통계지수(지수 분당 변화 avr & dev) done";
         }
 
-        private void 통계_지수_mixed() // MOD,  g.ogldata 1581, 통계 1573
-        {
-            string url = "https://finance.naver.com/item/main.naver?code=122630";
-
-            var resultDataset = new DataSet();
-
-            //HtmlDocument doc = new HtmlDocument();
-
-            HtmlAgilityPack.HtmlWeb web = new HtmlAgilityPack.HtmlWeb();
-
-            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-
-            doc = web.Load(url);
-
-
-
-
-            List<List<string>> table =
-            doc.DocumentNode.SelectSingleNode("//table [@class='tb_type1 tb_type1_b']")
-                .Descendants("tr")
-                .Skip(1)
-                .Where(tr => tr.Elements("td").Count() > 1)
-                .Select(tr => tr.Elements("td").Select(td => td.InnerText.Trim()).ToList())
-                .ToList();
-
-
-            int stock_count = 0;
-            string s = "";
-            for (int i = 0; i < table.Count; i++)
-            {
-                s = Encoding.GetEncoding("EUC-KR").GetString(Encoding.GetEncoding("EUC-KR").GetBytes(table[4][0]));
-                //  s = Encoding.UTF8.GetString(bytes1);
-                stock_count = Convert.ToInt32(table[4][1]);
-                i = 0;
-                continue;
-            }
-        }
-    
-
-
-            private void textBox3_TextChanged(object sender, EventArgs e)
+        private void textBox3_TextChanged(object sender, EventArgs e)
         {
 
         }
-
-        //private void 통계(object sender, EventArgs e)
-        //{
-        //    통계_working();
-        //}
 
         private void 통계_지수_Click(object sender, EventArgs e)
         {
@@ -2453,214 +1995,5 @@ namespace Pre_Processor
         {
             통계();
         }
-
-        private void 지수_종목_비중_Click(object sender, EventArgs e)
-        {
-            ssix.지수_종목_비중();
-        }
     }
 }
-
-        //var htmlBody = doc.DocumentNode.SelectSingleNode("//tbody").InnerText;
-        //DocumentNode.SelectSingleNode("//tbody").InnerText
-        //var tbody = doc.DocumentNode.SelectNodes("//table[@id='type_1']//tbody");
-        //foreach (var elem in tbody)
-        //{
-        //    //Dump only works in LinqPad
-        //    elem.InnerText.ToString();
-        //}
-        //var result = doc.DocumentNode.SelectSingleNode("//table[@class='table table-striped']")
-
-//var UserTable = doc.DocumentNode.SelectNodes("//div[@id='contentarea_left']/table/tr");
-//    string a = UserTable[3].SelectSingleNode("td[1]").InnerText;
-//    int r_c = a.IndexOf('\n');
-//    a = a.Substring(0, r_c);
-//foreach (var row in UserTable)
-//{
-//    string a = row.SelectSingleNode("td[1]").InnerText;
-//    //string value = row.InnerText.Attributes["value"].Value;
-//    //if (row.Attributes["data-source"] != null)
-//    //{
-//    //    string Source = row.Attributes["data-source"].Value;
-//    //    string UserName = row.SelectSingleNode("td[@class='tbl_col1']/a[@id='UserLink']/text()").InnerText;
-//    //    string Points = row.SelectSingleNode("td[@class='tbl_col2']/a[@id='PointLink']/text()").InnerText;
-//    //    Console.WriteLine(Source + "\t" + UserName + "\t" + Points);
-//    //}
-//}
-
-//var result = doc.DocumentNode.SelectSingleNode("//tbody")
-//.Descendants("tr")
-//.Skip(0)
-//.Select(tr => new
-//{
-//    Desc = tr.SelectSingleNode("td[1]").InnerText,
-//    //Val = WebUtility.HtmlDecode(tr.SelectSingleNode("td[2]").InnerText)
-//})
-//.ToList();
-
-//var htmlBody = doc.DocumentNode.SelectSingleNode("//tbody");
-//htmlBody.SelectSingleNode("$0");
-
-//var nodes = doc.DocumentNode.SelectNodes("//tr"); //.Where(x => x.InnerHtml.Contains("== $0")).ToArray();
-
-//var str = nodes[3].Elements("td").First().InnerText;
-
-//foreach (var item in nodes)
-//{
-
-
-//    var stock = item.InnerText.ToString();
-//    string stock_trimmed = stock.TrimEnd('*', ' ');
-//    sw.WriteLine(stock_trimmed);
-//    count++;
-//}
-//sw.WriteLine();
-//    theme_count++;
-//}
-//sw.Close();
-
-//textBox6.Text = theme_count.ToString() + "/" + count.ToString() + " are Processed";
-
-
-//File.WriteAllText(@"C:\병신\" + "temp" + ".txt", all_stock);
-
-//var table = doc.DocumentNode.SelectSingleNode("//table"); // ok
-
-//foreach (var cell in table.SelectNodes("//tr//td/a[@href]"))
-//{
-//    var t = cell.InnerText;
-//    var s = cell.InnerHtml;
-//    var href = cell.Attributes["//a[@href"].Value;
-//}
-//    //{
-//    //    var s = col.InnerText;
-//    //}
-
-
-
-//var allelement = doc.DocumentNode.SelectNodes("//a[@href]"); // ok
-//foreach (var element in allelement)
-//{
-//    var href = element.Attributes["href"].Value;
-
-//}
-
-
-
-//var nasdaq_future = doc.DocumentNode.SelectSingleNode("//div [@class='name_area']");
-//var nasdaq_future_percentage = nasdaq_future.InnerHtml.ToString();
-
-//nasdaq_future = doc.DocumentNode.SelectSingleNode("//div [@class='name_area']");
-//nasdaq_future_percentage = nasdaq_future.InnerHtml.ToString();
-
-//nasdaq_future = doc.DocumentNode.SelectSingleNode("//div [@class='name_area']");
-//nasdaq_future_percentage = nasdaq_future.InnerHtml.ToString();
-
-//var allelement = doc.DocumentNode.SelectNodes("//div [@class='name_area']");
-//foreach (var element in allelement)
-//{
-//    var stock = element.InnerText.ToString();
-//}
-
-
-
-
-
-/*
-private static void _stockmst_Received()
-{
-
-
-    int count = (int)_stockmst.GetHeaderValue(0);                                  // code 내 종목숫자
-    for (int k = 0; k < count; k++)
-    {
-        string 종목명 = _stockmst2.GetDataValue(1, k);
-        long 시간 = _stockmst2.GetDataValue(2, k);
-        long 현재가 = _stockmst2.GetDataValue(3, k);
-        long 전일대비 = _stockmst2.GetDataValue(4, k); // 하락액수
-        char 상태구분 = (char)_stockmst2.GetDataValue(5, k);
-        //'1' 상한 '2' 상승 '3' 보함 '4' 하한 '5' 하락 '6' 기세상한 '7' 기세상승 '8' 기세하한 '9' 기세하락
-        long 시가 = _stockmst2.GetDataValue(6, k);
-        long 매도호가 = _stockmst2.GetDataValue(9, k);
-        long 거래량 = _stockmst2.GetDataValue(11, k);
-        long 거래대금 = _stockmst2.GetDataValue(12, k); // 메뉴얼 천원 그러나 실제 만원 단위
-        long 총매도잔량 = _stockmst2.GetDataValue(13, k); // 호가창 그대로 나타남
-        long 매도잔량 = _stockmst2.GetDataValue(15, k); // 호가창 그대로 나타남
-        float 외국인보유비율 = _stockmst2.GetDataValue(18, k);
-        long 전일거래량 = _stockmst2.GetDataValue(20, k);
-        float 체결강도 = _stockmst2.GetDataValue(21, k); // 누적체결강도 나의 그래프와 동일
-        long 순간체결량 = _stockmst2.GetDataValue(22, k); // 2주 등 불필요
-        char 체결가비교 = (char)_stockmst2.GetDataValue(23, k); // 'O' 매도 'B' 매수 불필요
-        char 호가비교 = (char)_stockmst2.GetDataValue(24, k);
-        char 동시호가구분 = (char)_stockmst2.GetDataValue(25, k); // '1' 동시호가 '2' 장중
-        long 예상체결가 = _stockmst2.GetDataValue(26, k); // 현재가 217000, 예상체결가는 시가인 221000 ...이해 곤란
-        long 예상체결가전일대비 = _stockmst2.GetDataValue(27, k); // 0으로 나오는 데 시가를 비교하는 것으로 보임
-        long 예상체결가상태구분 = _stockmst2.GetDataValue(28, k); // 메뉴얼은 '1' 상한 '2' 상승 등으로 나오는 데 long 이해 곤란
-        long 예상체결가거래량 = _stockmst2.GetDataValue(29, k); // 1098 출력 ... 이해 곤란 
-    }
-}
-*/
-
-
-/* List<string> alist = new List<string>();
-            alist.Add((price / 100000000).ToString());
-            alist.Add(temp_stockname);
-             List<Employee> employeeList = new List<Employee>();
-            employeeList.Add(new Employee(1, "Roger"));
-            시총.Add(new employee(시총 / 100000000, temp_stockname));
-            */
-
-
-
-/*var items = new List<Tuple<int, string>> { };
-            foreach (var name in sL)
-            {
-                string path = @"C:\병신\분\" + date.ToString() +
-                    "\\" + name + ".txt";
-
-                if (!File.Exists(path))
-                {
-                    continue;
-                }
-
-
-                int nline = File.ReadAllLines(path).Length;  // MOD
-                if (endtime > nline)
-                {
-                    endtime = nline; ;
-                }
-               
-
-                string line = File.ReadLines(path).Skip(endtime -1).Take(1).First(); // endtime not included for draw
-                string[] words = line.Split(' ');
-                int savedvalue = Convert.ToInt32(words[col]); // use end value
-                /*
-                Stream sf = System.IO.File.Open(path,
-                                      FileMode.Open,
-                                      FileAccess.Read,
-                                      FileShare.ReadWrite);
-
-                StreamReader sr = new StreamReader(sf);
-
-                string line;
-                int savedvalue = 0;
-
-                while ((line = sr.ReadLine()) != null)
-                {
-                    string[] words = line.Split(' ');
-
-                   
-                    //if (Convert.ToInt32(words[0]) > 0)
-                     //   savedvalue = Convert.ToInt32(words[col]);
-                    //else
-                      //  break;
-                        
-
-                    savedvalue = Convert.ToInt32(words[col]); // use end value
-
-    items.Add(Tuple.Create(savedvalue, name));
-            }
-            items = items.OrderByDescending(t => t.Item1).ToList();*/
-
-
-

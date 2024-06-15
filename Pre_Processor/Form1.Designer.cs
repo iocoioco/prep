@@ -48,7 +48,6 @@
             this.button12 = new System.Windows.Forms.Button();
             this.button13 = new System.Windows.Forms.Button();
             this.button14 = new System.Windows.Forms.Button();
-            this.지수_종목_비중 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -261,22 +260,11 @@
             this.button14.UseVisualStyleBackColor = true;
             this.button14.Click += new System.EventHandler(this.통계_지수_Click);
             // 
-            // 지수_종목_비중
-            // 
-            this.지수_종목_비중.Location = new System.Drawing.Point(837, 797);
-            this.지수_종목_비중.Name = "지수_종목_비중";
-            this.지수_종목_비중.Size = new System.Drawing.Size(310, 63);
-            this.지수_종목_비중.TabIndex = 26;
-            this.지수_종목_비중.Text = "지수_종목_비중";
-            this.지수_종목_비중.UseVisualStyleBackColor = true;
-            this.지수_종목_비중.Click += new System.EventHandler(this.지수_종목_비중_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1713, 904);
-            this.Controls.Add(this.지수_종목_비중);
             this.Controls.Add(this.button14);
             this.Controls.Add(this.button13);
             this.Controls.Add(this.button12);
@@ -329,7 +317,6 @@
         private System.Windows.Forms.Button button12;
         private System.Windows.Forms.Button button13;
         private System.Windows.Forms.Button button14;
-        private System.Windows.Forms.Button 지수_종목_비중;
     }
 }
 
