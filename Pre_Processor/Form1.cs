@@ -19,6 +19,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Xml.Linq;
 using static Pre_Processor.g;
+using StockLibrary;
 
 namespace Pre_Processor
 {
@@ -1053,7 +1054,7 @@ namespace Pre_Processor
                 File.Delete(file);
             }
             Stream FS = new FileStream(@"C:\병신\data\" + "그룹_네이버_업종" + ".txt", FileMode.CreateNew, FileAccess.Write);
-            StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
+            StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.UTF8);
 
             int[] themeRemove = new int[] { 25 }; // 환율하락수혜
             //int[] themeRemove = new int [] {31, // 환율하락수혜
@@ -1668,6 +1669,7 @@ namespace Pre_Processor
             프돈외기();
         }
 
+
         private void 통계() // MOD,  g.ogldata 1581, 통계 1573
         {
             // rd.read_변수();
@@ -1710,8 +1712,16 @@ namespace Pre_Processor
             foreach (var stock in _gl) // 혼합 2 종목 빠져시 to-jsb 보다 2 종목 작음
             {
 
+
+                string str = stock;
                 int count_success_ReadStockMinute = 0;
 
+                string filePath = @"C:\병신\data\일\" + stock + ".txt";
+                List<int> highest = new List<int>();
+                str += "\t" + rd.FindHighestClose(filePath, 20).ToString();
+                str += "\t" + rd.FindHighestClose(filePath, 60).ToString();
+                str += "\t" + rd.FindHighestClose(filePath, 120).ToString();
+                str += "\t" + rd.FindHighestClose(filePath, 240).ToString();
 
                 var 프분 = new List<double>();
                 var 거분 = new List<double>();
@@ -1827,7 +1837,7 @@ namespace Pre_Processor
                 //ms.Naver_호가_txt(2, -1, -1, 0, 0);
 
 
-                string str = stock;
+             
                 int minimum_number_of_data_for_processing = 100;
 
                 // 프분

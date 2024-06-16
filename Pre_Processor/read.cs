@@ -1,5 +1,7 @@
-﻿using System;
+﻿using StockLibrary;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,6 +14,56 @@ namespace Pre_Processor
     {
         static CPUTILLib.CpCodeMgr _cpcodemgr;
         static CPUTILLib.CpStockCode _cpstockcode;
+
+        // 전고
+        public class DailyData
+        {
+            public DateTime Date { get; set; }
+            public int Close { get; set; } // Using int to represent the closing price in cents
+        }
+
+        public static int FindHighestClose(string fileName, int duration)
+        {
+            List<DailyData> dailyDataList = new List<DailyData>();
+
+            foreach (var line in File.ReadLines(fileName))
+            {
+                var parts = line.Split(' ');
+                dailyDataList.Add(new DailyData
+                {
+                    Date = DateTime.ParseExact(parts[0], "yyyyMMdd", CultureInfo.InvariantCulture),
+                    Close = (int)(double.Parse(parts[4])) // Convert to cents
+                });
+            }
+
+            // If duration is longer than the number of data lines, return 10000000
+            if (duration > dailyDataList.Count)
+            {
+                return 10000000;
+            }
+
+            // Reverse the order to make the last line the most recent date
+            dailyDataList.Reverse();
+
+            DateTime endDate = dailyDataList[0].Date; // Most recent date
+            DateTime startDate = endDate.AddDays(-duration);
+
+            int highestClose = int.MinValue;
+
+            foreach (var dailyData in dailyDataList)
+            {
+                if (dailyData.Date >= startDate && dailyData.Date <= endDate)
+                {
+                    if (dailyData.Close > highestClose)
+                    {
+                        highestClose = dailyData.Close;
+                    }
+                }
+            }
+
+            return highestClose;
+        }
+
 
         public static bool read_단기과열(string stock)
         {

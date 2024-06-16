@@ -578,7 +578,7 @@ namespace Pre_Processor
             }
 
 
-            string[] grlines = File.ReadAllLines(filepath, Encoding.Default);
+            string[] grlines = File.ReadAllLines(filepath, Encoding.UTF8);
 
             List<string> GL_list = new List<string>();
 
