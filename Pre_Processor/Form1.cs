@@ -1054,7 +1054,7 @@ namespace Pre_Processor
                 File.Delete(file);
             }
             Stream FS = new FileStream(@"C:\병신\data\" + "그룹_네이버_업종" + ".txt", FileMode.CreateNew, FileAccess.Write);
-            StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.UTF8);
+            StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
 
             int[] themeRemove = new int[] { 25 }; // 환율하락수혜
             //int[] themeRemove = new int [] {31, // 환율하락수혜
@@ -1669,7 +1669,8 @@ namespace Pre_Processor
             프돈외기();
         }
 
-
+        // 20일전고, 60일 전고, 120일 전고, 240일 전고
+        // 프분평균, 프분편차, 거분평균, 거분편차, 배차평균, 배차편차, 배합평균, 배합편차
         private void 통계() // MOD,  g.ogldata 1581, 통계 1573
         {
             // rd.read_변수();
@@ -1744,13 +1745,14 @@ namespace Pre_Processor
                 double value = 0.0;
 
                 int 전일종가 = rd.read_전일종가(stock);
-                double money_factor = 전일종가 / g.억원;
+                double money_factor = 전일종가 / g.천만원;
 
 
 
 
                 // find g.nCol * g.nRow maximum date and time
                 // in order of descending
+                // 마지막에서부터 20일 읽는 것으로 되어있음
                 for (int i = end_date; i >= start_date; i--) // 20 days from successful ReadStockMinute
                 {
                     g.date = i;
@@ -1785,8 +1787,8 @@ namespace Pre_Processor
 
 
 
-                        value = (double)(x[j, 4] - x[j - 1, 4]) * money_factor;
-                        if (value > 0.001) // positive side only
+                        value = (double)(x[j, 4] - x[j - 1, 4]) * money_factor; // 
+                        // if (value > 0.001) // positive side only
                             프분.Add(value);
                         value = (double)(x[j, 7] - x[j - 1, 7]) * money_factor;
                         거분.Add(value);
@@ -1910,7 +1912,7 @@ namespace Pre_Processor
                 sw.WriteLine("{0}", str);
 
                 if (프분.Count < 5000) // write down to temp.txt
-                    wr.w(stock);
+                    wr.w(str);
             }
             sw.Close();
             textBox6.Text = "통계 done";
