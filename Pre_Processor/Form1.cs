@@ -1696,7 +1696,8 @@ namespace Pre_Processor
                 _gl.Add("KODEX 코스닥150선물인버스");
 
 
-            wk.일평균거래액10억이상종목선택(_gl, 10);
+           // wk.일평균거래액10억이상종목선택(_gl, 10);
+            wk.일최대거래액일정액이상종목선택(_gl, 30); // duration 0.8 seconds
 
             int start_date = 20220302; // MOD
             int end_date = Convert.ToInt32(DateTime.Now.Date.ToString("yyyyMMdd"));

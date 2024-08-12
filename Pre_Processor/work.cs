@@ -355,6 +355,54 @@ namespace Pre_Processor
             return true;
         }
 
+        public static void 일최대거래액일정액이상종목선택(List<string> tsl, int 최소거래액이상_억원)
+        {
+            var tuple = new List<Tuple<ulong, string>> { };
+
+            int days = 20;
+            foreach (var stock in tsl)
+            {
+                string path = @"C:\병신\data\일\" + stock + ".txt";
+                if (!File.Exists(path))
+                    continue;
+
+                List<string> lines = File.ReadLines(path).Reverse().Take(days).ToList(); // 파일 후반 읽기
+
+
+                // 지난 20일 중 최대 일 거래액 구하기
+                ulong max_day_dealt_money = 0;
+                foreach (var line in lines)
+                {
+                    string[] words = line.Split(' ');
+                    ulong day_dealt_money = (ulong)(Convert.ToDouble(words[4]) * Convert.ToUInt64(words[5]) / g.억원); // 종가 * 당일거래량
+                    if (day_dealt_money > max_day_dealt_money)
+                        max_day_dealt_money = day_dealt_money;
+                }
+                tuple.Add(Tuple.Create(max_day_dealt_money, stock));
+            }
+            tuple = tuple.OrderByDescending(t => t.Item1).ToList();
+
+
+            // max_day_dealt_money가 최소거래액_이상인 종목만 선택
+            // 10억원 이상인 경우 1710개
+            // 20억원 이상인 경우  1387개
+            // 30억원 이상인 경우  1209개
+            // 40억원 이상인 경우  1088개
+            // 50억원 이상인 경우  992개
+            // 60억원 이상인 경우  918개
+            // 70억원 이상인 경우  865개
+            // 80억원 이상인 경우  809개
+            // 90억원 이상인 경우  773개
+            // 100억원 이상인 경우  743개
+            tsl.Clear();
+
+            foreach (var item in tuple)
+            {
+                if (item.Item1 < (ulong)최소거래액이상_억원)
+                    continue;
+                tsl.Add(item.Item2);
+            }
+        }
         public static void 일평균거래액10억이상종목선택(List<string> tsl, int 최소거래액이상_억원)
         {
             var tuple = new List<Tuple<ulong, string>> { };
