@@ -20,7 +20,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 using System.Xml.Linq;
 using static Pre_Processor.g;
 //using StockLibrary;
-
+ 
 namespace Pre_Processor
 {
     public partial class Form1 : Form
