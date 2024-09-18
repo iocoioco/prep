@@ -19,7 +19,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Xml.Linq;
 using static Pre_Processor.g;
-//using StockLibrary;
+//using StockLibrary; 
  
 namespace Pre_Processor
 {
