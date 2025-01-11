@@ -560,7 +560,168 @@ namespace Pre_Processor
         }
 
 
-      
+
+        public static void SpearmanRankCorrelationBetweenDays(int ArrayLength, int PrintLength, List<string> sL)
+        {
+            double[] values = new double[ArrayLength];
+
+            double[] RankFirst = new double[ArrayLength];
+            double[] RankSecond = new double[ArrayLength];
+
+            string path = @"C:\병신\data\";
+            path += ("RankCorrelation" + ".txt");
+            if (File.Exists(path))
+                File.Delete(path);
+
+            Stream FS = new FileStream(path, FileMode.CreateNew, FileAccess.Write);
+            StreamWriter sw = new StreamWriter(FS, System.Text.Encoding.Default);
+
+            foreach (string stockname1 in sL)
+            {
+                path = @"C:\병신\data\일\";
+                path += (stockname1 + ".txt");
+                if (!File.Exists(path))
+                {
+                    continue;
+                }
+
+                List<string> lines = File.ReadLines(path).Reverse().Take(ArrayLength).ToList();
+                if (lines.Count != ArrayLength) // Array Length
+                {
+                    wr.wt(lines.Count.ToString() + " days : " + stockname1);
+                    continue;
+                }
+
+                string[] words_check = lines[0].Split(' '); // 거래중지
+                if (words_check[5] == "0")
+                {
+                    wr.wt("거래중지             : " + stockname1);
+                    continue;
+                }
+
+                int inc = 0;
+                foreach (string line in lines)
+                {
+                    string[] words = line.Split(' ');
+                    values[inc++] = Convert.ToDouble(words[4]); // 종가
+                }
+
+                // Compute daily percentage changes and rank them
+                double[] RateRiseFirst = new double[inc - 1];
+                for (int i = 0; i < inc - 1; i++)
+                {
+                    RateRiseFirst[i] = (values[i + 1] - values[i]) / values[i];
+                }
+                RankFirst = GetRanks(RateRiseFirst);
+
+                var stocks = new List<Tuple<double, string>> { };
+
+                foreach (string stockname2 in sL)
+                {
+                    path = @"C:\병신\data\일\";
+                    path += (stockname2 + ".txt");
+                    if (!File.Exists(path))
+                    {
+                        continue;
+                    }
+
+                    if (stockname1 == stockname2 || !File.Exists(path))
+                    {
+                        continue;
+                    }
+
+                    lines = File.ReadLines(path).Reverse().Take(ArrayLength).ToList();
+                    if (lines.Count != ArrayLength) // Array Length
+                    {
+                        continue;
+                    }
+
+                    words_check = lines[0].Split(' '); // 거래중지
+                    if (words_check[5] == "0")
+                    {
+                        continue;
+                    }
+
+                    inc = 0;
+                    foreach (string line in lines)
+                    {
+                        string[] words = line.Split(' ');
+                        values[inc++] = Convert.ToDouble(words[4]); // 종가
+                    }
+
+                    // Compute daily percentage changes and rank them
+                    double[] RateRiseSecond = new double[inc - 1];
+                    for (int i = 0; i < inc - 1; i++)
+                    {
+                        RateRiseSecond[i] = (values[i + 1] - values[i]) / values[i];
+                    }
+                    RankSecond = GetRanks(RateRiseSecond);
+
+                    // Compute Spearman correlation
+                    double correlation = SpearmanCorrelation(RankFirst, RankSecond);
+                    stocks.Add(Tuple.Create(correlation, stockname2));
+                }
+
+                stocks = stocks.OrderByDescending(t => t.Item1).ToList();
+
+                var s = stockname1;
+                sw.WriteLine("{0}", s);
+
+                inc = 0;
+                foreach (var item in stocks)
+                {
+                    decimal d = Convert.ToDecimal(item.Item1);
+                    string t = String.Format("{0:0.000}", d);
+                    sw.WriteLine("{0}\t{1}", t, item.Item2);
+
+                    if (inc++ > PrintLength) { break; }
+                }
+                sw.WriteLine();
+            }
+            sw.Close();
+        }
+
+        // Method to compute ranks for an array
+        private static double[] GetRanks(double[] data)
+        {
+            var sorted = data
+                .Select((value, index) => new { Value = value, Index = index })
+                .OrderBy(x => x.Value)
+                .ToArray();
+
+            double[] ranks = new double[data.Length];
+            int i = 0;
+            while (i < sorted.Length)
+            {
+                int j = i;
+                while (j < sorted.Length - 1 && sorted[j].Value == sorted[j + 1].Value)
+                {
+                    j++;
+                }
+                double rank = (i + j + 2) / 2.0; // Average rank for ties
+                for (int k = i; k <= j; k++)
+                {
+                    ranks[sorted[k].Index] = rank;
+                }
+                i = j + 1;
+            }
+            return ranks;
+        }
+
+        // Method to compute Spearman correlation
+        private static double SpearmanCorrelation(double[] rankA, double[] rankB)
+        {
+            int n = rankA.Length;
+            double sumD2 = 0;
+
+            for (int i = 0; i < n; i++)
+            {
+                double d = rankA[i] - rankB[i];
+                sumD2 += d * d;
+            }
+
+            return 1 - (6 * sumD2) / (n * (n * n - 1));
+        }
 
 
 

@@ -919,8 +919,8 @@ namespace Pre_Processor
 
             int days_of_array = 50;
             int print_length = 20;
-            Pre_Processor_Class1.PearsonRateDifferenceBetweenDays(days_of_array, print_length, _gl);
-
+            //Pre_Processor_Class1.PearsonRateDifferenceBetweenDays(days_of_array, print_length, _gl);
+            Pre_Processor_Class1.SpearmanRankCorrelationBetweenDays(days_of_array, print_length, _gl);
             textBox6.Text = "상관(Pearson Correlation) done & All done";
         }
         
