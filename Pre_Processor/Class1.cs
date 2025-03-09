@@ -569,7 +569,7 @@ namespace Pre_Processor
             double[] RankSecond = new double[ArrayLength];
 
             string path = @"C:\병신\data\";
-            path += ("RankCorrelation" + ".txt");
+            path += ("Correlation" + ".txt");
             if (File.Exists(path))
                 File.Delete(path);
 

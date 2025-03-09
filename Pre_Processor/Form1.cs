@@ -915,7 +915,7 @@ namespace Pre_Processor
             //    _gl.Add("KODEX 코스닥150선물인버스");
 
 
-            wk.일평균거래액10억이상종목선택(_gl, 10);
+            wk.일평균거래액10억이상종목선택(_gl, 10); // 상위순 _gl로 리턴
 
             int days_of_array = 50;
             int print_length = 20;
