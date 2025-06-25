@@ -96,6 +96,7 @@ namespace Pre_Processor
 
             //_gl = Pre_Processor_Class1.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
 
+           
 
             _gl = Pre_Processor_Class1.read_그룹_네이버_테마();
             _variable[0] = textBox3.Text; // 일, 주, 월 중 하나 입력
