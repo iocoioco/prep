@@ -358,7 +358,7 @@ namespace Pre_Processor
             public List<List<double>> 강지 = new List<List<double>>();
             public List<List<double>> 강위 = new List<List<double>>();
 
-            public List<List<double>> 프분 = new List<List<double>>();
+            public List<List<double>> 푀분 = new List<List<double>>();
             public List<List<double>> 프틱 = new List<List<double>>();
             public List<List<double>> 프지 = new List<List<double>>();
             public List<List<double>> 프퍼 = new List<List<double>>();
@@ -397,7 +397,7 @@ namespace Pre_Processor
                 public double 가연, 가분, 가틱, 가반, 가지, 가위;
                 public double 수연, 수지, 수위;
                 public double 강연, 강지, 강위;
-                public double 프분, 프틱, 프지, 프퍼, 프일;
+                public double 푀분, 프틱, 프지, 프퍼, 프일;
                 public double 거분, 거틱, 거일;
                 public double 배차, 배반, 배합;
 

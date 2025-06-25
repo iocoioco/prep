@@ -180,29 +180,7 @@ namespace Pre_Processor
 
 
 
-        public static void read_KODEX(List<string> _gl)
-        {
-            // 종목별 배당된 주식숫자로부터 각 종목의 Weighting Factor 계산하여 저장
-            string file = @"C:\병신\data\지수.txt";
-            if (!File.Exists(file))
-            {
-                MessageBox.Show("KODEX.txt Not Exist");
-                return;
-            }
-
-            string[] grlines = File.ReadAllLines(file);
-            List<string> list = new List<string>();
-
-            foreach (string line in grlines)
-            {
-                string[] words = line.Split('\t');
-
-                if (words[0].Length > 0 && !_gl.Contains(words[0]))
-                {
-                    _gl.Add(words[0]);
-                }
-            }
-        }
+        
 
         public static bool isStock(string stock)
         {
@@ -807,10 +785,62 @@ namespace Pre_Processor
             return uniqueItemsList;
         }
 
-     
 
+        public static void AddIfMissing(IEnumerable<string> stocks, List<string> TotalList)
+        {
+            foreach (string stock in stocks)
+            {
+                if (!TotalList.Contains(stock))
+                    TotalList.Add(stock);
+            }
+        }
 
+        public static List<string> SelectTop1000Stocks()
+        {
+            List<string> filteredStocks = new List<string>();
 
+            // Step 1: Merge related groups into filteredStocks
+            var themeList = read_그룹_네이버_테마();
+            AddIfMissing(themeList, filteredStocks);
+
+            List<List<string>> GroupList = new List<List<string>>();
+            List<string> groupList = read_그룹_네이버_업종(GroupList);
+            AddIfMissing(groupList, filteredStocks);
+
+            var stockVolumeTuples = new List<Tuple<ulong, string>>();
+            int recentDays = 20;
+
+            foreach (var stock in filteredStocks)
+            {
+                string path = $@"C:\병신\data\일\{stock}.txt";
+                if (!File.Exists(path))
+                    continue;
+
+                List<string> lines = File.ReadLines(path).Reverse().Take(recentDays).ToList();
+
+                ulong maxDailyVolume = 0;
+
+                foreach (var line in lines)
+                {
+                    string[] parts = line.Split(' ');
+                    ulong dailyVolume = (ulong)(Convert.ToDouble(parts[4]) * Convert.ToUInt64(parts[5]) / g.억원); // 종가 * 당일거래량
+
+                    if (dailyVolume > maxDailyVolume)
+                        maxDailyVolume = dailyVolume;
+                }
+
+                stockVolumeTuples.Add(Tuple.Create(maxDailyVolume, stock));
+            }
+
+            // Step 2: Sort and select top 1000 stocks
+            var topStocks = stockVolumeTuples
+                .OrderByDescending(t => t.Item1)
+                .Take(1000)
+                .Select(t => t.Item2)
+                .ToList();
+
+            return topStocks;
+        }
 
     }
 }

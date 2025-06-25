@@ -18,6 +18,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Xml.Linq;
+using HtmlAgilityPack;
 using static Pre_Processor.g;
 //using StockLibrary; 
  
@@ -474,28 +475,25 @@ namespace Pre_Processor
         public void 일주월()
         {
 
-            List<string> Gl = new List<string>(); // 실제 프로그램 내에서 사용하지 않음
-            List<List<string>> GL = new List<List<string>>(); // 실제 프로그램 내에서 사용하지 않음
-            List<string> kodex_list = new List<string>();
-
-            _gl.Clear();
+            var groupList = new List<List<string>>();
+            var totalStocksToProcede = new List<string>();
 
 
-            _gl = Pre_Processor_Class1.read_그룹_네이버_업종(GL);
-            //Pre_Processor_Class1.read_그룹_네이버_테마(_gl, Gl, GL);
-            Pre_Processor_Class1.read_KODEX(_gl);
+            totalStocksToProcede = Pre_Processor_Class1.read_그룹_네이버_업종(groupList);
+             var themeStocks = Pre_Processor_Class1.read_그룹_네이버_테마();
+            Pre_Processor_Class1.AddIfMissing(themeStocks, totalStocksToProcede);
 
             textBox6.Text = "일 진행 중";
 
 
-            if (!_gl.Contains("KODEX 레버리지"))
-                _gl.Add("KODEX 레버리지"); // 전체적으로 지수의 흐름을 보고 단타를 치기위함
-            if (!_gl.Contains("KODEX 200선물인버스2X"))
-                _gl.Add("KODEX 200선물인버스2X");
-            if (!_gl.Contains("KODEX 코스닥150레버리지"))
-                _gl.Add("KODEX 코스닥150레버리지");
-            if (!_gl.Contains("KODEX 코스닥150선물인버스"))
-                _gl.Add("KODEX 코스닥150선물인버스");
+            if (!totalStocksToProcede.Contains("KODEX 레버리지"))
+                totalStocksToProcede.Add("KODEX 레버리지"); // 전체적으로 지수의 흐름을 보고 단타를 치기위함
+            if (!totalStocksToProcede.Contains("KODEX 200선물인버스2X"))
+                totalStocksToProcede.Add("KODEX 200선물인버스2X");
+            if (!totalStocksToProcede.Contains("KODEX 코스닥150레버리지"))
+                totalStocksToProcede.Add("KODEX 코스닥150레버리지");
+            if (!totalStocksToProcede.Contains("KODEX 코스닥150선물인버스"))
+                totalStocksToProcede.Add("KODEX 코스닥150선물인버스");
 
             _Stock_Chart_일주월.Received += new CPSYSDIBLib._ISysDibEvents_ReceivedEventHandler(_Stock_Chart_일주월_Received);
 
@@ -503,37 +501,8 @@ namespace Pre_Processor
             _variable[1] = "700"; // 오늘부터 과거로 가면서 최대갯수 
             _Stock_Chart_일주월_stockChart();
 
-            /*
-            _variable[0] = "주"; // 일, 주, 월 중 하나 입력
-            _variable[1] = "300"; // 오늘부터 과거로 가면서 최대갯수 
-            _Stock_Chart_일주월_stockChart();
 
-            _variable[0] = "월"; // 일, 주, 월 중 하나 입력
-            _variable[1] = "120"; // 오늘부터 과거로 가면서 최대갯수 
-            _Stock_Chart_일주월_stockChart();
-            */
 
-            /*
-            foreach(var stockname in _gl)
-            {
-                _cpsvr7254 = new CPSYSDIBLib.CpSvr7254();
-                _cpsvr7254.Received += new CPSYSDIBLib._ISysDibEvents_ReceivedEventHandler(_cpsvr7254_Received);
-                _cpsvr7254.SetInputValue(0, _cpstockcode.NameToCode(stockname));
-                _cpsvr7254.SetInputValue(1, 3); //0:사용자지정 1:1개,월, 2:2개월 3:3개월 4:6개월,5:최근5일 6:일별
-                _cpsvr7254.SetInputValue(2, 20190102); // 0:사용자지정일 아닐 경우 시작일
-                _cpsvr7254.SetInputValue(3, 20190315); // 0:사용자지정일 아닐 경우 종료일
-                _cpsvr7254.SetInputValue(4, '1'); //'0' 순매수, '1' 매매비중
-                _cpsvr7254.SetInputValue(5, 0);// 전체, 1 개인, 2 외국인 ...
-                while (true)
-                {
-                    int result = _cpsvr7254.BlockRequest();
-                    if (result != 0)
-                    {
-                        continue;
-                    }
-                }
-            }
-            */
 
             textBox6.Text = "일 done";
         }
@@ -741,48 +710,9 @@ namespace Pre_Processor
         public void 시가총액()
         {
             textBox6.Text = "시총 진행 중";
-            List<string> Gl = new List<string>(); // 실제 프로그램 내에서 사용하지 않음
-            List<List<string>> GL = new List<List<string>>(); // 실제 프로그램 내에서 사용하지 않음
-            List<string> alist = new List<string>();
 
-            //_gl = Pre_Processor_Class1.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
-            //_gl = Pre_Processor_Class1.read_그룹_네이버_업종(Gl, GL);
-
-            _gl.Clear();
-
-
-            _gl = Pre_Processor_Class1.read_그룹_네이버_업종(GL);
-            //Pre_Processor_Class1.read_그룹_네이버_테마(_gl, Gl, GL);
-            Pre_Processor_Class1.read_KODEX(_gl);
-
-
-            if (!_gl.Contains("KODEX 레버리지"))
-                _gl.Add("KODEX 레버리지"); // 전체적으로 지수의 흐름을 보고 단타를 치기위함
-            if (!_gl.Contains("KODEX 200선물인버스2X"))
-                _gl.Add("KODEX 200선물인버스2X");
-            if (!_gl.Contains("KODEX 코스닥150레버리지"))
-                _gl.Add("KODEX 코스닥150레버리지");
-            if (!_gl.Contains("KODEX 코스닥150선물인버스"))
-                _gl.Add("KODEX 코스닥150선물인버스");
-
-
-            wk.일평균거래액10억이상종목선택(_gl, 10);
-            //Pre_Processor_Class1.read_그룹_상관(_gl, Gl, GL);
-            //_gl = Pre_Processor_Class1.read_전종목코드();
-            //_gl = Pre_Processor_Class1.read_그룹4(Gl);
-            //Pre_Processor_Class1.calc_평균(_gl, _aV); // calculate day average for each stock, averaging  20 days
-            //Pre_Processor_Class1.read_누적(_mF); // read from file "일중분별누적%" 901 0.017 etc
-
-            // 종목이름 맞는 지 확인
-            foreach (string stockname in _gl)
-            {
-
-                string code = _cpstockcode.NameToCode(stockname);
-                if (code == "")
-                {
-
-                }
-            }
+           
+          
 
             _Stock_Chart_시총.Received += new CPSYSDIBLib._ISysDibEvents_ReceivedEventHandler(_Stock_Chart_시총_Received);
 
@@ -805,7 +735,10 @@ namespace Pre_Processor
             StreamWriter sw = File.CreateText(file);
             sw.Close();
 
-            for (int i = 0; i < _gl.Count; i++)
+            var selected1000Stocks = Pre_Processor_Class1.SelectTop1000Stocks();
+
+
+            for (int i = 0; i < selected1000Stocks.Count; i++)
             {
                 //Thread.Sleep(1000); // Less than 15 request in 15 minutes
 
@@ -817,7 +750,7 @@ namespace Pre_Processor
                     continue;
                 }
 
-                string code = _cpstockcode.NameToCode(_gl[i]);
+                string code = _cpstockcode.NameToCode(selected1000Stocks[i]);
                 if (code.Length < 7)
                 {
                     continue;
@@ -873,54 +806,14 @@ namespace Pre_Processor
 
         private void 상관계산()
         {
-            List<List<string>> tgl = new List<List<string>>();
-            List<string> total_stock_list = new List<string>();
-            List<List<string>> Gl = new List<List<string>>();
-            List<List<string>> GL = new List<List<string>>();
-            List<string> 상관_group_total_stock_list = new List<string>();
-            List<string> tgl_title = new List<string>();
+            var selected1000Stocks = Pre_Processor_Class1.SelectTop1000Stocks();
 
-
-
-            _gl.Clear();
-
-
-            _gl = Pre_Processor_Class1.read_그룹_네이버_업종(GL);
-            //Pre_Processor_Class1.read_그룹_네이버_테마(_gl, Gl, GL);
-            Pre_Processor_Class1.read_KODEX(_gl);
-
-
-            List<string> remove_list = new List<string>();
-            foreach (var stock in _gl)
-            {
-                if (stock.Contains("KODEX") || stock.Contains("KBSTAR"))
-                    remove_list.Add(stock);
-            }
-
-            foreach (var stock in remove_list)
-            {
-                _gl.Remove(stock);
-            }
-
-            textBox6.Text = _gl.Count.ToString() + " 상관(Pearson Correlation) 진행 중";
-
-
-            //if (!_gl.Contains("KODEX 레버리지"))
-            //    _gl.Add("KODEX 레버리지"); // 전체적으로 지수의 흐름을 보고 단타를 치기위함
-            //if (!_gl.Contains("KODEX 200선물인버스2X"))
-            //    _gl.Add("KODEX 200선물인버스2X");
-            //if (!_gl.Contains("KODEX 코스닥150레버리지"))
-            //    _gl.Add("KODEX 코스닥150레버리지");
-            //if (!_gl.Contains("KODEX 코스닥150선물인버스"))
-            //    _gl.Add("KODEX 코스닥150선물인버스");
-
-
-            wk.일평균거래액10억이상종목선택(_gl, 10); // 상위순 _gl로 리턴
+            textBox6.Text = selected1000Stocks.Count.ToString() + " 상관(Pearson Correlation) 진행 중";
 
             int days_of_array = 50;
             int print_length = 20;
             //Pre_Processor_Class1.PearsonRateDifferenceBetweenDays(days_of_array, print_length, _gl);
-            Pre_Processor_Class1.SpearmanRankCorrelationBetweenDays(days_of_array, print_length, _gl);
+            Pre_Processor_Class1.SpearmanRankCorrelationBetweenDays(days_of_array, print_length, selected1000Stocks);
             textBox6.Text = "상관(Pearson Correlation) done & All done";
         }
         
@@ -1239,10 +1132,12 @@ namespace Pre_Processor
         {
 
         }
-
+        
         public void 네이버_테마(int version)
         {
             textBox6.Text = "네이버테마 진행 중";
+
+
 
             var doc = new HtmlAgilityPack.HtmlDocument();
             HtmlAgilityPack.HtmlWeb web = new HtmlAgilityPack.HtmlWeb();
@@ -1704,34 +1599,12 @@ namespace Pre_Processor
         }
 
         // 20일전고, 60일 전고, 120일 전고, 240일 전고
-        // 프분평균, 프분편차, 거분평균, 거분편차, 배차평균, 배차편차, 배합평균, 배합편차
+        // 푀분평균, 푀분편차, 거분평균, 거분편차, 배차평균, 배차편차, 배합평균, 배합편차
         private void 통계() // MOD,  g.ogldata 1581, 통계 1573
         {
             // rd.read_변수();
             textBox6.Text = "통계 진행 중";
-            List<List<string>> GL = new List<List<string>>();
-            _gl.Clear();
-
-
-            _gl = Pre_Processor_Class1.read_그룹_네이버_업종(GL);
-            //Pre_Processor_Class1.read_그룹_네이버_테마(_gl, Gl, GL);
-            Pre_Processor_Class1.read_KODEX(_gl);
-
-
-
-
-            if (!_gl.Contains("KODEX 레버리지"))
-                _gl.Add("KODEX 레버리지"); // 전체적으로 지수의 흐름을 보고 단타를 치기위함
-            if (!_gl.Contains("KODEX 200선물인버스2X"))
-                _gl.Add("KODEX 200선물인버스2X");
-            if (!_gl.Contains("KODEX 코스닥150레버리지"))
-                _gl.Add("KODEX 코스닥150레버리지");
-            if (!_gl.Contains("KODEX 코스닥150선물인버스"))
-                _gl.Add("KODEX 코스닥150선물인버스");
-
-
-           // wk.일평균거래액10억이상종목선택(_gl, 10);
-            wk.일최대거래액일정액이상종목선택(_gl, 30); // duration 0.8 seconds
+            var selected1000Stocks = Pre_Processor_Class1.SelectTop1000Stocks();
 
             int start_date = 20220302; // MOD
             int end_date = Convert.ToInt32(DateTime.Now.Date.ToString("yyyyMMdd"));
@@ -1743,9 +1616,9 @@ namespace Pre_Processor
 
             StreamWriter sw = File.CreateText(path);
 
-            int processing_count = 0;
+            
 
-            foreach (var stock in _gl) // 혼합 2 종목 빠져시 to-jsb 보다 2 종목 작음
+            foreach (var stock in selected1000Stocks) // 혼합 2 종목 빠져시 to-jsb 보다 2 종목 작음
             {
 
 
@@ -1759,23 +1632,18 @@ namespace Pre_Processor
                 str += "\t" + rd.FindHighestClose(filePath, 120).ToString();
                 str += "\t" + rd.FindHighestClose(filePath, 240).ToString();
 
-                var 프분 = new List<double>();
+                var 푀분 = new List<double>();
                 var 거분 = new List<double>();
 
                 var 배차 = new List<double>();
                 var 배합 = new List<double>();
 
-                var 프누 = new List<List<double>>();
-                var 종누 = new List<List<double>>();
+                var 프누 = new List<double>();
+                var 종누 = new List<double>();
 
 
 
 
-                for (int i = 0; i < 382; i++)
-                {
-                    프누.Add(new List<double>());
-                    종누.Add(new List<double>());
-                }
 
                 double value = 0.0;
 
@@ -1788,15 +1656,17 @@ namespace Pre_Processor
                 // find g.nCol * g.nRow maximum date and time
                 // in order of descending
                 // 마지막에서부터 20일 읽는 것으로 되어있음
+
+                int processing_count = 0;
                 for (int i = end_date; i >= start_date; i--) // 20 days from successful ReadStockMinute
                 {
+                    if (processing_count == 21)
+                        break;
+
                     g.date = i;
+
                     if (stock.Contains("KODEX") || stock.Contains("혼합"))
                     {
-                        if (stock.Contains("KODEX 레버리지") || stock.Contains("KODEX 코스닥150레버리지"))
-                        {
-                            break;
-                        }
                         continue;
                     }
 
@@ -1811,30 +1681,30 @@ namespace Pre_Processor
                     if (count_success_ReadStockMinute == 20)
                         break;
 
-                    for (int j = 1; j < nrow; j++)
+                    for (int j = 1; j < nrow; j++) // from 9:00 
                     {
                         double interval_by_seconds = ms.total_Seconds(x[j - 1, 0], x[j, 0]);
-                        if (interval_by_seconds > 75.0 || interval_by_seconds < 45.0) // interval_by_seconds larger than 70 seconds, then skip
+                        if (interval_by_seconds > 70.0 || interval_by_seconds < 50.0) // interval_by_seconds, otherwise continue
                         {
                             continue;
                         }
 
-
-
-
-                        value = (double)(x[j, 4] - x[j - 1, 4]) * money_factor; // 
-                        // if (value > 0.001) // positive side only
-                            프분.Add(value);
+                        value = (double)(x[j, 4] - x[j - 1, 4] + x[j, 5] - x[j - 1, 5]) * money_factor; // 
+                        if (value > 0.001) // positive side only
+                            푀분.Add(value);
                         value = (double)(x[j, 7] - x[j - 1, 7]) * money_factor;
                         거분.Add(value);
 
                         배차.Add(x[j, 8] - x[j, 9]);
                         배합.Add(x[j, 8] + x[j, 9]);
 
-                        //int id = (x[j, 0] / 10000 - 9) * 60 + (x[j, 0] % 10000) / 100 + 1;
 
-                        //프누[id].Add(x[j, 4] * money_factor); 
-                        //종누[id].Add(x[j, 7] * money_factor);
+                        if (x[j, 0] / 100 == 1519)
+                        {
+                            프누.Add((x[j, 4] + x[j, 5]) * money_factor);
+                            종누.Add(x[j, 7] * money_factor);
+                        }
+
 
                         if (count_success_ReadStockMinute >= 20) // 한 달치만 읽고 계산하는 것으로 세팅
                             break;
@@ -1877,15 +1747,15 @@ namespace Pre_Processor
              
                 int minimum_number_of_data_for_processing = 100;
 
-                // 프분
+                // 푀분
                 double avr = 0.0;
                 double dev = 0.0;
-                if (프분.Count > minimum_number_of_data_for_processing)
+                if (푀분.Count > minimum_number_of_data_for_processing)
                 {
-                    avr = 프분.Sum() / 프분.Count;
-                    dev = Math.Sqrt(프분.Sum(y => Math.Pow(y - avr, 2)) / (프분.Count - 1));
+                    avr = 푀분.Sum() / 푀분.Count;
+                    dev = Math.Sqrt(푀분.Sum(y => Math.Pow(y - avr, 2)) / (푀분.Count - 1));
                 }
-                str += "\t" + 프분.Count;
+                str += "\t" + 푀분.Count;
                 if (avr < 0.001)
                     str += "\t" + "0.0";
                 else
@@ -1946,8 +1816,10 @@ namespace Pre_Processor
 
                 sw.WriteLine("{0}", str);
 
-                if (프분.Count < 5000) // write down to temp.txt
+                if (푀분.Count < 5000) // write down to temp.txt
                     wr.w(str);
+
+                processing_count++;
             }
             sw.Close();
             textBox6.Text = "통계 done";
@@ -2014,7 +1886,7 @@ namespace Pre_Processor
                 if (count_success_ReadStockMinute == 0) // 하루치도 없는 경우 무시하고 다음 종목으로
                     continue;
 
-                // 프분
+                // 푀분
                 double avr = 0.0;
                 double dev = 0.0;
                 avr = 지수종목_가격차이.Sum() / 지수종목_가격차이.Count;
