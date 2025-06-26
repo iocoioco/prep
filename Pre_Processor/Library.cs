@@ -15,7 +15,7 @@ namespace Pre_Processor
 {
 
 
-    class Pre_Processor_Class1
+    class Library
     {
         static CPUTILLib.CpCodeMgr _cm = new CPUTILLib.CpCodeMgr();
 
@@ -30,6 +30,15 @@ namespace Pre_Processor
         //CPSYSDIBLib.StockChart _Stock_Chart6 = new CPSYSDIBLib.StockChart();
         CPSYSDIBLib.CpSvr7254 _cpsvr7254 = new CPSYSDIBLib.CpSvr7254();
         CPSYSDIBLib.CpSvrNew7216 _cpsvrNew7216 = new CPSYSDIBLib.CpSvrNew7216();
+
+        public static (string avg, string std) CalcStats(List<double> list)
+        {
+            if (list.Count == 0)
+                return ("0.0", "0.0");
+            double avg = list.Sum() / list.Count;
+            double std = Math.Sqrt(list.Sum(x => Math.Pow(x - avg, 2)) / (list.Count - 1));
+            return (avg.ToString("0.0"), std.ToString("0.0"));
+        }
 
         public static string calcurate_종목일중변동평균편차(string stock, int days, ref double avr, ref double dev, ref int 일평균거래액,
                          ref int 일최소거래액, ref int 일최대거래액, ref int MaxmumDate, ref double MaximumPriceRiseRate)

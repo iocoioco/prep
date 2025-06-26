@@ -139,7 +139,7 @@ namespace Pre_Processor
             public List<string> stocks = new List<string>();
 
             public double 총점;
-            public double 프누, 종누, 분푀, 배차, 가증, 분거, 상순, 저순;
+            public double 푀누, 종누, 분푀, 배차, 가증, 분거, 상순, 저순;
             public double average_price;
         }
         public static List<g.group_data> oGL_data = new List<group_data>();

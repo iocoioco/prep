@@ -21,7 +21,7 @@ using System.Xml.Linq;
 using HtmlAgilityPack;
 using static Pre_Processor.g;
 //using StockLibrary; 
- 
+
 namespace Pre_Processor
 {
     public partial class Form1 : Form
@@ -88,27 +88,27 @@ namespace Pre_Processor
             List<List<string>> Gl = new List<List<string>>(); // 실제 프로그램 내에서 사용하지 않음
             List<List<string>> GL = new List<List<string>>(); // 실제 프로그램 내에서 사용하지 않음
             List<string> alist = new List<string>();
-            //_gl = Pre_Processor_Class1.read_group();
-            //_gl = Pre_Processor_Class1.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
-            //_gl = Pre_Processor_Class1.read_그룹_네이버_업종(Gl, GL);
-            //_gl = Pre_Processor_Class1.read_전종목코드();
+            //_gl = Library.read_group();
+            //_gl = Library.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
+            //_gl = Library.read_그룹_네이버_업종(Gl, GL);
+            //_gl = Library.read_전종목코드();
 
 
-            //_gl = Pre_Processor_Class1.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
+            //_gl = Library.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
 
-           
 
-            _gl = Pre_Processor_Class1.read_그룹_네이버_테마();
+
+            _gl = Library.read_그룹_네이버_테마();
             _variable[0] = textBox3.Text; // 일, 주, 월 중 하나 입력
             _variable[1] = textBox4.Text; // 오늘부터 과거로 가면서 최대갯수 
 
-            //_gl = Pre_Processor_Class1.read_분별종목(); // _oL unique list : 옛날 방식의 groupList and singleList
+            //_gl = Library.read_분별종목(); // _oL unique list : 옛날 방식의 groupList and singleList
             for (int i = 0; i < _gl.Count; i++)
             {
-                _aV[i] = Pre_Processor_Class1.calculate_종목20일기준일평균거래량(_gl[i]);
+                _aV[i] = Library.calculate_종목20일기준일평균거래량(_gl[i]);
             }
 
-            Pre_Processor_Class1.read_누적(_mF); // read from file "일중분별누적%" 901 0.017 etc
+            Library.read_누적(_mF); // read from file "일중분별누적%" 901 0.017 etc
 
 
             // 종목이름 맞는 지 확인
@@ -141,7 +141,7 @@ namespace Pre_Processor
         {
             int[] workingdays = new int[1000];
 
-            Pre_Processor_Class1.read_날짜_삼성전자일자료로부터(Convert.ToInt32(_variable[0]),
+            Library.read_날짜_삼성전자일자료로부터(Convert.ToInt32(_variable[0]),
                         Convert.ToInt32(_variable[1]), "삼성전자", workingdays);
             if (workingdays.Length == 0)
             {
@@ -255,7 +255,7 @@ namespace Pre_Processor
         {
             int[] workingdays = new int[1000];
 
-            Pre_Processor_Class1.read_날짜_삼성전자일자료로부터(Convert.ToInt32(_variable[0]),
+            Library.read_날짜_삼성전자일자료로부터(Convert.ToInt32(_variable[0]),
                         Convert.ToInt32(_variable[1]), "삼성전자", workingdays);
             if (workingdays.Length == 0)
             {
@@ -367,7 +367,7 @@ namespace Pre_Processor
             }
 
             StreamWriter sw = File.CreateText(path);
-            int 전일종가 = Pre_Processor_Class1.read_일자제시_전일종가(_workingDay, stockname);
+            int 전일종가 = Library.read_일자제시_전일종가(_workingDay, stockname);
             if (전일종가 < 0)
             {
                 return;
@@ -435,11 +435,11 @@ namespace Pre_Processor
                 int 누적체결매도 = x[i, 4];
 
                 List<string> alist = new List<string>();
-                alist = Pre_Processor_Class1.find_리스트(x[i, 0].ToString(), _mF);
+                alist = Library.find_리스트(x[i, 0].ToString(), _mF);
                 double minuteaverage = Convert.ToDouble(alist[1]);
                 string code1 = _Stock_Chart_분.GetHeaderValue(0);
                 string name = _cm.CodeToName(code1);
-                int nthfile = Pre_Processor_Class1.find_순서(name, _gl);
+                int nthfile = Library.find_순서(name, _gl);
 
                 누적거래량 = 누적체결매수 + 누적체결매도;
                 int 수급 = (int)(누적거래량 / (minuteaverage * _aV[nthfile]) * 100.0); //_aV : 일평균거래량
@@ -480,9 +480,9 @@ namespace Pre_Processor
             var totalStocksToProcede = new List<string>();
 
 
-            totalStocksToProcede = Pre_Processor_Class1.read_그룹_네이버_업종(groupList);
-             var themeStocks = Pre_Processor_Class1.read_그룹_네이버_테마();
-            Pre_Processor_Class1.AddIfMissing(themeStocks, totalStocksToProcede);
+            totalStocksToProcede = Library.read_그룹_네이버_업종(groupList);
+            var themeStocks = Library.read_그룹_네이버_테마();
+            Library.AddIfMissing(themeStocks, totalStocksToProcede);
 
             textBox6.Text = "일 진행 중";
 
@@ -712,8 +712,8 @@ namespace Pre_Processor
         {
             textBox6.Text = "시총 진행 중";
 
-           
-          
+
+
 
             _Stock_Chart_시총.Received += new CPSYSDIBLib._ISysDibEvents_ReceivedEventHandler(_Stock_Chart_시총_Received);
 
@@ -736,7 +736,7 @@ namespace Pre_Processor
             StreamWriter sw = File.CreateText(file);
             sw.Close();
 
-            var selected1000Stocks = Pre_Processor_Class1.SelectTop1000Stocks();
+            var selected1000Stocks = Library.SelectTop1000Stocks();
 
 
             for (int i = 0; i < selected1000Stocks.Count; i++)
@@ -807,26 +807,26 @@ namespace Pre_Processor
 
         private void 상관계산()
         {
-            var selected1000Stocks = Pre_Processor_Class1.SelectTop1000Stocks();
+            var selected1000Stocks = Library.SelectTop1000Stocks();
 
             textBox6.Text = selected1000Stocks.Count.ToString() + " 상관(Pearson Correlation) 진행 중";
 
             int days_of_array = 50;
             int print_length = 20;
-            //Pre_Processor_Class1.PearsonRateDifferenceBetweenDays(days_of_array, print_length, _gl);
-            Pre_Processor_Class1.SpearmanRankCorrelationBetweenDays(days_of_array, print_length, selected1000Stocks);
+            //Library.PearsonRateDifferenceBetweenDays(days_of_array, print_length, _gl);
+            Library.SpearmanRankCorrelationBetweenDays(days_of_array, print_length, selected1000Stocks);
             textBox6.Text = "상관(Pearson Correlation) done & All done";
         }
-        
+
         //	투자주체별현황을 일별/기간별, 순매수/매매비중을 일자별
         private void button5_Click(object sender, EventArgs e)
         {
             // List<List<string>> Gl = new List<List<string>>(); // 실제 프로그램 내에서 사용하지 않음
             List<List<string>> GL = new List<List<string>>(); // 실제 프로그램 내에서 사용하지 않음
             List<string> alist = new List<string>();
-            //_gl = Pre_Processor_Class1.read_그룹4(Gl);
-            //_gl = Pre_Processor_Class1.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
-            _gl = Pre_Processor_Class1.read_그룹_네이버_업종(GL);
+            //_gl = Library.read_그룹4(Gl);
+            //_gl = Library.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
+            _gl = Library.read_그룹_네이버_업종(GL);
             string path = @"C:\병신\그룹_" + textBox2.Text + ".txt";
             if (File.Exists(path))
                 File.Delete(path);
@@ -908,7 +908,7 @@ namespace Pre_Processor
 
         private void button7_Click(object sender, EventArgs e)
         {
-            var list = Pre_Processor_Class1.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
+            var list = Library.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
 
             string path = @"C:\병신\" + "그룹" + textBox2.Text + ".txt";
 
@@ -1133,7 +1133,7 @@ namespace Pre_Processor
         {
 
         }
-        
+
         public void 네이버_테마(int version)
         {
             textBox6.Text = "네이버테마 진행 중";
@@ -1370,7 +1370,7 @@ namespace Pre_Processor
                 List<double> 기돈 = new List<double>(); double 기돈_평균; double 기돈_편차; double 기돈_최대 = 0;
 
                 // 전일종가 문제 있는 종목은 무시하고 진행
-                int 전일종가 = Pre_Processor_Class1.read_일자제시_전일종가(reference_date, 종목);
+                int 전일종가 = Library.read_일자제시_전일종가(reference_date, 종목);
                 if (전일종가 <= 0)
                 {
                     str_temp += 종목 + "\n";
@@ -1382,9 +1382,9 @@ namespace Pre_Processor
                 int count = 0;
                 for (int i = 0; i < 300; i++)
                 {
-                    moving_date = Pre_Processor_Class1.directory_분전후(moving_date, -1); // 거래익일
+                    moving_date = Library.directory_분전후(moving_date, -1); // 거래익일
 
-                    int nword = Pre_Processor_Class1.ReadStockMinute_LasLine(moving_date, 종목, x);
+                    int nword = Library.ReadStockMinute_LasLine(moving_date, 종목, x);
                     if (nword != 12 || x[0] / 100 != 1520)
                         continue;
 
@@ -1404,19 +1404,19 @@ namespace Pre_Processor
                         break;
                 }
 
-                double money_factor = 전일종가 / 100000000.0; // divided by 억원
+                double MoneyFactor = 전일종가 / 100000000.0; // divided by 억원
 
-                프돈_평균 = 프돈.Sum() / 프돈.Count * money_factor;
-                프돈_편차 = Math.Sqrt(프돈.Sum(t => Math.Pow(t - 프돈_평균, 2)) / (프돈.Count - 1)) * money_factor;
-                프돈_최대 *= money_factor;
+                프돈_평균 = 프돈.Sum() / 프돈.Count * MoneyFactor;
+                프돈_편차 = Math.Sqrt(프돈.Sum(t => Math.Pow(t - 프돈_평균, 2)) / (프돈.Count - 1)) * MoneyFactor;
+                프돈_최대 *= MoneyFactor;
 
-                외돈_평균 = 외돈.Sum() / 외돈.Count * money_factor;
-                외돈_편차 = Math.Sqrt(외돈.Sum(t => Math.Pow(t - 외돈_평균, 2)) / (외돈.Count - 1)) * money_factor;
-                외돈_최대 *= money_factor;
+                외돈_평균 = 외돈.Sum() / 외돈.Count * MoneyFactor;
+                외돈_편차 = Math.Sqrt(외돈.Sum(t => Math.Pow(t - 외돈_평균, 2)) / (외돈.Count - 1)) * MoneyFactor;
+                외돈_최대 *= MoneyFactor;
 
-                기돈_평균 = 기돈.Sum() / 기돈.Count * money_factor;
-                기돈_편차 = Math.Sqrt(기돈.Sum(t => Math.Pow(t - 기돈_평균, 2)) / (기돈.Count - 1)) * money_factor;
-                기돈_최대 *= money_factor;
+                기돈_평균 = 기돈.Sum() / 기돈.Count * MoneyFactor;
+                기돈_편차 = Math.Sqrt(기돈.Sum(t => Math.Pow(t - 기돈_평균, 2)) / (기돈.Count - 1)) * MoneyFactor;
+                기돈_최대 *= MoneyFactor;
 
 
                 str += 종목 + "\t" + 시총 + "\t" +
@@ -1450,8 +1450,8 @@ namespace Pre_Processor
             List<List<string>> GL = new List<List<string>>(); // 실제 프로그램 내에서 사용하지 않음
             List<string> alist = new List<string>();
 
-            //_gl = Pre_Processor_Class1.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
-            _gl = Pre_Processor_Class1.read_그룹_네이버_업종(GL);
+            //_gl = Library.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
+            _gl = Library.read_그룹_네이버_업종(GL);
             int days = 20;
             double avr = 0.0, dev = 0.0;
             int 일평균거래액 = 0, 일최소거래액 = 0, 일최대거래액 = 0;
@@ -1459,7 +1459,7 @@ namespace Pre_Processor
             double MaximumPriceRiseRate = 0;
             foreach (var stock in _gl)
             {
-                string dev_avr = Pre_Processor_Class1.calcurate_종목일중변동평균편차(stock, days, ref avr, ref dev, ref 일평균거래액,
+                string dev_avr = Library.calcurate_종목일중변동평균편차(stock, days, ref avr, ref dev, ref 일평균거래액,
                            ref 일최소거래액, ref 일최대거래액, ref MaximumDate, ref MaximumPriceRiseRate);
                 a_tuple.Add(Tuple.Create(일최대거래액, MaximumDate, 일평균거래액, dev, avr, stock, (int)MaximumPriceRiseRate));
             }
@@ -1600,12 +1600,13 @@ namespace Pre_Processor
         }
 
         // 20일전고, 60일 전고, 120일 전고, 240일 전고
-        // 푀분평균, 푀분편차, 거분평균, 거분편차, 배차평균, 배차편차, 배합평균, 배합편차
-        private void 통계() // MOD,  g.ogldata 1581, 통계 1573
+        // 푀분평균, 푀분편차, 거분평균, 거분편차, 배차평균, 배차편차,
+        // 배합평균, 배합편차, 푀누평균, 푀누편차, 종누평균, 종누편차
+        private void 통계() 
         {
             // rd.read_변수();
             textBox6.Text = "통계 진행 중";
-            var selected1000Stocks = Pre_Processor_Class1.SelectTop1000Stocks();
+            var selected1000Stocks = Library.SelectTop1000Stocks();
 
             int start_date = 20220302; // MOD
             int end_date = Convert.ToInt32(DateTime.Now.Date.ToString("yyyyMMdd"));
@@ -1617,14 +1618,12 @@ namespace Pre_Processor
 
             StreamWriter sw = File.CreateText(path);
 
-            
-
             foreach (var stock in selected1000Stocks) // 혼합 2 종목 빠져시 to-jsb 보다 2 종목 작음
             {
-
+                if (stock.Contains("KODEX") || stock.Contains("혼합")) // actually not include these stocks
+                    continue;
 
                 string str = stock;
-                int count_success_ReadStockMinute = 0;
 
                 string filePath = @"C:\병신\data\일\" + stock + ".txt";
                 List<int> highest = new List<int>();
@@ -1639,188 +1638,86 @@ namespace Pre_Processor
                 var 배차 = new List<double>();
                 var 배합 = new List<double>();
 
-                var 프누 = new List<double>();
+                var 푀누 = new List<double>();
                 var 종누 = new List<double>();
-
-
-
-
 
                 double value = 0.0;
 
                 int 전일종가 = rd.read_전일종가(stock);
-                double money_factor = 전일종가 / g.천만원;
+                double MoneyFactor = 전일종가 / g.천만원;
 
+                int DaysProcessed = 0;
+                int MinutesProcessed = 0;
 
-
-
-                // find g.nCol * g.nRow maximum date and time
-                // in order of descending
-                // 마지막에서부터 20일 읽는 것으로 되어있음
-
-                int processing_count = 0;
                 for (int i = end_date; i >= start_date; i--) // 20 days from successful ReadStockMinute
                 {
-                    if (processing_count == 21)
+                    if (DaysProcessed > 20)
                         break;
 
                     g.date = i;
 
-                    if (stock.Contains("KODEX") || stock.Contains("혼합"))
-                    {
-                        continue;
-                    }
-
-
                     int[,] x = new int[400, 12];
                     int nrow = rd.ReadStockMinute(i, stock, x); // i -> date
-                    if (!rd.readStockMinuteCheck(nrow, x)) // check usability of minute data 
+                    if (!rd.readStockMinuteCheck(nrow, x)) // check usability of minutes data 
                         continue;
                     else
-                        count_success_ReadStockMinute++;
-
-                    if (count_success_ReadStockMinute == 20)
-                        break;
+                        DaysProcessed++;
 
                     for (int j = 1; j < nrow; j++) // from 9:00 
                     {
                         double interval_by_seconds = ms.total_Seconds(x[j - 1, 0], x[j, 0]);
-                        if (interval_by_seconds > 70.0 || interval_by_seconds < 50.0) // interval_by_seconds, otherwise continue
-                        {
+                        if (interval_by_seconds > 70.0 || interval_by_seconds < 50.0) // interval for seconds, 
                             continue;
-                        }
 
-                        value = (double)(x[j, 4] - x[j - 1, 4] + x[j, 5] - x[j - 1, 5]) * money_factor; // 
+                        value = (double)(x[j, 4] - x[j - 1, 4] + x[j, 5] - x[j - 1, 5]) * MoneyFactor; // 
                         if (value > 0.001) // positive side only
                             푀분.Add(value);
-                        value = (double)(x[j, 7] - x[j - 1, 7]) * money_factor;
+                        value = (double)(x[j, 7] - x[j - 1, 7]) * MoneyFactor;
                         거분.Add(value);
 
                         배차.Add(x[j, 8] - x[j, 9]);
                         배합.Add(x[j, 8] + x[j, 9]);
 
-
                         if (x[j, 0] / 100 == 1519)
                         {
-                            프누.Add((x[j, 4] + x[j, 5]) * money_factor);
-                            종누.Add(x[j, 7] * money_factor);
+                            var ProgramAndForeign = (x[j, 4] + x[j, 5]) * MoneyFactor;
+                            if (ProgramAndForeign > 0) // pisitve side only
+                                푀누.Add((x[j, 4] + x[j, 5]) * MoneyFactor);
+                            종누.Add(x[j, 7] * MoneyFactor);
                         }
-
-
-                        if (count_success_ReadStockMinute >= 20) // 한 달치만 읽고 계산하는 것으로 세팅
-                            break;
+                        MinutesProcessed++;
                     }
-                    //if (프누.Count != 종누.Count)
-                    //{
-                    //    MessageBox.Show("프누 & 종누 숫자 불일치");
-                    //}
                 }
 
-                if (count_success_ReadStockMinute == 0) // 하루치도 없는 경우 무시하고 다음 종목으로
+                if (MinutesProcessed <= 100 && DaysProcessed != 20) // 분 데이터 숫자 100 이하 -> 계산하지 않음
                     continue;
 
-                //for (int i = 1; i < 382; i++)
-                //{
-                //    if(count_success_ReadStockMinute != 프누[i].Count)
-                //        MessageBox.Show("프누 array 숫자 불일치");
-                //    if (count_success_ReadStockMinute != 종누[i].Count)
-                //        MessageBox.Show("종누 array 숫자 불일치");
-                //}
-
-                //double[] 프누_avr = new double[382];
-                //double[] 프누_dev = new double[382];
-                //double[] 종누_avr = new double[382];
-                //double[] 종누_dev = new double[382];
-
-                //for (int i = 1; i < 382; i++)
-                //{
-                //    프누_avr[i] = 프누[i].Sum() / 프누[i].Count;
-                //    프누_dev[i] = Math.Sqrt(프누[i].Sum(y => Math.Pow(y - 프누_avr[i], 2)) / (프누[i].Count - 1));
-                //    종누_avr[i] = 종누[i].Sum() / 종누[i].Count;
-                //    종누_dev[i] = Math.Sqrt(종누[i].Sum(y => Math.Pow(y - 종누_avr[i], 2)) / (종누[i].Count - 1));
-                //}
-
-
-                //g.clicked_Stock = stock;
-                //ms.Naver_호가_txt(2, -1, -1, 0, 0);
-
-
-             
-                int minimum_number_of_data_for_processing = 100;
-
                 // 푀분
-                double avr = 0.0;
-                double dev = 0.0;
-                if (푀분.Count > minimum_number_of_data_for_processing)
-                {
-                    avr = 푀분.Sum() / 푀분.Count;
-                    dev = Math.Sqrt(푀분.Sum(y => Math.Pow(y - avr, 2)) / (푀분.Count - 1));
-                }
-                str += "\t" + 푀분.Count;
-                if (avr < 0.001)
-                    str += "\t" + "0.0";
-                else
-                    str += "\t" + avr.ToString("#.##");
-                if (dev < 0.001)
-                    str += "\t" + "0.0";
-                else
-                    str += "\t" + dev.ToString("#.##");
+                (var avg, var std) = Library.CalcStats(푀분);
+                str += $"\t{푀분.Count}\t{avg}\t{std}";
+
 
                 // 거분
-                avr = 0.0;
-                dev = 0.0;
-                if (거분.Count > count_success_ReadStockMinute)
-                {
-                    avr = 거분.Sum() / 거분.Count;
-                    dev = Math.Sqrt(거분.Sum(y => Math.Pow(y - avr, 2)) / (거분.Count - 1));
-                }
-                // str += "\t" + 거분.Count;
-                if (avr < 0.001)
-                    str += "\t" + "0.0";
-                else
-                    str += "\t" + avr.ToString("#.##");
-                if (dev < 0.001)
-                    str += "\t" + "0.0";
-                else
-                    str += "\t" + dev.ToString("#.##");
+                (avg, std) = Library.CalcStats(거분);
+                str += $"\t{avg}\t{std}";
 
                 // 배차
-                avr = 0.0;
-                dev = 0.0;
-                if (배차.Count > minimum_number_of_data_for_processing)
-                {
-                    avr = 배차.Sum() / 배차.Count;
-                    dev = Math.Sqrt(배차.Sum(y => Math.Pow(y - avr, 2)) / (배차.Count - 1));
-                }
-                // str += "\t" + 배차.Count;
-                str += "\t" + avr.ToString("#.##");
-                if (dev < 0.001)
-                    str += "\t" + "0.0";
-                else
-                    str += "\t" + dev.ToString("#.##");
-
+                (avg, std) = Library.CalcStats(배차);
+                str += $"\t{avg}\t{std}";
 
                 // 배합
-                avr = 0.0;
-                dev = 0.0;
-                if (배합.Count > minimum_number_of_data_for_processing)
-                {
-                    avr = 배합.Sum() / 배합.Count;
-                    dev = Math.Sqrt(배합.Sum(y => Math.Pow(y - avr, 2)) / (배합.Count - 1));
-                }
-                // str += "\t" + 배합.Count;
-                str += "\t" + avr.ToString("#.##");
-                if (dev < 0.001)
-                    str += "\t" + "0.0";
-                else
-                    str += "\t" + dev.ToString("#.##");
+                (avg, std) = Library.CalcStats(배합);
+                str += $"\t{avg}\t{std}";
+
+                // 푀누
+                (avg, std) = Library.CalcStats(푀누);
+                str += $"\t{avg}\t{std}";
+
+                // 종누
+                (avg, std) = Library.CalcStats(종누);
+                str += $"\t{avg}\t{std}";
 
                 sw.WriteLine("{0}", str);
-
-                if (푀분.Count < 5000) // write down to temp.txt
-                    wr.w(str);
-
-                processing_count++;
             }
             sw.Close();
             textBox6.Text = "통계 done";
@@ -1845,7 +1742,7 @@ namespace Pre_Processor
             string str = "// 지수\avr/min\tdev/min";
             sw.WriteLine("{0}", str);
 
-            int processing_count = 0;
+            int DaysProcessed = 0;
 
 
             var 지수종목 = new List<string>();
@@ -1854,7 +1751,7 @@ namespace Pre_Processor
 
             foreach (var stock in 지수종목) // 혼합 2 종목 빠져시 to-jsb 보다 2 종목 작음
             {
-                int count_success_ReadStockMinute = 0;
+                int MinutesProcessed = 0;
 
                 var 지수종목_가격차이 = new List<double>();
 
@@ -1867,9 +1764,9 @@ namespace Pre_Processor
                     if (!rd.readStockMinuteCheck(nrow, x)) // check usability of minute data 
                         continue;
                     else
-                        count_success_ReadStockMinute++;
+                        MinutesProcessed++;
 
-                    if (count_success_ReadStockMinute == 60)
+                    if (MinutesProcessed == 60)
                         break;
 
                     for (int j = 1; j < nrow; j++)
@@ -1884,7 +1781,7 @@ namespace Pre_Processor
                     }
                 }
 
-                if (count_success_ReadStockMinute == 0) // 하루치도 없는 경우 무시하고 다음 종목으로
+                if (MinutesProcessed == 0) // 하루치도 없는 경우 무시하고 다음 종목으로
                     continue;
 
                 // 푀분
