@@ -219,7 +219,7 @@
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.ColumnHeadersVisible = false;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView1.Location = new System.Drawing.Point(118, 981);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowHeadersWidth = 82;
@@ -264,7 +264,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1713, 904);
+            this.ClientSize = new System.Drawing.Size(1713, 1184);
             this.Controls.Add(this.button14);
             this.Controls.Add(this.button13);
             this.Controls.Add(this.button12);
