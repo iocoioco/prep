@@ -1260,66 +1260,20 @@ namespace Pre_Processor
 
         private void button10_Click(object sender, EventArgs e)
         {
+            // Delete "data work" & copy "data" to "data work"
             string original_directory = @"C:\병신\data";
             string copy_directory = original_directory + " work";
-
             if (Directory.Exists(copy_directory))
                 Directory.Delete(copy_directory, true);
-
             Directory.CreateDirectory(copy_directory);
             Library.CopyDirectory(original_directory, copy_directory);
 
-      
+            // Delete "data copy" & copy "data" to "data copy"
             copy_directory = original_directory + " copy";
-
             if (Directory.Exists(copy_directory))
                 Directory.Delete(copy_directory, true);
-
             Directory.CreateDirectory(copy_directory);
             Library.CopyDirectory(original_directory, copy_directory);
-
-
-            //string original_directory = @"C:\병신\data";
-            //string copy_directory = original_directory + " Copy";
-
-            //string[] files = Directory.GetFiles(copy_directory);
-            //string[] directories = Directory.GetDirectories(copy_directory);
-            //foreach (var file in files)
-            //{
-            //    var attributes = File.GetAttributes(file);
-            //    // Check if the file is read-only
-            //    bool isReadOnly = (attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly;
-            //    // Check other attributes as needed
-            //}
-
-            //foreach (var dir in directories)
-            //{
-            //    var attributes = File.GetAttributes(dir);
-            //    // Check if the directory is read-only
-            //    bool isReadOnly = (attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly;
-            //    // Check other attributes as needed
-            //}
-
-            //try
-            //{
-            //    if (Directory.Exists(copy_directory))
-            //    {
-            //        Directory.Delete(copy_directory, true);
-            //    }
-            //}
-            //catch (UnauthorizedAccessException ex)
-            //{
-            //    MessageBox.Show($"Access denied: {ex.Message}");
-            //    return;
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show($"An error occurred: {ex.Message}");
-            //    return;
-            //}
-
-            //Directory.CreateDirectory(copy_directory);
-            //FileSystem.CopyDirectory(original_directory, copy_directory);
 
             네이버_업종(); // 1 분
             네이버_테마(1); // 1 분
@@ -1329,11 +1283,10 @@ namespace Pre_Processor
             통계_지수();
             상관계산(); // 12 분 
 
+            // Delete "data work" & copy "data" to "data work"
             copy_directory = original_directory + " work";
-
             if (Directory.Exists(copy_directory))
                 Directory.Delete(copy_directory, true);
-
             Directory.CreateDirectory(copy_directory);
             Library.CopyDirectory(original_directory, copy_directory);
         }
