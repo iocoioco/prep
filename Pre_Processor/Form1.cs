@@ -738,6 +738,10 @@ namespace Pre_Processor
 
             var selected1000Stocks = Library.SelectTop1000Stocks();
 
+            var LeverageList = new List<string> { "KODEX 레버리지", "KODEX 코스닥150레버리지" };
+            var InverseList = new List<string> { "KODEX 200선물인버스2X", "KODEX 코스닥150선물인버스" };
+            var IndexList = LeverageList.Concat(InverseList).ToList();
+            selected1000Stocks.AddRange(IndexList);
 
             for (int i = 0; i < selected1000Stocks.Count; i++)
             {
@@ -1257,46 +1261,65 @@ namespace Pre_Processor
         private void button10_Click(object sender, EventArgs e)
         {
             string original_directory = @"C:\병신\data";
-            string copy_directory = original_directory + " Copy";
+            string copy_directory = original_directory + " work";
 
-            string[] files = Directory.GetFiles(copy_directory);
-            string[] directories = Directory.GetDirectories(copy_directory);
-            foreach (var file in files)
-            {
-                var attributes = File.GetAttributes(file);
-                // Check if the file is read-only
-                bool isReadOnly = (attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly;
-                // Check other attributes as needed
-            }
-
-            foreach (var dir in directories)
-            {
-                var attributes = File.GetAttributes(dir);
-                // Check if the directory is read-only
-                bool isReadOnly = (attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly;
-                // Check other attributes as needed
-            }
-
-            try
-            {
-                if (Directory.Exists(copy_directory))
-                {
-                    Directory.Delete(copy_directory, true);
-                }
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                MessageBox.Show($"Access denied: {ex.Message}");
-                return;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred: {ex.Message}");
-                return;
-            }
+            if (Directory.Exists(copy_directory))
+                Directory.Delete(copy_directory, true);
 
             Directory.CreateDirectory(copy_directory);
-            FileSystem.CopyDirectory(original_directory, copy_directory);
+            Library.CopyDirectory(original_directory, copy_directory);
+
+      
+            copy_directory = original_directory + " copy";
+
+            if (Directory.Exists(copy_directory))
+                Directory.Delete(copy_directory, true);
+
+            Directory.CreateDirectory(copy_directory);
+            Library.CopyDirectory(original_directory, copy_directory);
+
+
+            //string original_directory = @"C:\병신\data";
+            //string copy_directory = original_directory + " Copy";
+
+            //string[] files = Directory.GetFiles(copy_directory);
+            //string[] directories = Directory.GetDirectories(copy_directory);
+            //foreach (var file in files)
+            //{
+            //    var attributes = File.GetAttributes(file);
+            //    // Check if the file is read-only
+            //    bool isReadOnly = (attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly;
+            //    // Check other attributes as needed
+            //}
+
+            //foreach (var dir in directories)
+            //{
+            //    var attributes = File.GetAttributes(dir);
+            //    // Check if the directory is read-only
+            //    bool isReadOnly = (attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly;
+            //    // Check other attributes as needed
+            //}
+
+            //try
+            //{
+            //    if (Directory.Exists(copy_directory))
+            //    {
+            //        Directory.Delete(copy_directory, true);
+            //    }
+            //}
+            //catch (UnauthorizedAccessException ex)
+            //{
+            //    MessageBox.Show($"Access denied: {ex.Message}");
+            //    return;
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"An error occurred: {ex.Message}");
+            //    return;
+            //}
+
+            //Directory.CreateDirectory(copy_directory);
+            //FileSystem.CopyDirectory(original_directory, copy_directory);
 
             네이버_업종(); // 1 분
             네이버_테마(1); // 1 분
@@ -1305,6 +1328,14 @@ namespace Pre_Processor
             통계();
             통계_지수();
             상관계산(); // 12 분 
+
+            copy_directory = original_directory + " work";
+
+            if (Directory.Exists(copy_directory))
+                Directory.Delete(copy_directory, true);
+
+            Directory.CreateDirectory(copy_directory);
+            Library.CopyDirectory(original_directory, copy_directory);
         }
 
         private void 프돈외기()

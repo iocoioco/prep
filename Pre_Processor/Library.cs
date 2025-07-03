@@ -31,6 +31,24 @@ namespace Pre_Processor
         CPSYSDIBLib.CpSvr7254 _cpsvr7254 = new CPSYSDIBLib.CpSvr7254();
         CPSYSDIBLib.CpSvrNew7216 _cpsvrNew7216 = new CPSYSDIBLib.CpSvrNew7216();
 
+        public static void CopyDirectory(string sourceDir, string destinationDir, bool overwrite = true)
+        {
+            Directory.CreateDirectory(destinationDir);
+
+            foreach (var file in Directory.GetFiles(sourceDir))
+            {
+                string destFile = Path.Combine(destinationDir, Path.GetFileName(file));
+                File.Copy(file, destFile, overwrite);
+            }
+
+            foreach (var dir in Directory.GetDirectories(sourceDir))
+            {
+                string destSubDir = Path.Combine(destinationDir, Path.GetFileName(dir));
+                CopyDirectory(dir, destSubDir, overwrite);
+            }
+        }
+
+
         public static (string avg, string std) CalcStats(List<double> list)
         {
             if (list.Count == 0)
