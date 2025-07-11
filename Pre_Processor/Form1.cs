@@ -1260,20 +1260,12 @@ namespace Pre_Processor
 
         private void button10_Click(object sender, EventArgs e)
         {
-            // Delete "data work" & copy "data" to "data work"
-            string original_directory = @"C:\병신\data";
-            string copy_directory = original_directory + " work";
-            if (Directory.Exists(copy_directory))
-                Directory.Delete(copy_directory, true);
-            Directory.CreateDirectory(copy_directory);
-            Library.CopyDirectory(original_directory, copy_directory);
+            string originalDirectory = @"C:\병신\data work";
+            string copyDirectory = @"C:\병신\data";
+            DirectoryHandler.DeleteAndCopyDirectory(originalDirectory, copyDirectory);
 
-            // Delete "data copy" & copy "data" to "data copy"
-            copy_directory = original_directory + " copy";
-            if (Directory.Exists(copy_directory))
-                Directory.Delete(copy_directory, true);
-            Directory.CreateDirectory(copy_directory);
-            Library.CopyDirectory(original_directory, copy_directory);
+            copyDirectory = @"C:\병신\data copy";
+            DirectoryHandler.DeleteAndCopyDirectory(originalDirectory, copyDirectory);
 
             네이버_업종(); // 1 분
             네이버_테마(1); // 1 분
@@ -1283,12 +1275,9 @@ namespace Pre_Processor
             통계_지수();
             상관계산(); // 12 분 
 
-            // Delete "data work" & copy "data" to "data work"
-            copy_directory = original_directory + " work";
-            if (Directory.Exists(copy_directory))
-                Directory.Delete(copy_directory, true);
-            Directory.CreateDirectory(copy_directory);
-            Library.CopyDirectory(original_directory, copy_directory);
+            originalDirectory = @"C:\병신\data";
+            copyDirectory = @"C:\병신\data work";
+            DirectoryHandler.DeleteAndCopyDirectory(originalDirectory, copyDirectory);
         }
 
         private void 프돈외기()
