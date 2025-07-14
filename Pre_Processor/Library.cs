@@ -1,4 +1,5 @@
 ﻿
+using CPFORETRADELib;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -579,7 +580,7 @@ namespace Pre_Processor
                 File.Delete(path);
 
             Stream FS = new FileStream(path, FileMode.CreateNew, FileAccess.Write);
-            StreamWriter sw = new StreamWriter(FS, System.Text.Encoding.Default);
+            StreamWriter sw = new StreamWriter(FS, System.Text.Encoding.UTF8);
 
             foreach (string stockname1 in sL)
             {
@@ -590,7 +591,14 @@ namespace Pre_Processor
                     continue;
                 }
 
-                List<string> lines = File.ReadLines(path).Reverse().Take(ArrayLength).ToList();
+                List<string> lines = new List<String>();
+                bool beforeMarket = DateTime.Now.TimeOfDay < new TimeSpan(9, 0, 0);
+                if(beforeMarket)
+                    lines = File.ReadLines(path).Reverse().Skip(1).Take(ArrayLength).ToList();
+                else
+                    lines = File.ReadLines(path).Reverse().Take(ArrayLength).ToList();
+
+
                 if (lines.Count != ArrayLength) // Array Length
                 {
                     wr.wt(lines.Count.ToString() + " days : " + stockname1);
@@ -634,8 +642,13 @@ namespace Pre_Processor
                     {
                         continue;
                     }
+                   
+                    //beforeMarket = DateTime.Now.TimeOfDay < new TimeSpan(9, 0, 0);
+                    if (beforeMarket)
+                        lines = File.ReadLines(path).Reverse().Skip(1).Take(ArrayLength).ToList();
+                    else
+                        lines = File.ReadLines(path).Reverse().Take(ArrayLength).ToList();
 
-                    lines = File.ReadLines(path).Reverse().Take(ArrayLength).ToList();
                     if (lines.Count != ArrayLength) // Array Length
                     {
                         continue;

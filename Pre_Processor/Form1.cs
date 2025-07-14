@@ -500,7 +500,7 @@ namespace Pre_Processor
 
             _variable[0] = "일"; // 일, 주, 월 중 하나 입력
             _variable[1] = "700"; // 오늘부터 과거로 가면서 최대갯수 
-            _Stock_Chart_일주월_stockChart();
+            _Stock_Chart_일주월_stockChart(totalStocksToProcede);
 
 
 
@@ -584,14 +584,14 @@ namespace Pre_Processor
 
         }
 
-        public void _Stock_Chart_일주월_stockChart()
+        public void _Stock_Chart_일주월_stockChart(List<string> totalStocksToProcede)
         {
 
 
-            for (int i = 0; i < _gl.Count; i++)
+            for (int i = 0; i < totalStocksToProcede.Count; i++)
             {
 
-                string code = _cpstockcode.NameToCode(_gl[i]);
+                string code = _cpstockcode.NameToCode(totalStocksToProcede[i]);
                 if (code.Length < 7)
                 {
                     continue;
