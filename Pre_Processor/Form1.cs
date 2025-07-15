@@ -1745,7 +1745,7 @@ namespace Pre_Processor
                     for (int j = 1; j < nrow; j++)
                     {
                         double interval_by_seconds = ms.total_Seconds(x[j - 1, 0], x[j, 0]);
-                        if (interval_by_seconds > 75.0 || interval_by_seconds < 45.0) // interval_by_seconds larger than 70 seconds, then skip
+                        if (interval_by_seconds > 75.0 || interval_by_seconds < 45.0) // interval_by_seconds larger than 70 seconds
                         {
                             continue;
                         }

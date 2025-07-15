@@ -592,8 +592,8 @@ namespace Pre_Processor
                 }
 
                 List<string> lines = new List<String>();
-                bool beforeMarket = DateTime.Now.TimeOfDay < new TimeSpan(9, 0, 0);
-                if(beforeMarket)
+                bool beforeMarketHour = DateTime.Now.TimeOfDay < new TimeSpan(9, 0, 0);
+                if(beforeMarketHour)
                     lines = File.ReadLines(path).Reverse().Skip(1).Take(ArrayLength).ToList();
                 else
                     lines = File.ReadLines(path).Reverse().Take(ArrayLength).ToList();
@@ -644,7 +644,7 @@ namespace Pre_Processor
                     }
                    
                     //beforeMarket = DateTime.Now.TimeOfDay < new TimeSpan(9, 0, 0);
-                    if (beforeMarket)
+                    if (beforeMarketHour)
                         lines = File.ReadLines(path).Reverse().Skip(1).Take(ArrayLength).ToList();
                     else
                         lines = File.ReadLines(path).Reverse().Take(ArrayLength).ToList();
