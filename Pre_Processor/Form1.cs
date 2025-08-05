@@ -1617,6 +1617,8 @@ namespace Pre_Processor
                 double value = 0.0;
 
                 int 전일종가 = rd.read_전일종가(stock);
+                if (전일종가 == 0)
+                    continue;
                 double MoneyFactor = 전일종가 / g.천만원;
 
                 int DaysProcessed = 0;
@@ -1624,7 +1626,7 @@ namespace Pre_Processor
 
                 for (int i = end_date; i >= start_date; i--) // 20 days from successful ReadStockMinute
                 {
-                    if (DaysProcessed > 20)
+                    if (DaysProcessed >= 20)
                         break;
 
                     g.date = i;
@@ -1642,7 +1644,7 @@ namespace Pre_Processor
                         if (interval_by_seconds > 70.0 || interval_by_seconds < 50.0) // interval for seconds, 
                             continue;
 
-                        value = (double)(x[j, 4] - x[j - 1, 4] + x[j, 5] - x[j - 1, 5]) * MoneyFactor; // 
+                        value = (double)(x[j, 4] - x[j - 1, 4] + x[j, 5] - x[j - 1, 5]) * MoneyFactor; // 프돈 + 외돈
                         if (value > 0.001) // positive side only
                             푀분.Add(value);
                         value = (double)(x[j, 7] - x[j - 1, 7]) * MoneyFactor;

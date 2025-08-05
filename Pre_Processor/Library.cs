@@ -497,7 +497,8 @@ namespace Pre_Processor
 
                 for (int i = 0; i < inc - 1; i++)
                 {
-                    RateRiseFirst[i] = (values[i + 1] - values[i]) / values[i];
+                    RateRiseFirst[i] = values[i] == 0 ? 0 : (values[i + 1] - values[i]) / values[i];
+
                 }
 
                 var stocks = new List<Tuple<double, string>> { };
@@ -511,7 +512,7 @@ namespace Pre_Processor
                         continue;
                     }
 
-                    if (stockname1 == stockname2 || !File.Exists(path))
+                    if (stockname1 == stockname2)
                     {
                         continue;
                     }
@@ -537,7 +538,8 @@ namespace Pre_Processor
 
                     for (int i = 0; i < inc - 1; i++)
                     {
-                        RateRiseSecond[i] = (values[i + 1] - values[i]) / values[i];
+                        RateRiseSecond[i] = values[i] == 0 ? 0 : (values[i + 1] - values[i]) / values[i];
+                 
                     }
 
                     stocks.Add(Tuple.Create(wk.PearsonCorrelationCalculation(RateRiseFirst, RateRiseSecond), stockname2));
@@ -558,7 +560,7 @@ namespace Pre_Processor
                     else
                         sw.WriteLine("{0}\t{1}", t, item.Item2);
 
-                    if (inc++ > PrintLength) { break; }
+                    if (inc++ >= PrintLength) { break; }
                 }
                 sw.WriteLine();
             }
@@ -623,7 +625,8 @@ namespace Pre_Processor
                 double[] RateRiseFirst = new double[inc - 1];
                 for (int i = 0; i < inc - 1; i++)
                 {
-                    RateRiseFirst[i] = (values[i + 1] - values[i]) / values[i];
+                    RateRiseFirst[i] = values[i] == 0 ? 0 : (values[i + 1] - values[i]) / values[i];
+           
                 }
                 RankFirst = GetRanks(RateRiseFirst);
 
@@ -671,7 +674,8 @@ namespace Pre_Processor
                     double[] RateRiseSecond = new double[inc - 1];
                     for (int i = 0; i < inc - 1; i++)
                     {
-                        RateRiseSecond[i] = (values[i + 1] - values[i]) / values[i];
+                        RateRiseSecond[i] = values[i] == 0 ? 0 : (values[i + 1] - values[i]) / values[i
+               
                     }
                     RankSecond = GetRanks(RateRiseSecond);
 
