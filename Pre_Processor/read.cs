@@ -131,7 +131,7 @@ namespace Pre_Processor
        
         public static double read_시총(string stock)
         {
-            string[] grlines = File.ReadAllLines(@"C:\병신\data\시총.txt", Encoding.Default);
+            string[] grlines = File.ReadAllLines(@"C:\BJS\data\시총.txt", Encoding.Default);
             foreach (string line in grlines)
             {
                 string[] words = line.Split(' ');
@@ -148,7 +148,7 @@ namespace Pre_Processor
         {
             List<string> gl_list = new List<string>();
 
-            string filename = @"C:\병신\data\제외.txt"; ;
+            string filename = @"C:\BJS\data\제외.txt"; ;
 
             string[] grlines = File.ReadAllLines(filename);
 
@@ -217,7 +217,7 @@ namespace Pre_Processor
                 date = Convert.ToInt32(now.ToString("yyyyMMdd"));
             }
 
-            string file = @"C:\병신\분\" + date.ToString() + "\\" + stock + ".txt";
+            string file = @"C:\BJS\분\" + date.ToString() + "\\" + stock + ".txt";
             if (!File.Exists(file))
             {
                 return 0;
@@ -312,7 +312,7 @@ namespace Pre_Processor
 
         public static int read_전일종가_전일거래액_천만원(string stock)
         {
-            string path = @"C:\병신\data\일\" + stock + ".txt";
+            string path = @"C:\BJS\data\일\" + stock + ".txt";
             if (!File.Exists(path))
             {
                 return -1;
@@ -329,7 +329,7 @@ namespace Pre_Processor
         public static int read_전일종가(string stock)
         {
 
-            string path = @"C:\병신\data\일\" + stock + ".txt";
+            string path = @"C:\BJS\data\일\" + stock + ".txt";
             if (!File.Exists(path))
             {
                 return -1;
@@ -347,7 +347,7 @@ namespace Pre_Processor
 
             List<string> gl_list = new List<string>();
 
-            string filepath = @"C:\병신\data\그룹_네이버_업종.txt";
+            string filepath = @"C:\BJS\data\그룹_네이버_업종.txt";
             if (!File.Exists(filepath))
             {
                 return gl_list;

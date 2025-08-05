@@ -210,7 +210,7 @@ namespace Pre_Processor
 
             string path = "";
 
-            path = @"C:\병신\틱\";
+            path = @"C:\BJS\틱\";
             path = path + _workingDay;
 
             bool exists = Directory.Exists(path);
@@ -277,7 +277,7 @@ namespace Pre_Processor
                 {
                     string path = "";
 
-                    path = @"C:\병신\분\";
+                    path = @"C:\BJS\분\";
                     path = path + _workingDay;
 
                     bool exists = System.IO.Directory.Exists(path);
@@ -349,7 +349,7 @@ namespace Pre_Processor
 
             string path = "";
 
-            path = @"C:\병신\분\";
+            path = @"C:\BJS\분\";
             path = path + _workingDay;
 
             bool exists = System.IO.Directory.Exists(path);
@@ -521,7 +521,7 @@ namespace Pre_Processor
 
         public void _Stock_Chart_일주월_stockChart_post()
         {
-            string path = @"C:\병신\data\일";
+            string path = @"C:\BJS\data\일";
             if (!Directory.Exists(path))
             {
                 return;
@@ -666,13 +666,13 @@ namespace Pre_Processor
             switch (_variable[0])
             {
                 case "일":
-                    path = @"C:\병신\data\일\";
+                    path = @"C:\BJS\data\일\";
                     break;
                 case "주":
-                    path = @"C:\병신\data\주\";
+                    path = @"C:\BJS\data\주\";
                     break;
                 case "월":
-                    path = @"C:\병신\data\월\";
+                    path = @"C:\BJS\data\월\";
                     break;
                 default:
                     break;
@@ -728,7 +728,7 @@ namespace Pre_Processor
 
         public void _Stock_Chart_시총_stockChart()
         {
-            string file = @"C:\병신\data\시총.txt";
+            string file = @"C:\BJS\data\시총.txt";
 
             if (File.Exists(file))
                 File.Delete(file);
@@ -784,7 +784,7 @@ namespace Pre_Processor
             string text1 = _Stock_Chart_시총.GetDibMsg1();
             string text2 = _Stock_Chart_시총.GetDibMsg2();
 
-            Stream FS = new FileStream(@"C:\병신\data\시총.txt", FileMode.Append, FileAccess.Write);
+            Stream FS = new FileStream(@"C:\BJS\data\시총.txt", FileMode.Append, FileAccess.Write);
             StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
 
             int count = (int)_Stock_Chart_시총.GetHeaderValue(1);
@@ -831,7 +831,7 @@ namespace Pre_Processor
             //_gl = Library.read_그룹4(Gl);
             //_gl = Library.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
             _gl = Library.read_그룹_네이버_업종(GL);
-            string path = @"C:\병신\그룹_" + textBox2.Text + ".txt";
+            string path = @"C:\BJS\그룹_" + textBox2.Text + ".txt";
             if (File.Exists(path))
                 File.Delete(path);
 
@@ -889,7 +889,7 @@ namespace Pre_Processor
             string text2 = _cpsvr7254.GetDibMsg2();
 
             string code = _cpsvr7254.GetHeaderValue(0);
-            string path = @"C:\병신\매\" + _cm.CodeToName(code) + ".txt";
+            string path = @"C:\BJS\매\" + _cm.CodeToName(code) + ".txt";
 
             if (File.Exists(path))
                 File.Delete(path);
@@ -914,7 +914,7 @@ namespace Pre_Processor
         {
             var list = Library.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
 
-            string path = @"C:\병신\" + "그룹" + textBox2.Text + ".txt";
+            string path = @"C:\BJS\" + "그룹" + textBox2.Text + ".txt";
 
             Stream FS = new FileStream(path, FileMode.Create, FileAccess.Write);
             StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
@@ -946,12 +946,12 @@ namespace Pre_Processor
             var doc = new HtmlAgilityPack.HtmlDocument();
             HtmlAgilityPack.HtmlWeb web = new HtmlAgilityPack.HtmlWeb();
 
-            string file = @"C:\병신\data\" + "그룹_네이버_업종" + ".txt";
+            string file = @"C:\BJS\data\" + "그룹_네이버_업종" + ".txt";
             if (File.Exists(file))
             {
                 File.Delete(file);
             }
-            Stream FS = new FileStream(@"C:\병신\data\" + "그룹_네이버_업종" + ".txt", FileMode.CreateNew, FileAccess.Write);
+            Stream FS = new FileStream(@"C:\BJS\data\" + "그룹_네이버_업종" + ".txt", FileMode.CreateNew, FileAccess.Write);
             StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
 
             int[] themeRemove = new int[] { 25 }; // 환율하락수혜
@@ -1052,15 +1052,15 @@ namespace Pre_Processor
             var doc = new HtmlAgilityPack.HtmlDocument();
             HtmlAgilityPack.HtmlWeb web = new HtmlAgilityPack.HtmlWeb();
 
-            string file = @"C:\병신\data\" + "그룹_네이버_업종" + ".txt";
+            string file = @"C:\BJS\data\" + "그룹_네이버_업종" + ".txt";
             if (File.Exists(file))
             {
                 File.Delete(file);
             }
-            Stream FS = new FileStream(@"C:\병신\data\" + "그룹_네이버_업종" + ".txt", FileMode.CreateNew, FileAccess.Write);
+            Stream FS = new FileStream(@"C:\BJS\data\" + "그룹_네이버_업종" + ".txt", FileMode.CreateNew, FileAccess.Write);
             StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
 
-            var lines = File.ReadAllLines(@"C:\병신\data\" + "업종_url" + ".txt");
+            var lines = File.ReadAllLines(@"C:\BJS\data\" + "업종_url" + ".txt");
 
             int count = 0;
             int upjong_count = 0;
@@ -1092,7 +1092,7 @@ namespace Pre_Processor
             textBox6.Text = upjong_count.ToString() + "/" + count.ToString() + " are Processed";
 
 
-            //File.WriteAllText(@"C:\병신\" + "temp" + ".txt", all_stock);
+            //File.WriteAllText(@"C:\BJS\" + "temp" + ".txt", all_stock);
 
             //var table = doc.DocumentNode.SelectSingleNode("//table"); // ok
 
@@ -1147,7 +1147,7 @@ namespace Pre_Processor
             var doc = new HtmlAgilityPack.HtmlDocument();
             HtmlAgilityPack.HtmlWeb web = new HtmlAgilityPack.HtmlWeb();
 
-            string file_0 = @"C:\병신\data\" + "그룹_네이버_테마" + ".txt";
+            string file_0 = @"C:\BJS\data\" + "그룹_네이버_테마" + ".txt";
             if (File.Exists(file_0))
             {
                 File.Delete(file_0);
@@ -1158,7 +1158,7 @@ namespace Pre_Processor
 
 
 
-            string file_1 = @"C:\병신\data\" + "그룹_네이버_테마_번호" + ".txt";
+            string file_1 = @"C:\BJS\data\" + "그룹_네이버_테마_번호" + ".txt";
             if (File.Exists(file_1))
             {
                 File.Delete(file_1);
@@ -1260,11 +1260,11 @@ namespace Pre_Processor
 
         private void button10_Click(object sender, EventArgs e)
         {
-            string originalDirectory = @"C:\병신\data work";
-            string copyDirectory = @"C:\병신\data";
+            string originalDirectory = @"C:\BJS\data work";
+            string copyDirectory = @"C:\BJS\data";
             DirectoryHandler.DeleteAndCopyDirectory(originalDirectory, copyDirectory);
 
-            copyDirectory = @"C:\병신\data copy";
+            copyDirectory = @"C:\BJS\data copy";
             DirectoryHandler.DeleteAndCopyDirectory(originalDirectory, copyDirectory);
 
             네이버_업종(); // 1 분
@@ -1275,8 +1275,8 @@ namespace Pre_Processor
             통계_지수();
             상관계산(); // 12 분 
 
-            originalDirectory = @"C:\병신\data";
-            copyDirectory = @"C:\병신\data work";
+            originalDirectory = @"C:\BJS\data";
+            copyDirectory = @"C:\BJS\data work";
             DirectoryHandler.DeleteAndCopyDirectory(originalDirectory, copyDirectory);
         }
 
@@ -1297,10 +1297,10 @@ namespace Pre_Processor
             if (HHmm <= 1530)
                 reference_date--; // 당일 데이터가 저장되어 있지 않아 전일 기준 Processing
 
-            string[] grlines = File.ReadAllLines(@"C:\병신\data\시총.txt", Encoding.Default);
+            string[] grlines = File.ReadAllLines(@"C:\BJS\data\시총.txt", Encoding.Default);
 
             // 저장파일 "프돈외기" 있으면 삭제 후 재생성
-            string path = @"C:\병신\data\프돈외기.txt";
+            string path = @"C:\BJS\data\프돈외기.txt";
             if (File.Exists(path))
                 File.Delete(path);
 
@@ -1314,7 +1314,7 @@ namespace Pre_Processor
             //sw.Write(str);
 
 
-            string temp_path = @"C:\병신\temp.txt";
+            string temp_path = @"C:\BJS\temp.txt";
             if (File.Exists(temp_path))
                 File.Delete(temp_path);
 
@@ -1442,7 +1442,7 @@ namespace Pre_Processor
 
 
 
-            string path = @"C:\병신\평점.txt";
+            string path = @"C:\BJS\평점.txt";
             var lines = File.ReadAllLines(path, Encoding.Default);
 
 
@@ -1521,12 +1521,12 @@ namespace Pre_Processor
 
             if (e.ColumnIndex == 5)
             {
-                string file = @"C:\병신\" + "평점" + ".txt";
+                string file = @"C:\BJS\" + "평점" + ".txt";
                 if (File.Exists(file))
                 {
                     File.Delete(file);
                 }
-                Stream FS = new FileStream(@"C:\병신\" + "평점" + ".txt", FileMode.CreateNew, FileAccess.Write);
+                Stream FS = new FileStream(@"C:\BJS\" + "평점" + ".txt", FileMode.CreateNew, FileAccess.Write);
                 StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
 
                 for (int k = 0; k < dtb1.Rows.Count; k++)
@@ -1584,7 +1584,7 @@ namespace Pre_Processor
             int start_date = 20220302; // MOD
             int end_date = Convert.ToInt32(DateTime.Now.Date.ToString("yyyyMMdd"));
 
-            string path = @"C:\병신\data\통계.txt";
+            string path = @"C:\BJS\data\통계.txt";
 
             if (File.Exists(path))
                 File.Delete(path);
@@ -1598,7 +1598,7 @@ namespace Pre_Processor
 
                 string str = stock;
 
-                string filePath = @"C:\병신\data\일\" + stock + ".txt";
+                string filePath = @"C:\BJS\data\일\" + stock + ".txt";
                 List<int> highest = new List<int>();
                 str += "\t" + rd.FindHighestClose(filePath, 20).ToString();
                 str += "\t" + rd.FindHighestClose(filePath, 60).ToString();
@@ -1704,7 +1704,7 @@ namespace Pre_Processor
             int start_date = 20220302; // MOD
             int end_date = Convert.ToInt32(DateTime.Now.Date.ToString("yyyyMMdd"));
 
-            string path = @"C:\병신\data\통계_지수.txt";
+            string path = @"C:\BJS\data\통계_지수.txt";
 
             if (File.Exists(path))
                 File.Delete(path);

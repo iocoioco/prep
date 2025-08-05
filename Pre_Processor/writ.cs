@@ -11,7 +11,7 @@ namespace Pre_Processor
     {
         public static void create_empty_temp_file()
         {
-            string path = @"C:\병신\temp.txt";
+            string path = @"C:\BJS\temp.txt";
 
             if (File.Exists(path))
                 File.Delete(path);
@@ -23,7 +23,7 @@ namespace Pre_Processor
         public static void w(double[] a)
         {
 
-                string path = @"C:\병신\temp.txt";
+                string path = @"C:\BJS\temp.txt";
                 StreamWriter sw = File.AppendText(path);
 
                 string str = "";
@@ -41,7 +41,7 @@ namespace Pre_Processor
         public static void w(List<List<double>> double_list)
         {
       
-                string path = @"C:\병신\temp.txt";
+                string path = @"C:\BJS\temp.txt";
                 StreamWriter sw = File.AppendText(path);
 
                 string str = "";
@@ -60,7 +60,7 @@ namespace Pre_Processor
         {
   
                 string time_now = DateTime.Now.ToString("hh:mm:ss.ffff");
-                string path = @"C:\병신\temp.txt";
+                string path = @"C:\BJS\temp.txt";
                 StreamWriter sw = File.AppendText(path);
 
                 //sw.WriteLine("{0}\t{1}", t, time_now);
@@ -74,7 +74,7 @@ namespace Pre_Processor
         {
   
                 string time_now = DateTime.Now.ToString("hh:mm:ss.ffff");
-                string path = @"C:\병신\temp.txt";
+                string path = @"C:\BJS\temp.txt";
                 StreamWriter sw = File.AppendText(path);
 
                 // sw.WriteLine(time_now);
@@ -97,7 +97,7 @@ namespace Pre_Processor
         public static void w(List<string> GL_title, List<List<string>> GL)
         {
 
-                string path = @"C:\병신\temp.txt";
+                string path = @"C:\BJS\temp.txt";
                 StreamWriter sw = File.AppendText(path);
 
                 string str = "";
@@ -119,7 +119,7 @@ namespace Pre_Processor
         public static void w(int[,] x, int start_line, int end_line)
         {
 
-                string path = @"C:\병신\temp.txt";
+                string path = @"C:\BJS\temp.txt";
                 StreamWriter sw = File.AppendText(path);
 
                 for (int i = start_line; i <= end_line; i++)
@@ -142,7 +142,7 @@ namespace Pre_Processor
         {
 
                 string time_now = DateTime.Now.ToString("hh:mm:ss.ffff");
-                string path = @"C:\병신\temp.txt";
+                string path = @"C:\BJS\temp.txt";
                 StreamWriter sw = File.AppendText(path);
 
 
@@ -155,7 +155,7 @@ namespace Pre_Processor
         {
 
                 string time_now = DateTime.Now.ToString("hh:mm:ss.ffff");
-                string path = @"C:\병신\temp.txt";
+                string path = @"C:\BJS\temp.txt";
                 StreamWriter sw = File.AppendText(path);
 
                 sw.WriteLine(time_now);
