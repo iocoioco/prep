@@ -1575,125 +1575,201 @@ namespace Pre_Processor
         // 20일전고, 60일 전고, 120일 전고, 240일 전고
         // 푀분평균, 푀분편차, 거분평균, 거분편차, 배차평균, 배차편차,
         // 배합평균, 배합편차, 푀누평균, 푀누편차, 종누평균, 종누편차
-        private void 통계() 
+        private void 통계()
         {
-            // rd.read_변수();
             textBox6.Text = "통계 진행 중";
             var selected1000Stocks = Library.SelectTop1000Stocks();
 
-            int start_date = 20220302; // MOD
+            int start_date = 20220302;
             int end_date = Convert.ToInt32(DateTime.Now.Date.ToString("yyyyMMdd"));
-
-            string path = @"C:\병신\data\통계.txt";
+            string path = @"C:\BJS\data\통계.txt";
 
             if (File.Exists(path))
                 File.Delete(path);
 
-            StreamWriter sw = File.CreateText(path);
-
-            foreach (var stock in selected1000Stocks) // 혼합 2 종목 빠져시 to-jsb 보다 2 종목 작음
+            using (StreamWriter sw = File.CreateText(path))
             {
-                if (stock.Contains("KODEX") || stock.Contains("혼합")) // actually not include these stocks
-                    continue;
-
-                string str = stock;
-
-                string filePath = @"C:\병신\data\일\" + stock + ".txt";
-                List<int> highest = new List<int>();
-                str += "\t" + rd.FindHighestClose(filePath, 20).ToString();
-                str += "\t" + rd.FindHighestClose(filePath, 60).ToString();
-                str += "\t" + rd.FindHighestClose(filePath, 120).ToString();
-                str += "\t" + rd.FindHighestClose(filePath, 240).ToString();
-
-                var 푀분 = new List<double>();
-                var 거분 = new List<double>();
-
-                var 배차 = new List<double>();
-                var 배합 = new List<double>();
-
-                var 푀누 = new List<double>();
-                var 종누 = new List<double>();
-
-                double value = 0.0;
-
-                int 전일종가 = rd.read_전일종가(stock);
-                double MoneyFactor = 전일종가 / g.천만원;
-
-                int DaysProcessed = 0;
-                int MinutesProcessed = 0;
-
-                for (int i = end_date; i >= start_date; i--) // 20 days from successful ReadStockMinute
+                foreach (var stock in selected1000Stocks)
                 {
-                    if (DaysProcessed > 20)
-                        break;
-
-                    g.date = i;
-
-                    int[,] x = new int[400, 12];
-                    int nrow = rd.ReadStockMinute(i, stock, x); // i -> date
-                    if (!rd.readStockMinuteCheck(nrow, x)) // check usability of minutes data 
+                    if (stock.Contains("KODEX") || stock.Contains("혼합"))
                         continue;
-                    else
-                        DaysProcessed++;
 
-                    for (int j = 1; j < nrow; j++) // from 9:00 
+                    string filePath = @"C:\BJS\data\일\" + stock + ".txt";
+                    if (!File.Exists(filePath))
+                        continue;
+
+                    string str = stock;
+                    str += "\t" + rd.FindHighestClose(filePath, 20).ToString();
+                    str += "\t" + rd.FindHighestClose(filePath, 60).ToString();
+                    str += "\t" + rd.FindHighestClose(filePath, 120).ToString();
+                    str += "\t" + rd.FindHighestClose(filePath, 240).ToString();
+
+                    var 푀분 = new List<double>();
+                    var 거분 = new List<double>();
+                    var 배차 = new List<double>();
+                    var 배합 = new List<double>();
+
+                    double value = 0.0;
+                    int 전일종가 = rd.read_전일종가(stock);
+                    if (전일종가 == 0)
+                        continue;
+                    double MoneyFactor = 전일종가 / g.천만원;
+
+                    int DaysProcessed = 0;
+                    int MinutesProcessed = 0;
+                    int TotalDaysChecked = 0;
+
+                    for (int i = end_date; i >= start_date; i--)
                     {
-                        double interval_by_seconds = ms.total_Seconds(x[j - 1, 0], x[j, 0]);
-                        if (interval_by_seconds > 70.0 || interval_by_seconds < 50.0) // interval for seconds, 
+                        if (!DateTime.TryParseExact(i.ToString(), "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out _))
                             continue;
 
-                        value = (double)(x[j, 4] - x[j - 1, 4] + x[j, 5] - x[j - 1, 5]) * MoneyFactor; // 
-                        if (value > 0.001) // positive side only
-                            푀분.Add(value);
-                        value = (double)(x[j, 7] - x[j - 1, 7]) * MoneyFactor;
-                        거분.Add(value);
+                        g.date = i;
+                        TotalDaysChecked++;
 
-                        배차.Add(x[j, 8] - x[j, 9]);
-                        배합.Add(x[j, 8] + x[j, 9]);
+                        int[,] x = new int[382, 12];
+                        int nrow = rd.ReadStockMinute(i, stock, x);
+                        if (nrow <= 1)
+                            continue;
 
-                        if (x[j, 0] / 100 == 1519)
+                        for (int j = 1; j < nrow; j++)
                         {
-                            var ProgramAndForeign = (x[j, 4] + x[j, 5]) * MoneyFactor;
-                            if (ProgramAndForeign > 0) // pisitve side only
-                                푀누.Add((x[j, 4] + x[j, 5]) * MoneyFactor);
-                            종누.Add(x[j, 7] * MoneyFactor);
+                            double interval = ms.total_Seconds(x[j - 1, 0], x[j, 0]);
+                            if (interval > 70.0 || interval < 50.0)
+                                continue;
+
+                            value = (double)(x[j, 4] - x[j - 1, 4] + x[j, 5] - x[j - 1, 5]) * MoneyFactor;
+                            if (value > 0.001)
+                                푀분.Add(value);
+
+                            value = (double)(x[j, 7] - x[j - 1, 7]) * MoneyFactor;
+                            거분.Add(value);
+
+                            배차.Add(x[j, 8] - x[j, 9]);
+                            배합.Add(x[j, 8] + x[j, 9]);
+
+                            MinutesProcessed++;
                         }
-                        MinutesProcessed++;
+
+                        if (DaysProcessed++ >= 30)
+                            break;
                     }
+
+                    if (MinutesProcessed <= 1000)
+                        continue;
+
+                    // 출력 줄 1: 종목명 + 최고가 정보
+                    sw.WriteLine(str);
+
+                    // 출력 줄 2~5: 기존 분봉 통계
+                    (var avg, var std) = Library.CalcStats(푀분);
+                    sw.WriteLine($"{푀분.Count}\t{avg:F2}\t{std:F2}");
+
+                    (avg, std) = Library.CalcStats(거분);
+                    sw.WriteLine($"{avg:F2}\t{std:F2}");
+
+                    (avg, std) = Library.CalcStats(배차);
+                    sw.WriteLine($"{avg:F2}\t{std:F2}");
+
+                    (avg, std) = Library.CalcStats(배합);
+                    sw.WriteLine($"{avg:F2}\t{std:F2}");
+
+                    // 출력 줄 6~8: 일봉 기반 통계
+                    // ✔ 아래는 새로운 변수 이름 사용
+                    double dAvg, dStd, dAvgF, dStdF, dAvgI, dStdI;
+                    CalcDailyStats(filePath, out dAvg, out dStd, out dAvgF, out dStdF, out dAvgI, out dStdI);
+                    sw.WriteLine($"{dAvg:F2}\t{dStd:F2}");
+                    sw.WriteLine($"{dAvgF:F2}\t{dStdF:F2}");
+                    sw.WriteLine($"{dAvgI:F2}\t{dStdI:F2}");
+                }
+            }
+
+            textBox6.Text = "통계 done";
+        }
+
+        private void CalcDailyStats(string filePath, out double 거래금액_Avg, out double 거래금액_Std,
+                            out double 외인_Avg, out double 외인_Std, out double 기관_Avg, out double 기관_Std)
+        {
+            거래금액_Avg = 거래금액_Std = 외인_Avg = 외인_Std = 기관_Avg = 기관_Std = 0;
+
+            var lines = File.ReadAllLines(filePath).Where(l => !string.IsNullOrWhiteSpace(l)).ToList();
+            if (lines.Count < 2) return;
+
+            var last = lines.Last().Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            if (!int.TryParse(last[4], out int 종가)) return;
+
+            var 거래List = new List<double>();
+            var 외인List = new List<double>();
+            var 기관List = new List<double>();
+
+            int i = lines.Count - 1;
+            int volumeSamples = 0;
+            int minSamples = 30;
+
+            while (i > 0 && (volumeSamples < 60 || 외인List.Count < minSamples || 기관List.Count < minSamples))
+            {
+                var curr = lines[i].Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                var prev = lines[i - 1].Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                if (curr.Length < 10 || prev.Length < 10) { i--; continue; }
+
+                if (volumeSamples < 60 && long.TryParse(curr[5], out long 거래량))
+                {
+                    거래List.Add(거래량 * 종가 / 10000000.0);
+                    volumeSamples++;
                 }
 
-                if (MinutesProcessed <= 100 && DaysProcessed != 20) // 분 데이터 숫자 100 이하 -> 계산하지 않음
-                    continue;
+                if (long.TryParse(curr[8], out long f_curr) && long.TryParse(prev[8], out long f_prev) && f_curr - f_prev > 0)
+                {
+                    외인List.Add((f_curr - f_prev) * 종가 / 10000000.0);
+                }
 
-                // 푀분
-                (var avg, var std) = Library.CalcStats(푀분);
-                str += $"\t{푀분.Count}\t{avg}\t{std}";
+                if (long.TryParse(curr[9], out long i_curr) && long.TryParse(prev[9], out long i_prev) && i_curr - i_prev > 0)
+                {
+                    기관List.Add((i_curr - i_prev) * 종가 / 10000000.0);
+                }
 
-
-                // 거분
-                (avg, std) = Library.CalcStats(거분);
-                str += $"\t{avg}\t{std}";
-
-                // 배차
-                (avg, std) = Library.CalcStats(배차);
-                str += $"\t{avg}\t{std}";
-
-                // 배합
-                (avg, std) = Library.CalcStats(배합);
-                str += $"\t{avg}\t{std}";
-
-                // 푀누
-                (avg, std) = Library.CalcStats(푀누);
-                str += $"\t{avg}\t{std}";
-
-                // 종누
-                (avg, std) = Library.CalcStats(종누);
-                str += $"\t{avg}\t{std}";
-
-                sw.WriteLine("{0}", str);
+                i--;
             }
-            sw.Close();
-            textBox6.Text = "통계 done";
+
+            if (거래List.Count > 0)
+            {
+                double avg = 거래List.Average();
+                double std = Math.Sqrt(거래List.Select(x => Math.Pow(x - avg, 2)).Average());
+                거래금액_Avg = avg;
+                거래금액_Std = std;
+            }
+            else
+            {
+                거래금액_Avg = 0;
+                거래금액_Std = 0;
+            }
+
+            if (외인List.Count > 0)
+            {
+                double avg = 외인List.Average(); // ✅ 수정됨
+                double std = Math.Sqrt(외인List.Select(x => Math.Pow(x - avg, 2)).Average()); // ✅
+                외인_Avg = avg;
+                외인_Std = std;
+            }
+            else
+            {
+                외인_Avg = 0;
+                외인_Std = 0;
+            }
+
+            if (기관List.Count > 0)
+            {
+                double avg = 기관List.Average(); // ✅ 수정됨
+                double std = Math.Sqrt(기관List.Select(x => Math.Pow(x - avg, 2)).Average()); // ✅
+                기관_Avg = avg;
+                기관_Std = std;
+            }
+            else
+            {
+                기관_Avg = 0;
+                기관_Std = 0;
+            }
+
         }
 
         private void 통계_지수() // MOD,  g.ogldata 1581, 통계 1573
