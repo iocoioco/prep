@@ -1685,7 +1685,7 @@ namespace Pre_Processor
             }
 
             textBox6.Text = "통계 done";
-        }
+        } 
 
         private void CalcDailyStats(string filePath, out double 거래금액_Avg, out double 거래금액_Std,
                             out double 외인_Avg, out double 외인_Std, out double 기관_Avg, out double 기관_Std)
