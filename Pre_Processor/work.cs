@@ -362,7 +362,7 @@ namespace Pre_Processor
             int days = 20;
             foreach (var stock in tsl)
             {
-                string path = @"C:\병신\data\일\" + stock + ".txt";
+                string path = @"C:\BJS\data\일\" + stock + ".txt";
                 if (!File.Exists(path))
                     continue;
 
@@ -410,7 +410,7 @@ namespace Pre_Processor
             int days = 20;
             foreach (var stock in tsl)
             {
-                string path = @"C:\병신\data\일\" + stock + ".txt";
+                string path = @"C:\BJS\data\일\" + stock + ".txt";
                 if (!File.Exists(path))
                     continue;
 
@@ -717,7 +717,7 @@ namespace Pre_Processor
         public static string calcurate_종목일중변동평균편차(string stock, int days, ref double avr, ref double dev,
                                     ref int avr_dealt, ref int min_dealt, ref int max_dealt, ref ulong 일평균거래량, ref int long_high)
         {
-            string path = @"C:\병신\data\일\" + stock + ".txt";
+            string path = @"C:\BJS\data\일\" + stock + ".txt";
             if (!File.Exists(path))
                 return "";
 
@@ -818,7 +818,7 @@ namespace Pre_Processor
     public static void read_외인기관일별매수동향(string stock, g.stock data)
     {
 
-    string path = @"C:\병신\매\" + stock + ".txt";
+    string path = @"C:\BJS\매\" + stock + ".txt";
     if (!File.Exists(path))
     {
         return;
@@ -840,7 +840,7 @@ namespace Pre_Processor
         inc++;
     }
 
-    path = @"C:\병신\일\" + stock + ".txt";
+    path = @"C:\BJS\일\" + stock + ".txt";
     if (!File.Exists(path))
         return;
 
@@ -888,7 +888,7 @@ namespace Pre_Processor
         public static ulong calculate_종목20일기준일평균거래량(string stock)
         {
             // Extract column 5 from stock filename
-            string filename = @"C:\병신\data\일\" + stock + ".txt";
+            string filename = @"C:\BJS\data\일\" + stock + ".txt";
             int[] c_id = new int[1]; // number of columns needed
             string[,] x = new string[1000, 1]; // array declaration
             List<double> alist = new List<double>();
@@ -987,7 +987,7 @@ namespace Pre_Processor
 
         public static int directory_분전후(int date_int, int updn, string stock)
         {
-            var subdirs = Directory.GetDirectories(@"C:\병신\분")
+            var subdirs = Directory.GetDirectories(@"C:\BJS\분")
                     .Select(Path.GetFileName).ToList();
 
             List<string> selected_subdirs = new List<string>();   // changing single list
@@ -1016,7 +1016,7 @@ namespace Pre_Processor
                     if (index == 0)
                         return -1;
                     date_string = selected_subdirs[index];
-                    if (File.Exists(Path.Combine(@"C:\병신\분\" + date_string, stock + ".txt")))
+                    if (File.Exists(Path.Combine(@"C:\BJS\분\" + date_string, stock + ".txt")))
                         return Convert.ToInt32(date_string);
                     else
                         index--;
@@ -1030,7 +1030,7 @@ namespace Pre_Processor
                     if (index == selected_subdirs.Count - 1)
                         return -1;
                     date_string = selected_subdirs[++index];
-                    if (File.Exists(Path.Combine(@"C:\병신\분\" + date_string, stock + ".txt")))
+                    if (File.Exists(Path.Combine(@"C:\BJS\분\" + date_string, stock + ".txt")))
                         return Convert.ToInt32(date_string);
                 }
             }
@@ -1042,7 +1042,7 @@ namespace Pre_Processor
                     if (index == 0)
                         return -1;
                     date_string = selected_subdirs[--index];
-                    if (File.Exists(Path.Combine(@"C:\병신\분\" + date_string, stock + ".txt")))
+                    if (File.Exists(Path.Combine(@"C:\BJS\분\" + date_string, stock + ".txt")))
                         return Convert.ToInt32(date_string);
                 }
             }
@@ -1053,7 +1053,7 @@ namespace Pre_Processor
 
         public static int directory_분전후(int date_int, int updn)
         {
-            var subdirs = Directory.GetDirectories(@"C:\병신\분")
+            var subdirs = Directory.GetDirectories(@"C:\BJS\분")
                     .Select(Path.GetFileName).ToList();
 
             List<string> selected_subdirs = new List<string>();   // changing single list
