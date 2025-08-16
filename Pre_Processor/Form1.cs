@@ -1678,9 +1678,16 @@ namespace Pre_Processor
                     // ✔ 아래는 새로운 변수 이름 사용
                     double dAvg, dStd, dAvgF, dStdF, dAvgI, dStdI;
                     CalcDailyStats(filePath, out dAvg, out dStd, out dAvgF, out dStdF, out dAvgI, out dStdI);
-                    sw.WriteLine($"{dAvg:F2}\t{dStd:F2}");
-                    sw.WriteLine($"{dAvgF:F2}\t{dStdF:F2}");
-                    sw.WriteLine($"{dAvgI:F2}\t{dStdI:F2}");
+                    sw.WriteLine($"{dAvg:F2}\t{dStd:F2}"); // 거래대금 (천만)
+                    sw.WriteLine($"{dAvgF:F2}\t{dStdF:F2}"); // 외인
+                    sw.WriteLine($"{dAvgI:F2}\t{dStdI:F2}"); // 기관 
+
+                    var stats = QuoteStatsLib.QuoteStatsCalculator.Compute(@"C:\BJS\호가변동자료", stock);
+
+                    sw.WriteLine($"{stats.BestAskMean:F0}\t{stats.BestAskStd:F0}"); // 최우선매도호가잔량
+                    sw.WriteLine($"{stats.BestBidMean:F0}\t{stats.BestBidStd:F0}"); // 최우선매수호가잔량
+                    sw.WriteLine($"{stats.TotalAskMean:F0}\t{stats.TotalAskStd:F0}"); // 총매도호가잔량
+                    sw.WriteLine($"{stats.TotalBidMean:F0}\t{stats.TotalBidStd:F0}"); // 총매수호가잔량
                 }
             }
 
@@ -1714,7 +1721,7 @@ namespace Pre_Processor
 
                 if (volumeSamples < 60 && long.TryParse(curr[5], out long 거래량))
                 {
-                    거래List.Add(거래량 * 종가 / 10000000.0);
+                    거래List.Add(거래량 * 종가 / 10000000.0); // 천만으로 나눔
                     volumeSamples++;
                 }
 

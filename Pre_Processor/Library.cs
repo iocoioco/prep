@@ -674,7 +674,7 @@ namespace Pre_Processor
                     double[] RateRiseSecond = new double[inc - 1];
                     for (int i = 0; i < inc - 1; i++)
                     {
-                        RateRiseSecond[i] = values[i] == 0 ? 0 : (values[i + 1] - values[i]) / values[i
+                        RateRiseSecond[i] = values[i] == 0 ? 0 : (values[i + 1] - values[i]) / values[i];
                
                     }
                     RankSecond = GetRanks(RateRiseSecond);
