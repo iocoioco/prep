@@ -1868,5 +1868,22 @@ namespace Pre_Processor
         {
             통계();
         }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void textBox6_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button15_Click(object sender, EventArgs e)
+        {
+            var start = "20250425";
+            var end = "20250912";
+            MinuteNormalizer.Run(start, end);
+        }
     }
 }

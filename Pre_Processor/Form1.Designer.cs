@@ -44,10 +44,11 @@
             this.button10 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.button12 = new System.Windows.Forms.Button();
             this.button13 = new System.Windows.Forms.Button();
             this.button14 = new System.Windows.Forms.Button();
+            this.IndexNormalizer = new System.Windows.Forms.Button();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -122,6 +123,7 @@
             this.textBox6.Size = new System.Drawing.Size(407, 35);
             this.textBox6.TabIndex = 8;
             this.textBox6.Text = "Processing Status";
+            this.textBox6.TextChanged += new System.EventHandler(this.textBox6_TextChanged);
             // 
             // textBox1
             // 
@@ -215,19 +217,6 @@
             this.button11.UseVisualStyleBackColor = true;
             this.button11.Click += new System.EventHandler(this.프돈외기);
             // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.ColumnHeadersVisible = false;
-            this.dataGridView1.Location = new System.Drawing.Point(118, 981);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.RowHeadersWidth = 82;
-            this.dataGridView1.RowTemplate.Height = 37;
-            this.dataGridView1.Size = new System.Drawing.Size(406, 117);
-            this.dataGridView1.TabIndex = 22;
-            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
-            // 
             // button12
             // 
             this.button12.Location = new System.Drawing.Point(155, 123);
@@ -260,15 +249,36 @@
             this.button14.UseVisualStyleBackColor = true;
             this.button14.Click += new System.EventHandler(this.통계_지수_Click);
             // 
+            // IndexNormalizer
+            // 
+            this.IndexNormalizer.Location = new System.Drawing.Point(833, 839);
+            this.IndexNormalizer.Name = "IndexNormalizer";
+            this.IndexNormalizer.Size = new System.Drawing.Size(324, 132);
+            this.IndexNormalizer.TabIndex = 26;
+            this.IndexNormalizer.Text = "Index Normalization";
+            this.IndexNormalizer.UseVisualStyleBackColor = true;
+            this.IndexNormalizer.Click += new System.EventHandler(this.button15_Click);
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(825, 1059);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowHeadersWidth = 82;
+            this.dataGridView1.RowTemplate.Height = 37;
+            this.dataGridView1.Size = new System.Drawing.Size(384, 84);
+            this.dataGridView1.TabIndex = 27;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1713, 1184);
+            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.IndexNormalizer);
             this.Controls.Add(this.button14);
             this.Controls.Add(this.button13);
             this.Controls.Add(this.button12);
-            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.button11);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.button10);
@@ -313,10 +323,11 @@
         private System.Windows.Forms.Button button10;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button11;
-        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button button12;
         private System.Windows.Forms.Button button13;
         private System.Windows.Forms.Button button14;
+        private System.Windows.Forms.Button IndexNormalizer;
+        private System.Windows.Forms.DataGridView dataGridView1;
     }
 }
 
