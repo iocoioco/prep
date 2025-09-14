@@ -1881,8 +1881,8 @@ namespace Pre_Processor
 
         private void button15_Click(object sender, EventArgs e)
         {
-            var start = "20250425";
-            var end = "20250912";
+            var start = "20250102";
+            var end = "20250424";
             MinuteNormalizer.Run(start, end);
         }
     }

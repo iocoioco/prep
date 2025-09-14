@@ -12,7 +12,7 @@ namespace Pre_Processor
     {
         // ===== 설정 =====
         public static string RootDir = @"C:\BJS\분";
-        public static string OutFile = @"C:\BJS\분\norm_result.txt";
+        public static string OutFile = @"C:\BJS\data work\norm_result.txt";
         public static int MinGapSec = 50, MaxGapSec = 70;
         public static int StartCalcHHMM = 904;
         public static int StartFeedHHMM = 903;
