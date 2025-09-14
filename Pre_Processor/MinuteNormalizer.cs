@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace BJS.MinNorm
+namespace Pre_Processor
 {
     public static class MinuteNormalizer
     {
