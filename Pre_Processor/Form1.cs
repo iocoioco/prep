@@ -1572,10 +1572,171 @@ namespace Pre_Processor
             프돈외기();
         }
 
+
+        // (같은 클래스 안 상단 또는 파일 하단에 작은 유틸 추가) 
+        // [ADD] 매우 작은 트리밍 유틸 — 표본이 적으면 원본을 그대로 반환하여 동작 동일성 보장
+        private static List<double> TrimPercentile(List<double> src, double lowerPct = 0.01, double upperPct = 0.99, int minKeep = 500)
+        {
+            if (src == null || src.Count == 0) return src ?? new List<double>(0);
+            if (upperPct <= lowerPct) return src;
+
+            // NaN/Inf 방어 (거의 필요 없겠지만 안전)
+            var clean = src.Where(v => !double.IsNaN(v) && !double.IsInfinity(v)).ToList();
+            if (clean.Count < minKeep) return src; // 표본 작으면 원본 유지
+
+            var sorted = new List<double>(clean);
+            sorted.Sort();
+            int n = sorted.Count;
+
+            int loIdx = (int)Math.Floor(n * lowerPct);
+            int hiIdx = (int)Math.Floor(n * upperPct) - 1;
+            if (hiIdx < loIdx) hiIdx = loIdx;
+
+            double lo = sorted[Math.Max(0, Math.Min(n - 1, loIdx))];
+            double hi = sorted[Math.Max(0, Math.Min(n - 1, hiIdx))];
+
+            // 경계 안쪽만 유지
+            var trimmed = clean.Where(v => v >= lo && v <= hi).ToList();
+            // 트리밍 후 표본이 너무 작으면 역시 원본 유지
+            if (trimmed.Count < minKeep) return src;
+
+            return trimmed;
+        }
+
+        private void 통계()
+        {
+            textBox6.Text = "통계 진행 중";
+            var selected1000Stocks = Library.SelectTop1000Stocks();
+
+            int start_date = 20220302;
+            int end_date = Convert.ToInt32(DateTime.Now.Date.ToString("yyyyMMdd"));
+            string path = @"C:\BJS\data\통계.txt";
+
+            if (File.Exists(path))
+                File.Delete(path);
+
+            using (StreamWriter sw = File.CreateText(path))
+            {
+                foreach (var stock in selected1000Stocks)
+                {
+                    if (stock.Contains("KODEX") || stock.Contains("혼합"))
+                        continue;
+
+                    string filePath = @"C:\BJS\data\일\" + stock + ".txt";
+                    if (!File.Exists(filePath))
+                        continue;
+
+                    string str = stock;
+                    str += "\t" + rd.FindHighestClose(filePath, 20).ToString();
+                    str += "\t" + rd.FindHighestClose(filePath, 60).ToString();
+                    str += "\t" + rd.FindHighestClose(filePath, 120).ToString();
+                    str += "\t" + rd.FindHighestClose(filePath, 240).ToString();
+
+                    var 푀분 = new List<double>();
+                    var 거분 = new List<double>();
+                    var 배차 = new List<double>();
+                    var 배합 = new List<double>();
+
+                    double value = 0.0;
+                    int 전일종가 = rd.read_전일종가(stock);
+                    if (전일종가 == 0)
+                        continue;
+                    double MoneyFactor = 전일종가 / g.천만원;
+
+                    int DaysProcessed = 0;
+                    int MinutesProcessed = 0;
+                    int TotalDaysChecked = 0;
+
+                    for (int i = end_date; i >= start_date; i--)
+                    {
+                        if (!DateTime.TryParseExact(i.ToString(), "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out _))
+                            continue;
+
+                        g.date = i;
+                        TotalDaysChecked++;
+
+                        int[,] x = new int[382, 12];
+                        int nrow = rd.ReadStockMinute(i, stock, x);
+                        if (nrow <= 1)
+                            continue;
+
+                        for (int j = 1; j < nrow; j++)
+                        {
+                            double interval = ms.total_Seconds(x[j - 1, 0], x[j, 0]);
+                            if (interval > 70.0 || interval < 50.0)
+                                continue;
+
+                            value = (double)(x[j, 4] - x[j - 1, 4] + x[j, 5] - x[j - 1, 5]) * MoneyFactor;
+                            if (value > 0.001)
+                                푀분.Add(value);
+
+                            value = (double)(x[j, 7] - x[j - 1, 7]) * MoneyFactor;
+                            거분.Add(value);
+
+                            배차.Add(x[j, 8] - x[j, 9]);
+                            배합.Add(x[j, 8] + x[j, 9]);
+
+                            MinutesProcessed++;
+                        }
+
+                        if (DaysProcessed++ >= 30)
+                            break;
+                    }
+
+                    if (MinutesProcessed <= 1000)
+                        continue;
+
+                    // 출력 줄 1: 종목명 + 최고가 정보
+                    sw.WriteLine(str);
+
+                    // =========================
+                    //  ★★★ 핵심 변경 지점 ★★★
+                    //  CalcStats 호출 직전에 '상하 1% 트리밍'만 적용
+                    //  (표본이 적으면 유틸이 원본을 그대로 반환하므로 행동 동일)
+                    // =========================
+
+                    // [PATCH] 분봉 통계 4종: 푀분, 거분, 배차, 배합 — 각각 트리밍된 사본으로 통계
+                    var 푀분_t = TrimPercentile(푀분, 0.01, 0.99, 500);
+                    var 거분_t = TrimPercentile(거분, 0.01, 0.99, 500);
+                    var 배차_t = TrimPercentile(배차, 0.01, 0.99, 500);
+                    var 배합_t = TrimPercentile(배합, 0.01, 0.99, 500);
+
+                    // 출력 줄 2~5: 기존 분봉 통계 (호출부/형식 동일)
+                    (var avg, var std) = Library.CalcStats(푀분_t);
+                    sw.WriteLine($"{푀분_t.Count}\t{avg:F2}\t{std:F2}");
+
+                    (avg, std) = Library.CalcStats(거분_t);
+                    sw.WriteLine($"{avg:F2}\t{std:F2}");
+
+                    (avg, std) = Library.CalcStats(배차_t);
+                    sw.WriteLine($"{avg:F2}\t{std:F2}");
+
+                    (avg, std) = Library.CalcStats(배합_t);
+                    sw.WriteLine($"{avg:F2}\t{std:F2}");
+
+                    // 출력 줄 6~8: 일봉 기반 통계 (여기는 기존 그대로 사용)
+                    double dAvg, dStd, dAvgF, dStdF, dAvgI, dStdI;
+                    CalcDailyStats(filePath, out dAvg, out dStd, out dAvgF, out dStdF, out dAvgI, out dStdI);
+                    sw.WriteLine($"{dAvg:F2}\t{dStd:F2}");   // 거래대금 (천만)
+                    sw.WriteLine($"{dAvgF:F2}\t{dStdF:F2}"); // 외인
+                    sw.WriteLine($"{dAvgI:F2}\t{dStdI:F2}"); // 기관 
+
+                    var stats = QuoteStatsLib.QuoteStatsCalculator.Compute(@"C:\BJS\호가변동자료", stock);
+
+                    sw.WriteLine($"{stats.BestAskMean:F0}\t{stats.BestAskStd:F0}");   // 최우선매도호가잔량
+                    sw.WriteLine($"{stats.BestBidMean:F0}\t{stats.BestBidStd:F0}");   // 최우선매수호가잔량
+                    sw.WriteLine($"{stats.TotalAskMean:F0}\t{stats.TotalAskStd:F0}"); // 총매도호가잔량
+                    sw.WriteLine($"{stats.TotalBidMean:F0}\t{stats.TotalBidStd:F0}"); // 총매수호가잔량
+                }
+            }
+
+            textBox6.Text = "통계 done";
+        }
+
         // 20일전고, 60일 전고, 120일 전고, 240일 전고
         // 푀분평균, 푀분편차, 거분평균, 거분편차, 배차평균, 배차편차,
         // 배합평균, 배합편차, 푀누평균, 푀누편차, 종누평균, 종누편차
-        private void 통계()
+        private void 통계_20251019()
         {
             textBox6.Text = "통계 진행 중";
             var selected1000Stocks = Library.SelectTop1000Stocks();

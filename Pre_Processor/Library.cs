@@ -52,12 +52,24 @@ namespace Pre_Processor
 
         public static (string avg, string std) CalcStats(List<double> list)
         {
-            if (list.Count == 0)
+            if (list == null || list.Count == 0)
                 return ("0.0", "0.0");
-            double avg = list.Sum() / list.Count;
-            double std = Math.Sqrt(list.Sum(x => Math.Pow(x - avg, 2)) / (list.Count - 1));
-            return (avg.ToString("0.0"), std.ToString("0.0"));
+
+            // NaN / Infinity 방어 추가
+            var clean = list.Where(v => !double.IsNaN(v) && !double.IsInfinity(v)).ToList();
+            if (clean.Count == 0)
+                return ("0.0", "0.0");
+
+            double avg = clean.Sum() / clean.Count;
+            double std = 0.0;
+
+            if (clean.Count > 1)
+                std = Math.Sqrt(clean.Sum(x => Math.Pow(x - avg, 2)) / (clean.Count - 1));
+
+            // 소수점 2자리로 고정 (원래와 동일한 형식)
+            return (avg.ToString("0.00"), std.ToString("0.00"));
         }
+
 
         public static string calcurate_종목일중변동평균편차(string stock, int days, ref double avr, ref double dev, ref int 일평균거래액,
                          ref int 일최소거래액, ref int 일최대거래액, ref int MaxmumDate, ref double MaximumPriceRiseRate)
