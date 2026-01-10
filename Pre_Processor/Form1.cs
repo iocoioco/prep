@@ -86,19 +86,20 @@ namespace Pre_Processor
         private void button2_Click_1(object sender, EventArgs e)
         {
             List<List<string>> Gl = new List<List<string>>(); // 실제 프로그램 내에서 사용하지 않음
-            List<List<string>> GL = new List<List<string>>(); // 실제 프로그램 내에서 사용하지 않음
+            //List<List<string>> GL = new List<List<string>>(); // 실제 프로그램 내에서 사용하지 않음
             List<string> alist = new List<string>();
             //_gl = Library.read_group();
             //_gl = Library.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
-            //_gl = Library.read_그룹_네이버_업종(Gl, GL);
+            //_gl = Library.ReadNaverIndustry(Gl, GL);
             //_gl = Library.read_전종목코드();
 
 
-            //_gl = Library.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
+            _gl = Library.ReadNaverIndustry(Gl);
+            _gl = Library.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
 
 
 
-            _gl = Library.read_그룹_네이버_테마();
+
             _variable[0] = textBox3.Text; // 일, 주, 월 중 하나 입력
             _variable[1] = textBox4.Text; // 오늘부터 과거로 가면서 최대갯수 
 
@@ -480,9 +481,9 @@ namespace Pre_Processor
             var totalStocksToProcede = new List<string>();
 
 
-            totalStocksToProcede = Library.read_그룹_네이버_업종(groupList);
-            var themeStocks = Library.read_그룹_네이버_테마();
-            Library.AddIfMissing(themeStocks, totalStocksToProcede);
+            totalStocksToProcede = Library.ReadNaverIndustry(groupList);
+            //var themeStocks = Library.read_그룹_네이버_테마();
+            //Library.AddIfMissing(themeStocks, totalStocksToProcede);
 
             textBox6.Text = "일 진행 중";
 
@@ -784,25 +785,25 @@ namespace Pre_Processor
             string text1 = _Stock_Chart_시총.GetDibMsg1();
             string text2 = _Stock_Chart_시총.GetDibMsg2();
 
-            Stream FS = new FileStream(@"C:\BJS\data\시총.txt", FileMode.Append, FileAccess.Write);
-            StreamWriter sw = new System.IO.StreamWriter(FS, System.Text.Encoding.Default);
-
-            int count = (int)_Stock_Chart_시총.GetHeaderValue(1);
-
-            string code = _Stock_Chart_시총.GetHeaderValue(0);
-            string stockname = _cm.CodeToName(code);
-
             int numberofData = (int)_Stock_Chart_시총.GetHeaderValue(3);
             if (numberofData == 0)
                 return;
 
-            ulong 시총 = _Stock_Chart_시총.GetDataValue(0, 0); //0
+            string code = _Stock_Chart_시총.GetHeaderValue(0);
+            string stockname = _cm.CodeToName(code);
 
-            string temp_stockname = stockname.Replace(" ", "_");
-            sw.WriteLine("{0} {1}", temp_stockname, 시총 / 100000000); // 단위 : 천억
+            ulong 시총 = _Stock_Chart_시총.GetDataValue(0, 0);
 
-            sw.Close();
+            //string temp_stockname = stockname.Replace(" ", "_");
+
+            using (var fs = new FileStream(@"C:\BJS\data\시총.txt", FileMode.Append, FileAccess.Write, FileShare.Read))
+            using (var sw = new StreamWriter(fs, System.Text.Encoding.Default))
+            {
+                // 단위 : 억 (시총/1e8)
+                sw.WriteLine("{0}\t{1}", stockname, 시총 / 100000000UL);
+            }
         }
+
 
         private void button4_Click_1(object sender, EventArgs e)
         {
@@ -830,7 +831,7 @@ namespace Pre_Processor
             List<string> alist = new List<string>();
             //_gl = Library.read_그룹4(Gl);
             //_gl = Library.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
-            _gl = Library.read_그룹_네이버_업종(GL);
+            _gl = Library.ReadNaverIndustry(GL);
             string path = @"C:\BJS\그룹_" + textBox2.Text + ".txt";
             if (File.Exists(path))
                 File.Delete(path);
@@ -939,7 +940,7 @@ namespace Pre_Processor
 
         }
 
-        public void 네이버_업종() // 1st
+        public void WriteNaverIndustry() // 1st
         {
             textBox6.Text = "네이버업종 진행 중";
 
@@ -1044,7 +1045,7 @@ namespace Pre_Processor
 
         private void button9_Click(object sender, EventArgs e)
         {
-            네이버_업종();
+            WriteNaverIndustry();
             return;
 
             textBox6.Text = "네이버 업종 정리 Processing";
@@ -1267,8 +1268,8 @@ namespace Pre_Processor
             copyDirectory = @"C:\BJS\data copy";
             DirectoryHandler.DeleteAndCopyDirectory(originalDirectory, copyDirectory);
 
-            네이버_업종(); // 1 분
-            네이버_테마(1); // 1 분
+            WriteNaverIndustry(); // 1 분
+            //네이버_테마(1); // 1 분
             일주월();
             시가총액();
             통계();
@@ -1424,7 +1425,7 @@ namespace Pre_Processor
             List<string> alist = new List<string>();
 
             //_gl = Library.read_시총_일정액수이상(Convert.ToInt32(textBox2.Text));
-            _gl = Library.read_그룹_네이버_업종(GL);
+            _gl = Library.ReadNaverIndustry(GL);
             int days = 20;
             double avr = 0.0, dev = 0.0;
             int 일평균거래액 = 0, 일최소거래액 = 0, 일최대거래액 = 0;

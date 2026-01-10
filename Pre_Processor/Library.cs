@@ -762,7 +762,99 @@ namespace Pre_Processor
 
 
 
-        public static List<string> read_그룹_네이버_업종(List<List<string>> GL)
+        public static List<string> ReadNaverIndustry(List<List<string>> groups)
+        {
+            var allStocks = new List<string>();
+
+            string filepath = @"C:\BJS\data\그룹_네이버_업종.txt";
+            if (!File.Exists(filepath))
+                return allStocks;
+
+            // ANSI / UTF-8 혼용 대비
+            var lines = File.ReadAllLines(filepath, Encoding.Default);
+
+            List<string> currentGroup = new List<string>();
+
+            foreach (string rawLine in lines)
+            {
+                string line = rawLine.Trim();
+
+                // ---------------------------------
+                // 1) 빈 줄 → 그룹 종료
+                // ---------------------------------
+                if (line.Length == 0)
+                {
+                    if (currentGroup.Count > 0)
+                    {
+                        groups.Add(new List<string>(currentGroup));
+                        currentGroup.Clear();
+                    }
+                    continue;
+                }
+
+                // ---------------------------------
+                // 2) 업종 헤더 라인 (예: "항공사 305")
+                //    → 숫자로 끝나면 헤더로 판단
+                // ---------------------------------
+                if (IsGroupHeader(line))
+                {
+                    // 이전 그룹이 있으면 마무리
+                    if (currentGroup.Count > 0)
+                    {
+                        groups.Add(new List<string>(currentGroup));
+                        currentGroup.Clear();
+                    }
+                    continue;
+                }
+
+                // ---------------------------------
+                // 3) 종목 라인
+                // ---------------------------------
+                string stockName = NormalizeStockName(line);
+
+                if (!isStock(stockName))
+                    continue;
+
+                if (!allStocks.Contains(stockName))
+                    allStocks.Add(stockName);
+
+                currentGroup.Add(stockName);
+            }
+
+            // ---------------------------------
+            // 4) 파일 끝에서 남은 그룹 처리
+            // ---------------------------------
+            if (currentGroup.Count > 0)
+                groups.Add(new List<string>(currentGroup));
+
+            return allStocks.Distinct().ToList();
+        }
+
+        private static bool IsGroupHeader(string line)
+        {
+            // 예: "항공사 305", "전기장비 306"
+            int lastSpace = line.LastIndexOf(' ');
+            if (lastSpace < 0) return false;
+
+            string tail = line.Substring(lastSpace + 1);
+            return int.TryParse(tail, out _);
+        }
+        private static string NormalizeStockName(string s)
+        {
+            return s
+                .Replace("*", "")
+                .Trim();
+        }
+
+
+
+
+
+
+
+
+
+        public static List<string> ReadNaverIndustry_old(List<List<string>> GL)
         {
             List<string> gl_list = new List<string>();
 
@@ -853,20 +945,20 @@ namespace Pre_Processor
 
         public static List<string> SelectTop1000Stocks()
         {
-            List<string> filteredStocks = new List<string>();
+            //List<string> filteredStocks = new List<string>();
 
             // Step 1: Merge related groups into filteredStocks
-            var themeList = read_그룹_네이버_테마();
-            AddIfMissing(themeList, filteredStocks);
+            //var themeList = read_그룹_네이버_테마();
+            //AddIfMissing(themeList, filteredStocks);
 
             List<List<string>> GroupList = new List<List<string>>();
-            List<string> groupList = read_그룹_네이버_업종(GroupList);
-            AddIfMissing(groupList, filteredStocks);
+            List<string> NaverIndustryStocks = ReadNaverIndustry(GroupList);
+            //AddIfMissing(groupList, filteredStocks);
 
             var stockVolumeTuples = new List<Tuple<ulong, string>>();
             int recentDays = 20;
 
-            foreach (var stock in filteredStocks)
+            foreach (var stock in NaverIndustryStocks)
             {
                 string path = $@"C:\BJS\data\일\{stock}.txt";
                 if (!File.Exists(path))

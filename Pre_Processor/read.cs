@@ -341,7 +341,7 @@ namespace Pre_Processor
             return Convert.ToInt32(words[4]);
         }
 
-        public static List<string> read_그룹_네이버_업종() // this is for single list of stocks in 그룹_네이버_업종
+        public static List<string> ReadNaverIndustry() // this is for single list of stocks in 그룹_네이버_업종
         {
             _cpstockcode = new CPUTILLib.CpStockCode();
 
