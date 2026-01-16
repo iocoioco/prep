@@ -799,8 +799,8 @@ namespace Pre_Processor
             using (var fs = new FileStream(@"C:\BJS\data\시총.txt", FileMode.Append, FileAccess.Write, FileShare.Read))
             using (var sw = new StreamWriter(fs, System.Text.Encoding.Default))
             {
-                // 단위 : 천만 (시총/1e8)
-                sw.WriteLine("{0}\t{1}", stockname, 시총 / 10000000UL);
+                // 단위 : 억원 (시총/1e8)
+                sw.WriteLine("{0}\t{1}", stockname, 시총 / 100000000UL);
             }
         }
 
