@@ -804,7 +804,7 @@ namespace Pre_Processor
             }
         }
 
-
+         
         private void button4_Click_1(object sender, EventArgs e)
         {
             상관계산();
