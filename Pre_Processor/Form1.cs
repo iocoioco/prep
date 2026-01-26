@@ -794,13 +794,13 @@ namespace Pre_Processor
 
             ulong 시총 = _Stock_Chart_시총.GetDataValue(0, 0);
 
-            //string temp_stockname = stockname.Replace(" ", "_");
+            string stock_name = stockname.Replace(" ", "_");
 
             using (var fs = new FileStream(@"C:\BJS\data\시총.txt", FileMode.Append, FileAccess.Write, FileShare.Read))
             using (var sw = new StreamWriter(fs, System.Text.Encoding.Default))
             {
                 // 단위 : 억원 (시총/1e8)
-                sw.WriteLine("{0}\t{1}", stockname, 시총 / 100000000UL);
+                sw.WriteLine("{0} {1}", stock_name, 시총 / 100000000UL);
             }
         }
 
