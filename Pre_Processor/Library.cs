@@ -945,15 +945,8 @@ namespace Pre_Processor
 
         public static List<string> SelectTop1000Stocks()
         {
-            //List<string> filteredStocks = new List<string>();
-
-            // Step 1: Merge related groups into filteredStocks
-            //var themeList = read_그룹_네이버_테마();
-            //AddIfMissing(themeList, filteredStocks);
-
             List<List<string>> GroupList = new List<List<string>>();
             List<string> NaverIndustryStocks = ReadNaverIndustry(GroupList);
-            //AddIfMissing(groupList, filteredStocks);
 
             var stockVolumeTuples = new List<Tuple<ulong, string>>();
             int recentDays = 20;
@@ -964,26 +957,41 @@ namespace Pre_Processor
                 if (!File.Exists(path))
                     continue;
 
-                List<string> lines = File.ReadLines(path).Reverse().Take(recentDays).ToList();
+                List<string> lines = File.ReadLines(path)
+                                         .Reverse()
+                                         .Take(recentDays)
+                                         .ToList();
 
-                ulong maxDailyVolume = 0;
+                List<ulong> volumes = new List<ulong>();
 
                 foreach (var line in lines)
                 {
                     string[] parts = line.Split(' ');
-                    ulong dailyVolume = (ulong)(Convert.ToDouble(parts[4]) * Convert.ToUInt64(parts[5]) / g.억원); // 종가 * 당일거래량
 
-                    if (dailyVolume > maxDailyVolume)
-                        maxDailyVolume = dailyVolume;
+                    ulong dailyVolume =
+                        (ulong)(Convert.ToDouble(parts[4]) *
+                                Convert.ToUInt64(parts[5]) / g.억원);   // 종가 * 거래량
+
+                    volumes.Add(dailyVolume);
                 }
 
-                stockVolumeTuples.Add(Tuple.Create(maxDailyVolume, stock));
+                if (volumes.Count == 0)
+                    continue;
+
+                // 최근 20일 중 거래대금 상위 5일 평균
+                double top5Avg =
+                    volumes.OrderByDescending(v => v)
+                           .Take(5)
+                           .Average(v => (double)v);
+
+                stockVolumeTuples.Add(
+                    Tuple.Create((ulong)top5Avg, stock));
             }
 
-            // Step 2: Sort and select top 1000 stocks
+            // 거래대금 기준 정렬 후 Top1000 선택
             var topStocks = stockVolumeTuples
                 .OrderByDescending(t => t.Item1)
-                .Take(1000)
+                .Take(230)
                 .Select(t => t.Item2)
                 .ToList();
 
