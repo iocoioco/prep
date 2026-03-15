@@ -991,7 +991,7 @@ namespace Pre_Processor
             // 거래대금 기준 정렬 후 Top1000 선택
             var topStocks = stockVolumeTuples
                 .OrderByDescending(t => t.Item1)
-                .Take(230)
+                .Take(430)
                 .Select(t => t.Item2)
                 .ToList();
 
