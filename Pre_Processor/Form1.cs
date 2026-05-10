@@ -1609,7 +1609,7 @@ namespace Pre_Processor
             textBox6.Text = "통계 진행 중";
             var selected1000Stocks = Library.SelectTop1000Stocks();
 
-            int start_date = 20220302;
+            int start_date = 20260302;
             int end_date = Convert.ToInt32(DateTime.Now.Date.ToString("yyyyMMdd"));
             string path = @"C:\BJS\data\통계.txt";
 
@@ -1667,11 +1667,29 @@ namespace Pre_Processor
                             if (interval > 70.0 || interval < 50.0)
                                 continue;
 
-                            value = (double)(x[j, 4] - x[j - 1, 4] + x[j, 5] - x[j - 1, 5]) * MoneyFactor;
+
+
+
+                            // 20260510
+                            // j 루프 안, interval 통과 후
+                            //double chgPct = 0.0;
+                            //if (전일종가 > 0)
+                            //    chgPct = (x[j, 1] - 전일종가) * 100.0 / 전일종가;
+
+                            // 상/하한 근처 극단 제외
+                            if (x[j, 1]  >= 2700 || x[j, 1] <= -2700)
+                                continue;
+
+
+
+
+
+
+                            value = (double)(x[j, 4] - x[j - 1, 4] + x[j, 5] - x[j - 1, 5]) * MoneyFactor; // 천만원
                             if (value > 0.001)
                                 푀분.Add(value);
 
-                            value = (double)(x[j, 7] - x[j - 1, 7]) * MoneyFactor;
+                            value = (double)(x[j, 7] - x[j - 1, 7]) * MoneyFactor;// 천만원
                             거분.Add(value);
 
                             배차.Add(x[j, 8] - x[j, 9]);
@@ -1728,133 +1746,41 @@ namespace Pre_Processor
                     sw.WriteLine($"{stats.BestBidMean:F0}\t{stats.BestBidStd:F0}");   // 최우선매수호가잔량
                     sw.WriteLine($"{stats.TotalAskMean:F0}\t{stats.TotalAskStd:F0}"); // 총매도호가잔량
                     sw.WriteLine($"{stats.TotalBidMean:F0}\t{stats.TotalBidStd:F0}"); // 총매수호가잔량
+
+
+
+                    // 20260510
+                    double top5MoneyAvg = TopNAvgPositive(거분, 5);
+                    double top5MajorAvg = TopNAvgPositive(푀분, 5);
+
+                    sw.WriteLine($"{top5MoneyAvg:F2}");
+                    sw.WriteLine($"{top5MajorAvg:F2}");
+
+
                 }
             }
 
             textBox6.Text = "통계 done";
         }
 
+
+
+
+        // 20260510
+        private double TopNAvgPositive(List<double> values, int n)
+        {
+            var top = values
+                .Where(v => v > 0)
+                .OrderByDescending(v => v)
+                .Take(n)
+                .ToList();
+
+            return top.Count == 0 ? 0.0 : top.Average();
+        }
+
         // 20일전고, 60일 전고, 120일 전고, 240일 전고
         // 푀분평균, 푀분편차, 거분평균, 거분편차, 배차평균, 배차편차,
         // 배합평균, 배합편차, 푀누평균, 푀누편차, 종누평균, 종누편차
-        private void 통계_20251019()
-        {
-            textBox6.Text = "통계 진행 중";
-            var selected1000Stocks = Library.SelectTop1000Stocks();
-
-            int start_date = 20220302;
-            int end_date = Convert.ToInt32(DateTime.Now.Date.ToString("yyyyMMdd"));
-            string path = @"C:\BJS\data\통계.txt";
-
-            if (File.Exists(path))
-                File.Delete(path);
-
-            using (StreamWriter sw = File.CreateText(path))
-            {
-                foreach (var stock in selected1000Stocks)
-                {
-                    if (stock.Contains("KODEX") || stock.Contains("혼합"))
-                        continue;
-
-                    string filePath = @"C:\BJS\data\일\" + stock + ".txt";
-                    if (!File.Exists(filePath))
-                        continue;
-
-                    string str = stock;
-                    str += "\t" + rd.FindHighestClose(filePath, 20).ToString();
-                    str += "\t" + rd.FindHighestClose(filePath, 60).ToString();
-                    str += "\t" + rd.FindHighestClose(filePath, 120).ToString();
-                    str += "\t" + rd.FindHighestClose(filePath, 240).ToString();
-
-                    var 푀분 = new List<double>();
-                    var 거분 = new List<double>();
-                    var 배차 = new List<double>();
-                    var 배합 = new List<double>();
-
-                    double value = 0.0;
-                    int 전일종가 = rd.read_전일종가(stock);
-                    if (전일종가 == 0)
-                        continue;
-                    double MoneyFactor = 전일종가 / g.천만원;
-
-                    int DaysProcessed = 0;
-                    int MinutesProcessed = 0;
-                    int TotalDaysChecked = 0;
-
-                    for (int i = end_date; i >= start_date; i--)
-                    {
-                        if (!DateTime.TryParseExact(i.ToString(), "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out _))
-                            continue;
-
-                        g.date = i;
-                        TotalDaysChecked++;
-
-                        int[,] x = new int[382, 12];
-                        int nrow = rd.ReadStockMinute(i, stock, x);
-                        if (nrow <= 1)
-                            continue;
-
-                        for (int j = 1; j < nrow; j++)
-                        {
-                            double interval = ms.total_Seconds(x[j - 1, 0], x[j, 0]);
-                            if (interval > 70.0 || interval < 50.0)
-                                continue;
-
-                            value = (double)(x[j, 4] - x[j - 1, 4] + x[j, 5] - x[j - 1, 5]) * MoneyFactor;
-                            if (value > 0.001)
-                                푀분.Add(value);
-
-                            value = (double)(x[j, 7] - x[j - 1, 7]) * MoneyFactor;
-                            거분.Add(value);
-
-                            배차.Add(x[j, 8] - x[j, 9]);
-                            배합.Add(x[j, 8] + x[j, 9]);
-
-                            MinutesProcessed++;
-                        }
-
-                        if (DaysProcessed++ >= 30)
-                            break;
-                    }
-
-                    if (MinutesProcessed <= 1000)
-                        continue;
-
-                    // 출력 줄 1: 종목명 + 최고가 정보
-                    sw.WriteLine(str);
-
-                    // 출력 줄 2~5: 기존 분봉 통계
-                    (var avg, var std) = Library.CalcStats(푀분);
-                    sw.WriteLine($"{푀분.Count}\t{avg:F2}\t{std:F2}");
-
-                    (avg, std) = Library.CalcStats(거분);
-                    sw.WriteLine($"{avg:F2}\t{std:F2}");
-
-                    (avg, std) = Library.CalcStats(배차);
-                    sw.WriteLine($"{avg:F2}\t{std:F2}");
-
-                    (avg, std) = Library.CalcStats(배합);
-                    sw.WriteLine($"{avg:F2}\t{std:F2}");
-
-                    // 출력 줄 6~8: 일봉 기반 통계
-                    // ✔ 아래는 새로운 변수 이름 사용
-                    double dAvg, dStd, dAvgF, dStdF, dAvgI, dStdI;
-                    CalcDailyStats(filePath, out dAvg, out dStd, out dAvgF, out dStdF, out dAvgI, out dStdI);
-                    sw.WriteLine($"{dAvg:F2}\t{dStd:F2}"); // 거래대금 (천만)
-                    sw.WriteLine($"{dAvgF:F2}\t{dStdF:F2}"); // 외인
-                    sw.WriteLine($"{dAvgI:F2}\t{dStdI:F2}"); // 기관 
-
-                    var stats = QuoteStatsLib.QuoteStatsCalculator.Compute(@"C:\BJS\호가변동자료", stock);
-
-                    sw.WriteLine($"{stats.BestAskMean:F0}\t{stats.BestAskStd:F0}"); // 최우선매도호가잔량
-                    sw.WriteLine($"{stats.BestBidMean:F0}\t{stats.BestBidStd:F0}"); // 최우선매수호가잔량
-                    sw.WriteLine($"{stats.TotalAskMean:F0}\t{stats.TotalAskStd:F0}"); // 총매도호가잔량
-                    sw.WriteLine($"{stats.TotalBidMean:F0}\t{stats.TotalBidStd:F0}"); // 총매수호가잔량
-                }
-            }
-
-            textBox6.Text = "통계 done";
-        } 
 
         private void CalcDailyStats(string filePath, out double 거래금액_Avg, out double 거래금액_Std,
                             out double 외인_Avg, out double 외인_Std, out double 기관_Avg, out double 기관_Std)
