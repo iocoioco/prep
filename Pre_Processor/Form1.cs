@@ -1659,7 +1659,7 @@ namespace Pre_Processor
                     var regSell = new List<double>();
                     var regPrice = new List<double>();
 
-
+                     
                     double value = 0.0;
                     int 전일종가 = rd.read_전일종가(stock);
                     if (전일종가 == 0)
