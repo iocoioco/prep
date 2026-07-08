@@ -1796,7 +1796,7 @@ namespace Pre_Processor
 
 
 
-
+                    // 20260628
                     // [TEST] 삼성전자 매수배/매도배 -> 가격변화 1차 회귀 결과  // ??? 지울 부분 또는 수정 부분
                     var reg = FitLinear2D(regBuy, regSell, regPrice);
 
