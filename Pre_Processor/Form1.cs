@@ -1627,10 +1627,7 @@ namespace Pre_Processor
             {
                 foreach (var stock in selected1000Stocks)
                 {
-                    if (stock != "삼성전자") // ??? 지울 부분 또는 수정 부분
-                        continue;
-
-
+                  
                     if (stock.Contains("KODEX") || stock.Contains("혼합"))
                         continue;
 
@@ -1796,20 +1793,7 @@ namespace Pre_Processor
 
 
 
-                    // 20260628
-                    // [TEST] 삼성전자 매수배/매도배 -> 가격변화 1차 회귀 결과  // ??? 지울 부분 또는 수정 부분
-                    var reg = FitLinear2D(regBuy, regSell, regPrice);
-
-                    string tempPath = @"C:\BJS\temp.txt";
-                    using (StreamWriter tsw = File.CreateText(tempPath))
-                    {
-                        tsw.WriteLine(stock);
-                        tsw.WriteLine($"Count\t{reg.Count}");
-                        tsw.WriteLine($"a\t{reg.A:F8}");
-                        tsw.WriteLine($"b\t{reg.B:F8}");
-                        tsw.WriteLine($"c\t{reg.C:F8}");
-                        tsw.WriteLine($"R2\t{reg.R2:F6}");
-                    }
+                  
 
                 }
             }
@@ -1817,140 +1801,7 @@ namespace Pre_Processor
             textBox6.Text = "통계 done";
         }
 
-        private class Linear2DResult
-        {
-            public int Count;
-            public double A;
-            public double B;
-            public double C;
-            public double R2;
-        }
 
-        private static Linear2DResult FitLinear2D(
-            List<double> xs,
-            List<double> ys,
-            List<double> zs)
-        {
-            var result = new Linear2DResult();
-
-            if (xs == null || ys == null || zs == null)
-                return result;
-
-            int n = Math.Min(xs.Count, Math.Min(ys.Count, zs.Count));
-            result.Count = n;
-
-            if (n < 3)
-                return result;
-
-            double sx = 0.0, sy = 0.0, sz = 0.0;
-            double sxx = 0.0, syy = 0.0, sxy = 0.0;
-            double sxz = 0.0, syz = 0.0;
-
-            for (int i = 0; i < n; i++)
-            {
-                double x = xs[i];
-                double y = ys[i];
-                double z = zs[i];
-
-                sx += x;
-                sy += y;
-                sz += z;
-
-                sxx += x * x;
-                syy += y * y;
-                sxy += x * y;
-
-                sxz += x * z;
-                syz += y * z;
-            }
-
-            // Normal equation:
-            // [sxx sxy sx] [a] = [sxz]
-            // [sxy syy sy] [b] = [syz]
-            // [sx  sy  n ] [c] = [sz ]
-
-            double[,] m =
-            {
-        { sxx, sxy, sx  },
-        { sxy, syy, sy  },
-        { sx,  sy,  n   }
-    };
-
-            double[] v = { sxz, syz, sz };
-
-            if (!Solve3x3(m, v, out double a, out double b, out double c))
-                return result;
-
-            result.A = a;
-            result.B = b;
-            result.C = c;
-
-            double meanZ = sz / n;
-            double ssTot = 0.0;
-            double ssRes = 0.0;
-
-            for (int i = 0; i < n; i++)
-            {
-                double pred = a * xs[i] + b * ys[i] + c;
-                double dz = zs[i] - meanZ;
-                double er = zs[i] - pred;
-
-                ssTot += dz * dz;
-                ssRes += er * er;
-            }
-
-            if (ssTot > 1e-12)
-                result.R2 = 1.0 - ssRes / ssTot;
-            else
-                result.R2 = 0.0;
-
-            return result;
-        }
-
-        private static bool Solve3x3(
-            double[,] m,
-            double[] v,
-            out double x0,
-            out double x1,
-            out double x2)
-        {
-            x0 = x1 = x2 = 0.0;
-
-            double a00 = m[0, 0], a01 = m[0, 1], a02 = m[0, 2];
-            double a10 = m[1, 0], a11 = m[1, 1], a12 = m[1, 2];
-            double a20 = m[2, 0], a21 = m[2, 1], a22 = m[2, 2];
-
-            double det =
-                a00 * (a11 * a22 - a12 * a21)
-              - a01 * (a10 * a22 - a12 * a20)
-              + a02 * (a10 * a21 - a11 * a20);
-
-            if (Math.Abs(det) < 1e-12)
-                return false;
-
-            double b0 = v[0], b1 = v[1], b2 = v[2];
-
-            double det0 =
-                b0 * (a11 * a22 - a12 * a21)
-              - a01 * (b1 * a22 - a12 * b2)
-              + a02 * (b1 * a21 - a11 * b2);
-
-            double det1 =
-                a00 * (b1 * a22 - a12 * b2)
-              - b0 * (a10 * a22 - a12 * a20)
-              + a02 * (a10 * b2 - b1 * a20);
-
-            double det2 =
-                a00 * (a11 * b2 - b1 * a21)
-              - a01 * (a10 * b2 - b1 * a20)
-              + b0 * (a10 * a21 - a11 * a20);
-
-            x0 = det0 / det;
-            x1 = det1 / det;
-            x2 = det2 / det;
-
-            return true;
-        }
 
 
         // 20260510
